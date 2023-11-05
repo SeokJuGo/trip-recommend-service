@@ -59,20 +59,24 @@
 
 ### 3. 관광지 정보 조회
 
-- 지역별 관광지 구분
+- **지역별 관광지 정보 조회**
+- **관광지, 숙박, 음식점 조회**
+- **문화시설, 공연, 여행코스, 쇼핑 조회**
+- QueryString으로 매개변수 처리
+- 동적 쿼리를 이용해 Database 일괄 처리
+- 특정 관광지 정보 필요 시 PathVariable 처리
 
-![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/44fa65c1-f6cb-4b9f-acb9-98f9da99a8e5)
+![image](docs/images/swagger-ui_attraction_api.png)
 
-![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/dd7d34b2-ccf8-4bff-b527-80a4c83cf31a)
-![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/6a20a555-671a-4a11-850c-867fafa9efc0)
+### 4. 게시판 API
 
+- **게시판 목록 조회**
+- **게시글 상세 조회**
+- **게시글 작성**
+- **게시글 수정**
+- **게시글 삭제**
+- JSON RequestBody로 매개변수 처리
+- 동적 쿼리를 이용해 검색기능 일괄 처리
+- 특정 게시글 정보 필요 시 PathVariable 처리
 
-
-- 관광지, 숙박, 음식점, 문화시설, 공연, 여행코스, 쇼핑조회
-
-![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/6ac671bc-7e03-4c8d-8768-8ac0e1d9db82)
-
-![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/9d3ef15e-d58e-46a6-ad68-2d1ceb7841f6)
-
-![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/9e5aa387-a655-49de-bc2a-13f193f0f6b6)
-
+![image](docs/images/swagger-ui_board_api.png)
