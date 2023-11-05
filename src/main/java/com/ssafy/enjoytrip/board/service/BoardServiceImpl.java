@@ -39,4 +39,19 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.findById(id);
 	}
 
+	@Override
+	public void writeBoard(BoardDto boardDto) throws Exception {
+		mapper.writeBoard(boardDto);
+	}
+
+	@Override
+	public void updateBoard(BoardDto boardDto) throws Exception {
+		mapper.updateBoard(boardDto);
+	}
+
+	@Override
+	public void deleteBoard(Integer id) throws Exception {
+		mapper.deleteBoard(id);
+	}
+
 }

@@ -34,7 +34,7 @@ public class HomeController {
 		try {
 			List<AttractionDto> list = attractionService.home();
 			return new ResponseEntity<List<AttractionDto>>(list, HttpStatus.OK);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 	}

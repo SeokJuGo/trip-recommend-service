@@ -63,6 +63,11 @@ public class AttractionServiceImpl implements AttractionService {
 	}
 
 	@Override
+	public List<AttractionDto> findAllByAttraction(AttractionDto attractionDto) throws Exception {
+		return mapper.findAllByAttraction(attractionDto);
+	}
+	
+	@Override
 	public List<AttractionDto> home() throws SQLException {
 		return mapper.home();
 	}

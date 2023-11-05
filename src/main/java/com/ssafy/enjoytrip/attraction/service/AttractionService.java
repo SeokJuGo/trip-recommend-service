@@ -1,6 +1,5 @@
 package com.ssafy.enjoytrip.attraction.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.ssafy.enjoytrip.attraction.model.AttractionDto;
@@ -22,9 +21,11 @@ public interface AttractionService {
 	List<AttractionDto> findAllBySidoCodeAndGugunCode(int sidoCode, int gugunCode) throws Exception;
 
 	List<AttractionDto> findAllByOverviewContains(String overview) throws Exception;
+	
+	List<AttractionDto> findAllByAttraction(AttractionDto attractionDto) throws Exception;
 
 	AttractionDto findByContentId(int contentId) throws Exception;
 	
-	List<AttractionDto> home() throws SQLException;
+	List<AttractionDto> home() throws Exception;
 	
 }

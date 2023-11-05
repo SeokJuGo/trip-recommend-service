@@ -20,4 +20,10 @@ public interface BoardMapper {
 
 	BoardDto findById(int id) throws SQLException;
 
+	void writeBoard(BoardDto boardDto) throws SQLException;
+	
+	void updateBoard(BoardDto boardDto) throws SQLException;
+	
+	void deleteBoard(Integer id) throws SQLException;
+	
 }
