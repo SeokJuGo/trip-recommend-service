@@ -72,6 +72,7 @@
 
 ![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/6ac671bc-7e03-4c8d-8768-8ac0e1d9db82)
 
-![image-20231105154610922](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20231105154610922.png)
+![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/9d3ef15e-d58e-46a6-ad68-2d1ceb7841f6)
 
-![image-20231105154610922](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20231105154610922.png)
+![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/9e5aa387-a655-49de-bc2a-13f193f0f6b6)
+
