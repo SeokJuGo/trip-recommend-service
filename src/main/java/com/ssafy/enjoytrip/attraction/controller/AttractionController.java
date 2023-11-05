@@ -19,6 +19,7 @@ import com.ssafy.enjoytrip.attraction.service.AttractionService;
 import com.ssafy.enjoytrip.member.model.UserDto;
 
 import io.swagger.annotations.ApiOperation;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -78,7 +79,6 @@ public class AttractionController {
 		log.debug("AttractionController findByContentId() function called!!!");
 		try {
 			AttractionDto dto = attractionService.findByContentId(contentId);
-			log.debug("{}",dto);
 			if (dto != null)
 				return new ResponseEntity<>(dto, HttpStatus.OK);
 			return new ResponseEntity<>("Data Not Exists", HttpStatus.OK);
@@ -119,4 +119,5 @@ public class AttractionController {
 			return new ResponseEntity<>("Error Occurred!!!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 }
