@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.attraction.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -7,12 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.enjoytrip.attraction.model.AttractionDto;
 import com.ssafy.enjoytrip.attraction.service.AttractionService;
+import com.ssafy.enjoytrip.member.model.UserDto;
+
+import io.swagger.annotations.ApiOperation;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,6 +79,37 @@ public class AttractionController {
 		log.debug("AttractionController findByContentId() function called!!!");
 		try {
 			AttractionDto dto = attractionService.findByContentId(contentId);
+			if (dto != null)
+				return new ResponseEntity<>(dto, HttpStatus.OK);
+			return new ResponseEntity<>("Data Not Exists", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.debug(e.getMessage());
+			return new ResponseEntity<>("Error Occurred!!!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("findType/{contentTypeId}")
+	public ResponseEntity<?> findByContentTypeId(@PathVariable("contentTypeId") int contentTypeId) {
+		log.debug("AttractionController findByContentId() function called!!!");
+		try {
+			List<AttractionDto> lis = attractionService.findAllByContentTypeId(contentTypeId);
+			log.debug("{}",lis);
+			if (lis != null)
+				return new ResponseEntity<>(lis, HttpStatus.OK);
+			return new ResponseEntity<>("Data Not Exists", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.debug(e.getMessage());
+			return new ResponseEntity<>("Error Occurred!!!", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("sido/{sidoCode}")
+	public ResponseEntity<?> findBySidoCode(@PathVariable("sidoCode") int sidoCode) {
+		log.debug("AttractionController findByContentId() function called!!!");
+		try {
+			List<AttractionDto> dto = attractionService.findAllBySidoCode(sidoCode);
 			if (dto != null)
 				return new ResponseEntity<>(dto, HttpStatus.OK);
 			return new ResponseEntity<>("Data Not Exists", HttpStatus.OK);

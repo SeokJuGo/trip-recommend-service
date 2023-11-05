@@ -28,4 +28,6 @@ public interface AttractionMapper {
 
 	AttractionDto findByContentId(int contentId) throws SQLException;
 	
+	List<AttractionDto> home() throws SQLException;
+	
 }

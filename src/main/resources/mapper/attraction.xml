@@ -20,7 +20,7 @@
 		latitude, longitude, mlevel, overview
 		from attraction_info A JOIN attraction_description B
 		on A.content_id = B.content_id
-		where content_type_id = #{contentTypeId}
+		where content_type_id = #{contentTypeId} limit 5
 	</select>
 	
 	<select id="findAllByTitleContains" parameterType="String" resultType="AttractionDto">
@@ -64,7 +64,7 @@
 		latitude, longitude, mlevel, overview
 		from attraction_info A JOIN attraction_description B
 		on A.content_id = B.content_id
-		where sido_code = #{sidoCode}
+		where sido_code = #{sidoCode} limit 5
 	</select>
 	
 	<select id="findAllBySidoCodeAndGugunCode" parameterType="Integer" resultType="AttractionDto">
@@ -100,4 +100,8 @@
 		where A.content_id = #{contentId}
 	</select>
 
+	<select id="home" resultType="AttractionDto">
+	select content_id,title,addr1,first_image,readcount 
+	from attraction_info order by readcount desc limit 10;
+	</select>
 </mapper>
