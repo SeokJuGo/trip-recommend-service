@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.member.model.mapper.UserMapper">
+
+	<resultMap type="userDto" id="user">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+	</resultMap>
+	
+	<!-- ADMIN -->
+	<resultMap type="userDto" id="userAll" extends="user">
+		<result column="password" property="password"/>
+		<result column="email" property="email"/>
+		<result column="created_date" property="createdDate"/>
+		<result column="updated_date" property="updatedDate"/>
+	</resultMap>
+
+	<select id="idCheck" parameterType="String" resultType="int">
+		select count(id)
+		from user
+		where id = #{id}
+	</select>
+
+	<insert id="joinUser" parameterType="userDto">
+		insert into user (name, id, password, email, created_date,updated_date)
+		values (#{name}, #{id}, #{password}, #{email}, now(),now())
+	</insert>
+
+	<select id="loginUser" parameterType="UserDto" resultMap="user">
+		select id, name
+		from user
+		where id = #{id} and password = #{password}
+	</select>
+	
+	<!-- ADMIN -->
+	<select id="listUser" resultMap="userAll">
+		select name, id, password, email, created_date,updated_date
+		from user
+		order by created_date
+	</select>
+	
+	<select id="getUser" parameterType="string" resultMap="userAll">
+		select id, name, password, email, created_date,updated_date
+		from user
+		where id = #{id}
+	</select>
+	
+	<update id="updateUser" parameterType="userDto">
+		update user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="password != null">password = #{password},</if>
+			<if test="email != null">email = #{email},</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteUser" parameterType="String">
+		delete from user
+		where id = #{id}
+	</delete>
+	
+</mapper>
