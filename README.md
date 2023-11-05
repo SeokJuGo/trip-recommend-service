@@ -73,3 +73,5 @@
 ![image](https://github.com/SeokJuGo/SeokJuGo/assets/116260619/6ac671bc-7e03-4c8d-8768-8ac0e1d9db82)
 
 ![image-20231105154610922](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20231105154610922.png)
+
+![image-20231105154610922](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20231105154610922.png)
