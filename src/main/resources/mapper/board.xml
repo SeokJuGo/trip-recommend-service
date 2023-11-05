@@ -46,4 +46,21 @@
 		WHERE B.ID = #{id}
 	</select>	
 
+	<insert id="writeBoard" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="id">
+	    INSERT INTO BOARD (title, content, user_id)
+	    VALUES (#{title}, #{content}, #{userId})
+	</insert>
+	
+	<update id="updateBoard" parameterType="BoardDto">
+	    UPDATE BOARD SET
+	    	title = #{title},
+	    	content = #{content},
+	    	user_id = #{userId}
+	    WHERE ID = #{id}
+	</update>
+	
+	<update id="deleteBoard" parameterType="Integer">
+	    DELETE FROM BOARD WHERE id = #{id}
+	</update>
+
 </mapper>

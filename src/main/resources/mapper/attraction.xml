@@ -99,7 +99,40 @@
 		on A.content_id = B.content_id
 		where A.content_id = #{contentId}
 	</select>
+	
+	
+	<select id="findAllByAttraction" parameterType="AttractionDto" resultType="AttractionDto">
+		SELECT A.content_id contentId, content_type_id contentTypeId,
+			title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+			first_image firstImage, first_image2 secondImage,
+	    	sido_code sidoCode, gugun_code gugunCode,
+			latitude, longitude, mlevel, overview
+		FROM attraction_info A JOIN attraction_description B
+		ON A.content_id = B.content_id WHERE 1 = 1
+		<if test="contentTypeId != null and contentTypeId != 0">
+			AND A.content_type_id = #{contentTypeId}
+		</if>
+		<if test="sidoCode != null and sidoCode != 0">
+			AND A.sido_code = #{sidoCode}
+		</if>
+		<if test="gugunCode != null and gugunCode != 0">
+			AND A.gugun_code = #{gugunCode}		
+		</if>
+		<if test="title != null and title != ''">
+			AND A.title = #{title}		
+		</if>
+		<if test="address != null and address != ''">
+			AND A.addr1 = #{address}		
+		</if>
+		<if test="zipCode != null and zipCode != ''">
+			AND A.zipcode = #{zipCode}		
+		</if>
+		<if test="overview != null and overview != ''">
+			AND B.overview = #{overview}		
+		</if>
+	</select>
 
+	<!-- 추후 limit 조건 함수로 만들어 id값 변경 -->
 	<select id="home" resultType="AttractionDto">
 	select content_id,title,addr1,first_image,readcount 
 	from attraction_info order by readcount desc limit 10;

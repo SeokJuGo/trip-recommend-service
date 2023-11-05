@@ -25,9 +25,12 @@ public interface AttractionMapper {
 	List<AttractionDto> findAllBySidoCodeAndGugunCode(int sidoCode, int gugunCode) throws SQLException;
 
 	List<AttractionDto> findAllByOverviewContains(String overview) throws SQLException;
+	
+	List<AttractionDto> findAllByAttraction(AttractionDto attractionDto) throws SQLException;
 
 	AttractionDto findByContentId(int contentId) throws SQLException;
 	
+	// 추후 HomeController로 이동	
 	List<AttractionDto> home() throws SQLException;
 	
 }

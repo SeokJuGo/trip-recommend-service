@@ -16,4 +16,10 @@ public interface BoardService {
 
 	BoardDto findById(int id) throws Exception;
 
+	void writeBoard(BoardDto boardDto) throws Exception;
+	
+	void updateBoard(BoardDto boardDto) throws Exception;
+	
+	void deleteBoard(Integer id) throws Exception;
+	
 }
