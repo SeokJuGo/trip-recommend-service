@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.attraction.mapper.AttractionMapper">
+	<select id="findAll" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+	</select>
+	
+	<select id="findAllByContentTypeId" parameterType="int" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+		where content_type_id = #{contentTypeId} limit 5
+	</select>
+	
+	<select id="findAllByTitleContains" parameterType="String" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+		where title like concat('%', #{title}, '%')
+	</select>
+	
+	<select id="findAllByAddrContains" parameterType="String" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+		where addr1 like concat('%', #{address}, '%')
+	</select>
+	
+	<select id="findAllByZipcodeContains" parameterType="String" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+		where zipcode like concat('%', #{zipCode}, '%')
+	</select>
+	
+	<select id="findAllBySidoCode" parameterType="Integer" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+		where sido_code = #{sidoCode} limit 5
+	</select>
+	
+	<select id="findAllBySidoCodeAndGugunCode" parameterType="Integer" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+		where sido_code = #{sidoCode} and gugun_code = #{gugunCode}
+	</select>
+	
+	<select id="findAllByOverviewContains" parameterType="String" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+		where overview like concat('%', #{overview}, '%')
+	</select>
+	
+	<select id="findByContentId" parameterType="Integer" resultType="AttractionDto">
+		select A.content_id contentId, content_type_id contentTypeId,
+		title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+		first_image firstImage, first_image2 secondImage,
+	    sido_code sidoCode, gugun_code gugunCode,
+		latitude, longitude, mlevel, overview
+		from attraction_info A JOIN attraction_description B
+		on A.content_id = B.content_id
+		where A.content_id = #{contentId}
+	</select>
+
+	<select id="home" resultType="AttractionDto">
+	select content_id,title,addr1,first_image,readcount 
+	from attraction_info order by readcount desc limit 10;
+	</select>
+</mapper>
