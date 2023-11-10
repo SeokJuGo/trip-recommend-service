@@ -2,6 +2,7 @@ package com.ssafy.enjoytrip.board.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,7 +11,9 @@ import com.ssafy.enjoytrip.board.model.BoardDto;
 @Mapper
 public interface BoardMapper {
 
-	List<BoardDto> findAll() throws SQLException;
+	Integer countTotalElements(Map<String, Object> map) throws SQLException;
+
+	List<BoardDto> findAll(Map<String, Object> map) throws SQLException;
 
 	List<BoardDto> findAllByUserId(String userId) throws SQLException;
 
@@ -25,5 +28,6 @@ public interface BoardMapper {
 	void updateBoard(BoardDto boardDto) throws SQLException;
 	
 	void deleteBoard(Integer id) throws SQLException;
+	
 	
 }

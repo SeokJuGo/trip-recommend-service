@@ -3,10 +3,12 @@ package com.ssafy.enjoytrip.board.service;
 import java.util.List;
 
 import com.ssafy.enjoytrip.board.model.BoardDto;
+import com.ssafy.enjoytrip.board.model.BoardListDto;
+import com.ssafy.enjoytrip.board.model.BoardSearchDto;
 
 public interface BoardService {
 
-	List<BoardDto> findAll() throws Exception;
+	BoardListDto findAll(BoardSearchDto boardSearchDto) throws Exception;
 
 	List<BoardDto> findAllByUserId(String userId) throws Exception;
 
