@@ -1,41 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.enjoytrip.board.mapper.BoardMapper">
-	<select id="findAll" resultType="BoardDto">
+<mapper namespace="com.ssafy.enjoytrip.board.mapper.BoardMapper"> 
+     
+    <select id="countTotalElements" parameterType="Map" resultType="Integer">
+		SELECT COUNT(A.ID) FROM USER A JOIN BOARD B ON A.ID = B.USER_ID
+		<where>
+	        <if test="title != null and title != ''">
+	            AND B.TITLE LIKE CONCAT('%', #{title}, '%')
+	        </if>
+	        <if test="userId != null and userId != ''">
+	            AND A.ID LIKE CONCAT('%', #{userId}, '%')
+	        </if>
+	        <if test="content != null and content != ''">
+	            AND B.CONTENT LIKE CONCAT('%', #{content}, '%')
+	        </if>
+	    </where>
+	</select>
+	
+	<select id="findAll" parameterType="Map" resultType="BoardDto">
+	    SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
+	           B.ID id, B.TITLE title, B.CONTENT content,
+	           B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
+	    FROM USER A JOIN BOARD B ON A.ID = B.USER_ID
+		<where>
+	        <if test="title != null and title != ''">
+	            AND B.TITLE LIKE CONCAT('%', #{title}, '%')
+	        </if>
+	        <if test="userId != null and userId != ''">
+	            AND A.ID LIKE CONCAT('%', #{userId}, '%')
+	        </if>
+	        <if test="content != null and content != ''">
+	            AND B.CONTENT LIKE CONCAT('%', #{content}, '%')
+	        </if>
+	    </where>
+	    ORDER BY B.ID DESC
+	    LIMIT #{offset}, #{pageSize}
+	</select>
+	
+<!-- 	<select id="findAll" resultType="BoardDto">
 		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
 			B.ID id, B.TITLE title, B.CONTENT content,
 			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
 		FROM USER A JOIN BOARD B
 		ON A.ID = B.USER_ID
-	</select>
+		ORDER BY B.ID DESC
+	</select> -->
 	
-	<select id="findAllByUserId" parameterType="String" resultType="BoardDto">
+<!-- 	<select id="findAllByUserId" parameterType="String" resultType="BoardDto">
 		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
 			B.ID id, B.TITLE title, B.CONTENT content,
 			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
 		FROM USER A JOIN BOARD B
 		ON A.ID = B.USER_ID
 		WHERE A.ID = #{userId}
-	</select>
+	</select> -->
 	
-	<select id="findAllByTitleContains" parameterType="String" resultType="BoardDto">
+<!-- 	<select id="findAllByTitleContains" parameterType="String" resultType="BoardDto">
 		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
 			B.ID id, B.TITLE title, B.CONTENT content,
 			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
 		FROM USER A JOIN BOARD B
 		ON A.ID = B.USER_ID
 		WHERE B.TITLE LIKE CONCAT('%', #{title}, '%')
-	</select>
+	</select> -->
 
-	<select id="findAllByContentContains" parameterType="String" resultType="BoardDto">
+<!-- 	<select id="findAllByContentContains" parameterType="String" resultType="BoardDto">
 		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
 			B.ID id, B.TITLE title, B.CONTENT content,
 			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
 		FROM USER A JOIN BOARD B
 		ON A.ID = B.USER_ID
 		WHERE B.CONTENT LIKE CONCAT('%', #{content}, '%')
-	</select>
+	</select> -->
 	
 	<select id="findById" parameterType="Integer" resultType="BoardDto">
 		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
