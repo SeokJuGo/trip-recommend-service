@@ -2,41 +2,80 @@
 import { ref } from "vue";
 import api from "axios";
 import { onMounted } from "vue";
-import  ShareListItem  from "./item/ShareListItem.vue";
+import ShareListItem from "./item/ShareListItem.vue";
+import PageNavigation from "../common/PageNavigation.vue";
+
+const params = ref({
+    pageNum: undefined,
+    pageSize: 10,
+    keyword: "",
+    searchType: "",
+});
+
+const pageNum = ref(1);
+const totalPages = ref(0);
+
 const boards = ref([]);
 const boardlist = async () => {
-  await api
-    .get(`http://localhost:8080/enjoytrip/board`,
-	//  { params: {
-    //     pgno: "1",
-    //     key: "",
-    //     word: "",
-    //     spp: 5,
-    //   },}
-	  )
-    .then(({ data }) => {
-      boards.value = data;
-      console.log("1. boards data >> ", boards.value);
-      //console.log("----------------------------->", response);
-    })
-    .catch((e) => {
-      console.log("1. boards catch >> ", e);
-    });
+    await api
+        .get(`http://localhost:8080/enjoytrip/board`, { params: params.value })
+        .then((response) => {
+            console.log(response);
+            pageNum.value = response.data.pageNum;
+            totalPages.value = response.data.totalPages;
+            boards.value = response.data.boards;
+            console.log(response.data);
+        })
+        // .then(({ data }) => {
+        //     boards.value = data;
+        //     console.log("1. boards data >> ", boards.value);
+        //     //console.log("----------------------------->", response);
+        // })
+        .catch((e) => {
+            console.log("1. boards catch >> ", e);
+        });
 };
-console.log(boards);
+
 onMounted(() => {
-  boardlist();
+    boardlist();
 });
+
+const getBoardList = async () => {
+    console.log("서버에서 글목록 얻어오자!!!", params.value);
+    // API 호출
+    await api
+        .get(`http://localhost:8080/enjoytrip/board`, { params: params.value })
+        .then((response) => {
+            console.log(response);
+            pageNum.value = response.data.pageNum;
+            totalPages.value = response.data.totalPages;
+            boards.value = response.data.boards;
+            console.log(response.data);
+        })
+        .catch((e) => {
+            console.log("2. boards catch >> ", e);
+        });
+};
+
+const onPageChange = (val) => {
+    console.log(val + "번 페이지로 이동 준비 끝!!!");
+    pageNum.value = val;
+    params.value.pageNum = val;
+    getBoardList();
+};
 </script>
 
 <template>
-<div class="container-fluid bg-danger-subtle">
-	<div class="container-md py-5 text-white-emphasis">
-		<!-- Title -->
-		<h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
-		<div
-			class="border border-2 border-dark-subtle rounded bg-white shadow p-4">
-			<!-- <div class="col-md-9 ms-auto mb-3 w-50">
+    <div class="container-fluid bg-danger-subtle">
+        <div class="container-md py-5 text-white-emphasis">
+            <!-- Title -->
+            <h1 class="border-bottom border-2 border-secondary">
+                여행지 정보공유
+            </h1>
+            <div
+                class="border border-2 border-dark-subtle rounded bg-white shadow p-4"
+            >
+                <!-- <div class="col-md-9 ms-auto mb-3 w-50">
 					<form class="d-flex" id="form-search" action="">
 						<input type="hidden" name="action" value="list"> <input
 							type="hidden" name="pgno" value="1"> <select name="key"
@@ -54,49 +93,60 @@ onMounted(() => {
 						</div>
 					</form>
 				</div> -->
-			<table
-				class="table table-bordered table-striped table-hover text-center">
-				<thead>
-					<tr>
-						<th class="text-center" style="width: 7.5%">#</th>
-						<th class="text-start" style="width: 65%">제목</th>
-						<th class="text-center" style="width: 7.5%">작성자</th>
-						<th class="text-center" style="width: 7.5%">조회수</th>
-						<th class="text-center" style="width: 12.5%">작성일</th>
-					</tr>
-				</thead>
-				
-				<ShareListItem v-for="board in boards" 
-								:key="board.id" 
-								:board="board">
-							</ShareListItem>
-					
+                <table
+                    class="table table-bordered table-striped table-hover text-center"
+                >
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="width: 7.5%">#</th>
+                            <th class="text-start" style="width: 65%">제목</th>
+                            <th class="text-center" style="width: 7.5%">
+                                작성자
+                            </th>
+                            <th class="text-center" style="width: 7.5%">
+                                조회수
+                            </th>
+                            <th class="text-center" style="width: 12.5%">
+                                작성일
+                            </th>
+                        </tr>
+                    </thead>
 
-			</table>
+                    <ShareListItem
+                        v-for="board in boards"
+                        :key="board.id"
+                        :board="board"
+                    >
+                    </ShareListItem>
+                </table>
 
-			<div class="d-flex justify-content-center">
-				<div class="col-md-3 text-start"></div>
+                <div class="d-flex justify-content-center">
+                    <div class="col-md-3 text-start"></div>
 
-				<nav class="mx-auto" aria-label="Page navigation example">
-					<!-- <div class="row">${navigation.navigator}</div> -->
-				</nav>
-				<div class="col-md-3 text-end">
-					<button id="btn-board-register" class="btn btn-dark">등록하기</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                    <nav class="mx-auto" aria-label="Page navigation example">
+                        <!-- <div class="row">${navigation.navigator}</div> -->
+                    </nav>
+                    <div class="col-md-3 text-end">
+                        <button id="btn-board-register" class="btn btn-dark">
+                            등록하기
+                        </button>
+                    </div>
+                </div>
+                <PageNavigation
+                    :current-page="pageNum"
+                    :total-page="totalPages"
+                    @pageChange="onPageChange"
+                ></PageNavigation>
+            </div>
+        </div>
+    </div>
 
-<!-- <script>
+    <!-- <script>
 	document.querySelector("#btn-board-register").addEventListener("click",
 			function() {
 				location.href = "${root}/board?action=mvwrite";
 			});
 </script> -->
-
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
