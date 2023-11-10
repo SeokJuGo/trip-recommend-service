@@ -1,7 +1,7 @@
 <script setup>
-import paju from "../../assets/img/파주프로방스.png"
-import song from "../../assets/img/송도한옥마을.jpg"
-import eul from "../../assets/img/을왕리.jpg"
+import paju from "../assets/img/파주프로방스.png"
+import song from "../assets/img/송도한옥마을.jpg"
+import eul from "../assets/img/을왕리.jpg"
 </script>
 
 <template>

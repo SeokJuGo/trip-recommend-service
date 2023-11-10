@@ -5,24 +5,24 @@ import { onMounted } from "vue";
 const boards = ref([]);
 const boardlist = async () => {
   await api
-    .get(`http://localhost:9999/vue/board/`, {
+    .get(`http://localhost:8080/enjoytrip/board`, {
       params: {
         pgno: "1",
         key: "",
-        spp: "10",
         word: "",
+        spp: 5,
       },
     })
-    .then((response) => {
-      //   boards.value = data;
-      //   console.log("3. albums data >> ", data);
-      console.log(response);
+    .then(({ data }) => {
+      boards.value = data;
+      console.log("1. boards data >> ", boards.value);
+      //console.log("----------------------------->", response);
     })
     .catch((e) => {
-      console.log("3. bpards catch >> ", e);
+      console.log("1. boards catch >> ", e);
     });
 };
-console.log(boards);
+
 onMounted(() => {
   boardlist();
 });
@@ -66,21 +66,16 @@ onMounted(() => {
 				</thead>
 				<tbody>
 						<tr class="text-center" v-for = "(board,index) in boards" :key="board.articleNo">
-							<th scope="row"></th> <!--id-->
+							<th scope="row">{{ board.userName }}</th> <!--id-->
 							<td class="text-start"><a
 								href=""
 								class="article-title link-dark" data-no=""
-								style="text-decoration: none">  </a></td>
+								style="text-decoration: none">  </a>{{ board.title }}</td>
 							<td>{{ board.userId }}</td> <!--id-->
-							<td>{{ board.hit }}</td> <!--hit-->
-							<td>{{ board.registerTime }}</td> <!--createddate-->
+							<td>{{ board.userEmail }}</td> <!--hit-->
+							<td>{{ board.createdDate }}</td> <!--createddate-->
 						</tr>
 					</tbody>
-          <tr v-for="board in boards">
-            <td>1</td>
-            <td>2</td>
-            <td>2</td>
-          </tr>
 			</table>
 
 			<div class="d-flex justify-content-center">

@@ -1,11 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ShareView from "../views/share/ShareView.vue"
-import HotPlaceView from "../views/hotplace/HotPlaceView.vue"
-import AttractionView from "../views/attraction/AttractionView.vue"
-import MyPlanView from "../views/myplans/MyPlanView.vue"
-import LoginView from "../views/user/LoginView.vue"
-import JoinView from "../views/user/JoinView.vue"
-import MyPageView from "../views/user/MyPageView.vue"
+import ShareView from "../views/ShareView.vue"
+import HotPlaceView from "../views/HotPlaceView.vue"
+import AttractionView from "../views/AttractionView.vue"
+import MyPlanView from "../views/MyPlanView.vue"
 import MainView from "../views/MainView.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,25 +28,36 @@ const router = createRouter({
       component: MyPlanView
     },
     {
-      path: '/login',
-      name: 'login',
-      component: LoginView
-    },    
-    {
-      path: '/join',
-      name: 'join',
-      component: JoinView
-    },
-    {
-      path: '/mypage',
-      name: 'mypage',
-      component: MyPageView
-    },
-    {
-      path: '/',
-      name: 'main',
-      component: MainView
-    },
+      path: "/user",
+      name: "user",
+      component: () => import("../views/UserView.vue"),
+      redirect: {name: "login"},
+      children:[
+        { 
+          path: '/login',
+          name: 'login',
+          component: ()=>import("@/components/user/LoginPage.vue") 
+        },    
+        {
+          path: '/join',
+          name: 'join',
+          component: ()=>import("@/components/user/JoinPage.vue") 
+        },
+        {
+          path: '/mypage',
+          name: 'my-page',
+          component: ()=>import("@/components/user/MyPage.vue") 
+        },
+      ]},
+        {
+          path: '/',
+          name: 'main',
+          component: MainView
+        },
+    
+
+    
+  
     // {
     //   path: '/about',
     //   name: 'about',

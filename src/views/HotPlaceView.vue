@@ -15,7 +15,7 @@
 				<div class="col-md-6 col-lg-4">
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/강릉.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/강릉.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">강릉</h5>
 							<p class="card-text">This is a wider card with supporting
@@ -28,7 +28,7 @@
 					</div>
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/양양.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/양양.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">양양</h5>
 							<p class="card-text">This is a wider card with supporting
@@ -41,7 +41,7 @@
 					</div>
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/태안.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/태안.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">태안</h5>
 							<p class="card-text">This is a wider card with supporting
@@ -57,7 +57,7 @@
 				<div class="col-md-6 col-lg-4">
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/양양.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/양양.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">양양</h5>
 							<p class="card-text">This is a wider card with supporting
@@ -70,7 +70,7 @@
 					</div>
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/태안.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/태안.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">태안</h5>
 							<p class="card-text">This is a wider card with supporting
@@ -83,7 +83,7 @@
 					</div>
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/강릉.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/강릉.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">강릉</h5>
 							<p class="card-text">This is a wider card with supporting
@@ -99,7 +99,7 @@
 				<div class="col-md-6 col-lg-4">
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/강릉.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/강릉.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">강릉</h5>
 							<p class="card-text">This is a wider card with supporting
@@ -112,7 +112,7 @@
 					</div>
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/양양.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/양양.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">양양</h5>
 							<p class="card-text">This is a wider card with supporting
@@ -125,7 +125,7 @@
 					</div>
 					<!-- Card -->
 					<div class="card text-bg-dark shadow mb-3">
-						<img src="../../assets/img/태안.jpg" class="card-img" alt="..." />
+						<img src="../assets/img/태안.jpg" class="card-img" alt="..." />
 						<div class="card-img-overlay">
 							<h5 class="card-title">태안</h5>
 							<p class="card-text">This is a wider card with supporting
