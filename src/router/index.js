@@ -72,7 +72,7 @@ const router = createRouter({
           component: () => import("@/components/share/ShareList.vue"),
         },
         {
-          path: "view/:articleno",
+          path: "view/:id",
           name: "share-view",
           component: () => import("@/components/share/ShareDetail.vue"),
         },

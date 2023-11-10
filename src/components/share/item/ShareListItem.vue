@@ -8,9 +8,9 @@ defineProps({ board: Object });
 							<th scope="row">{{ board.userName }}</th> <!--id-->
 							
 							<td class="text-start">
-								<a href="view"
+								<router-link :to="{name:'share-view',params:{id:board.id}}"
 								class="boards-title link-dark" data-no=""
-								style="text-decoration: none">{{ board.title }} </a></td>
+								style="text-decoration: none">{{ board.title }}  </router-link></td>
 							<td>{{ board.userId }}</td> <!--id-->
 							<td>{{ board.userEmail }}</td> <!--hit-->
 							<td>{{ board.createdDate }}</td> <!--createddate-->
