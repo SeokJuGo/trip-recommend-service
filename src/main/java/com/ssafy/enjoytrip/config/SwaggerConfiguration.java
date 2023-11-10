@@ -29,6 +29,8 @@ public class SwaggerConfiguration {
 	// Swagger-UI 3.x 확인
 	// http://localhost:8080/{your-app-root}/swagger-ui/index.html
 	
+	private static final String API_TYPES = "home|user|admin|sido|gugun|attraction|board";
+	
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
@@ -38,10 +40,12 @@ public class SwaggerConfiguration {
 				.useDefaultResponseMessages(false)
 				.groupName(API_VERSION).select()
 //				.apis(RequestHandlerSelectors.basePackage("com.ssafy.enjoytrip.attraction.controller"))
-				.apis(RequestHandlerSelectors.any())	// @RequestMapping 으로 할당된 모든 URL 리스트 추출
-//				.paths(PathSelectors.regex("/sido/.*"))	// @RequestMapping 자기 자신은 인식하지 못하는 것 같음 
-				.paths(PathSelectors.regex("/.*"))		// regex()를 사용할 때는 "/{path}/.*"
-//				.paths(PathSelectors.ant("/**"))		// ant()를 사용할 때는 "/{path}/**"
+				.apis(RequestHandlerSelectors.any())		// @RequestMapping 으로 할당된 모든 URL 리스트 추출
+				.paths(PathSelectors.regex("/.*"))			// regex()를 사용할 때는 "/{path}.*"
+//				.paths(PathSelectors.ant("/**"))			// ant()를 사용할 때는 "/{path}/**"
+//				.paths(PathSelectors.regex("/enjoytrip.*"))	// application.properties의 context-path를 포함한 API URL
+//				.paths(PathSelectors.ant("/enjoytrip/**"))	// application.properties의 context-path를 포함한 API URL
+//				.paths(PathSelectors.regex("/enjoytrip/(" + API_TYPES + ").*"))	// 필요한 API만 Swagger에 표시
 				.build();
 	}
 
