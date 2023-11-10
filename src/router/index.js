@@ -34,18 +34,18 @@ const router = createRouter({
       redirect: {name: "login"},
       children:[
         { 
-          path: '/login',
+          path: 'login',
           name: 'login',
           component: ()=>import("@/components/user/LoginPage.vue") 
         },    
         {
-          path: '/join',
+          path: 'join',
           name: 'join',
           component: ()=>import("@/components/user/JoinPage.vue") 
         },
         {
-          path: '/mypage',
-          name: 'my-page',
+          path: 'mypage',
+          name: 'mypage',
           component: ()=>import("@/components/user/MyPage.vue") 
         },
       ]},
@@ -54,9 +54,40 @@ const router = createRouter({
           name: 'main',
           component: MainView
         },
-    
 
     
+    {
+      path: "/share",
+      name: "share",
+      // component: TheBoardView,
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import("../views/ShareView.vue"),
+      redirect: { name: "share-list" },
+      children: [
+        {
+          path: "list",
+          name: "share-list",
+          component: () => import("@/components/share/ShareList.vue"),
+        },
+        {
+          path: "view/:articleno",
+          name: "share-view",
+          component: () => import("@/components/share/ShareDetail.vue"),
+        },
+        // {
+        //   path: "write",
+        //   name: "article-write",
+        //   component: () => import("@/components/board/BoardWrite.vue"),
+        // },
+        // {
+        //   path: "modify/:articleno",
+        //   name: "article-modify",
+        //   component: () => import("@/components/board/BoardModify.vue"),
+        // },
+      ],
+    },
   
     // {
     //   path: '/about',
