@@ -4,7 +4,10 @@ import api from "axios";
 import { onMounted } from "vue";
 import ShareListItem from "./item/ShareListItem.vue";
 import PageNavigation from "../common/PageNavigation.vue";
+import {useRoute,useRouter} from 'vue-router';
 
+
+// 리스트
 const params = ref({
     pageNum: undefined,
     pageSize: 10,
@@ -26,19 +29,10 @@ const boardlist = async () => {
             boards.value = response.data.boards;
             console.log(response.data);
         })
-        // .then(({ data }) => {
-        //     boards.value = data;
-        //     console.log("1. boards data >> ", boards.value);
-        //     //console.log("----------------------------->", response);
-        // })
         .catch((e) => {
             console.log("1. boards catch >> ", e);
         });
 };
-
-onMounted(() => {
-    boardlist();
-});
 
 const getBoardList = async () => {
     console.log("서버에서 글목록 얻어오자!!!", params.value);
@@ -63,6 +57,21 @@ const onPageChange = (val) => {
     params.value.pageNum = val;
     getBoardList();
 };
+
+
+onMounted(() => {
+    boardlist();
+});
+
+
+//글 작성 라우터
+const router = useRouter()
+
+const goWrite = function() {
+	router.push({name:'share-write'})
+}
+
+
 </script>
 
 <template>
@@ -126,8 +135,9 @@ const onPageChange = (val) => {
                     <nav class="mx-auto" aria-label="Page navigation example">
                         <!-- <div class="row">${navigation.navigator}</div> -->
                     </nav>
+					
                     <div class="col-md-3 text-end">
-                        <button id="btn-board-register" class="btn btn-dark">
+                        <button @click="goWrite" id="btn-board-register" class="btn btn-dark">
                             등록하기
                         </button>
                     </div>

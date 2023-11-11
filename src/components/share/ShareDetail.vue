@@ -3,8 +3,14 @@ import { ref,onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 const board = ref([]);
+
+
 const route = useRoute();
 const { id } = route.params;
+
+
+
+//view 불러오기
 const b= async () => {
   await axios
     .get(`http://localhost:8080/enjoytrip/board/detail/${id}`)
@@ -17,7 +23,11 @@ const b= async () => {
       console.log("1. board catch >> ", e);
     });
 };
+onMounted(() => {
+  b();
+});
 
+//글 delete function
 const deleleShare = () => {
   
   axios.delete(`http://localhost:8080/enjoytrip/board/delete`, {
@@ -29,9 +39,18 @@ const deleleShare = () => {
   .catch(error => console.log(error));
 }
 
-onMounted(() => {
-  b();
-});
+
+//update 라우터
+const router = useRouter()
+const goUpdate = function() {
+	router.push({name:'share-update'})
+}
+
+//list 라우터
+const goList = function() {
+	router.push({name:'share-list'})
+}
+
 </script>
 
 <template>
@@ -65,17 +84,15 @@ onMounted(() => {
             </div>
             <div class="divider mt-3 mb-3"></div>
             <div class="d-flex justify-content-end">
-              <button type="button" id="btn-list" class="btn btn-outline-primary mb-3">
+              <button @click="goList" type="button" id="btn-list" class="btn btn-outline-primary mb-3">
                 글목록
               </button>
-              <c:if test="${userinfo.userId eq article.userId}">
-              <button type="button" id="btn-mv-modify" class="btn btn-outline-success mb-3 ms-1">
+              <button @click="goUpdate" type="button" id="btn-mv-modify" class="btn btn-outline-success mb-3 ms-1">
                 글수정
               </button>
               <button type="button" @click="deleleShare" id="btn-delete" class="btn btn-outline-danger mb-3 ms-1">
                 글삭제
               </button>
-              </c:if>
             </div>
           </div>
         </div>
