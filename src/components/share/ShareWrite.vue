@@ -5,6 +5,7 @@ import axios from "axios";
 const data = ref({
   title: "",
   content: "",
+  userId:"ssafy",
 });
 
 const write = async () => {
@@ -29,7 +30,6 @@ const write = async () => {
 						type="text" name="subject" id="subject" class="form-control"
 						placeholder="제목" v-model="data.title">
 				</div>
-        <p>{{ content }}</p>
 				<div class="mb-3">
 					<label for="content" class="form-label">내용</label>
 					<textarea name="content" id="content" class="form-control"
