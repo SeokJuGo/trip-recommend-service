@@ -14,8 +14,8 @@ const boardlist = async () => {
     //     spp: 5,
     //   },}
 	  )
-    .then(({ data }) => {
-      boards.value = data;
+    .then(({ response }) => {
+      boards.value = response.data;
       console.log("1. boards data >> ", boards.value);
       //console.log("----------------------------->", response);
     })

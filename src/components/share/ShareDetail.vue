@@ -1,14 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-import { onMounted } from "vue";
-import { isIntegerKey } from "@vue/shared";
 const board = ref([]);
 const route = useRoute();
 const { id } = route.params;
-console.log(id);
-const boardlist = async () => {
+const b= async () => {
   await axios
     .get(`http://localhost:8080/enjoytrip/board/detail/${id}`)
     .then(({ data }) => {
@@ -32,11 +29,8 @@ const deleleShare = () => {
   .catch(error => console.log(error));
 }
 
-
-
-
 onMounted(() => {
-  boardlist();
+  b();
 });
 </script>
 

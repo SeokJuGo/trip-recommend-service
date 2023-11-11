@@ -81,11 +81,11 @@ const router = createRouter({
           name: "article-write",
           component: () => import("@/components/share/ShareWrite.vue"),
         },
-        // {
-        //   path: "modify/:articleno",
-        //   name: "article-modify",
-        //   component: () => import("@/components/board/BoardModify.vue"),
-        // },
+        {
+          path: "modify/:id",
+          name: "article-modify",
+          component: () => import("@/components/share/ShareModify.vue"),
+        },
       ],
     },
   
