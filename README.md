@@ -18,25 +18,27 @@
 
 ### 1.1 게시글 목록
 
-<!-- 여기에 그림을 넣어주세요. -->
+![Alt text](docs/images/board_vue_list.png)
 
 [[Top]](#)
 
 ### 1.2 게시글 등록
 
-<!-- 여기에 그림을 넣어주세요. -->
+![Alt text](docs/images/board_vue_write.png)
 
 [[Top]](#)
 
 ### 1.3 게시글 수정
 
-<!-- 여기에 그림을 넣어주세요. -->
+![Alt text](docs/images/board_vue_write.png)
+
+
 
 [[Top]](#)
 
 ### 1.4 게시글 조회
 
-<!-- 여기에 그림을 넣어주세요. -->
+![Alt text](docs/images/board_vue_detail.png)
 
 [[Top]](#)
 
