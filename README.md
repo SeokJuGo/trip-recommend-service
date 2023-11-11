@@ -1,29 +1,72 @@
-# FrontEnd
+# EnjoyTrip*Vue*서울\_15반 조시훈 고석주
 
-This template should help get you started developing with Vue 3 in Vite.
+-   [1. Vue(Frontend)](#vuefrontend)
+    -   [1. 게시글 목록](#11-게시글-목록)
+    -   [2. 게시글 등록](#12-게시글-등록)
+    -   [3. 게시글 수정](#13-게시글-수정)
+    -   [4. 게시글 조회](#14-게시글-조회)
+-   [2. SpringBoot(Backend)](#2-springbootbackend)
+    -   [1. 게시글 목록](#21-게시글-목록)
+    -   [2. 게시글 등록](#22-게시글-등록)
+    -   [3. 게시글 수정](#23-게시글-수정)
+    -   [4. 게시글 조회](#24-게시글-조회)
+    -   [5. 게시글 삭제](#25-게시글-삭제)
 
-## Recommended IDE Setup
+---
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## 1. Vue(Frontend)
 
-## Customize configuration
+### 1.1 게시글 목록
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+![Alt text](docs/images/board_vue_list.png)
 
-## Project Setup
+[[Top]](#)
 
-```sh
-npm install
-```
+### 1.2 게시글 등록
 
-### Compile and Hot-Reload for Development
+![Alt text](docs/images/board_vue_write.png)
 
-```sh
-npm run dev
-```
+[[Top]](#)
 
-### Compile and Minify for Production
+### 1.3 게시글 수정
 
-```sh
-npm run build
-```
+![Alt text](docs/images/board_vue_write.png)
+
+
+
+[[Top]](#)
+
+### 1.4 게시글 조회
+
+![Alt text](docs/images/board_vue_detail.png)
+
+[[Top]](#)
+
+---
+
+## 2. SpringBoot(Backend)
+
+### 2.1 게시글 목록
+
+![Alt text](docs/images/swagger-ui_boardlist_api_get.png)
+[[Top]](#)
+
+### 2.2 게시글 등록
+
+![Alt text](docs/images/swagger-ui_board_api_post.png)
+[[Top]](#)
+
+### 2.3 게시글 수정
+
+![Alt text](docs/images/swagger-ui_board_api_put.png)
+[[Top]](#)
+
+### 2.4 게시글 조회
+
+![Alt text](docs/images/swagger-ui_board_api_get.png)
+[[Top]](#)
+
+### 2.5 게시글 삭제
+
+![Alt text](docs/images/swagger-ui_board_api_delete.png)
+[[Top]](#)
