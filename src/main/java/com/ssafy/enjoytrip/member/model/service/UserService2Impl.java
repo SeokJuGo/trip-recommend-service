@@ -8,18 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.enjoytrip.member.model.UserDto;
-import com.ssafy.enjoytrip.member.model.mapper.UserMapper;
+import com.ssafy.enjoytrip.member.model.mapper.UserMapper2;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserService2Impl implements UserService2 {
 	
 //	@Autowired
 //	private SqlSession sqlSession;
 	
-	private UserMapper userMapper;
+	private UserMapper2 userMapper;
 
 	@Autowired
-	public UserServiceImpl(UserMapper userMapper) {
+	public UserService2Impl(UserMapper2 userMapper) {
 		super();
 		this.userMapper = userMapper;
 	}

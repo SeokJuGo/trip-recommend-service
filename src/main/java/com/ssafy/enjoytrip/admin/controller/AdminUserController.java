@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.enjoytrip.member.model.UserDto;
-import com.ssafy.enjoytrip.member.model.service.UserService;
+import com.ssafy.enjoytrip.member.model.service.UserService2;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,10 +41,10 @@ public class AdminUserController {
 
 //	private static final Logger log = LoggerFactory.getLogger(AdminUserController.class);
 
-	private UserService userService;
+	private UserService2 userService;
 
 	@Autowired
-	public AdminUserController(UserService userService) {
+	public AdminUserController(UserService2 userService) {
 		this.userService = userService;
 	}
 

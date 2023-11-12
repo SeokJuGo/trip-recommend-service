@@ -1,12 +1,15 @@
-package com.ssafy.enjoytrip.member.model.service;
+package com.ssafy.enjoytrip.member.model.mapper;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.ssafy.enjoytrip.member.model.UserDto;
 
-public interface UserService {
+@Mapper
+public interface UserMapper2 {
 
 	int idCheck(String id) throws Exception;
 	void joinUser (UserDto userDto) throws Exception;
