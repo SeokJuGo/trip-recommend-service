@@ -1,12 +1,23 @@
 package com.ssafy.enjoytrip.user.mapper;
 
-import org.springframework.stereotype.Repository;
+import java.sql.SQLException;
+import java.util.List;
 
-import com.ssafy.enjoytrip.user.model.User;
+import org.apache.ibatis.annotations.Mapper;
 
-@Repository
+import com.ssafy.enjoytrip.user.model.UserEntity;
+
+@Mapper
 public interface UserMapper {
 	
-	User findByUsername(String username);
+	List<UserEntity> findAll() throws SQLException;
+	
+	UserEntity findByUsername(String username) throws SQLException;
+	
+	void regist(UserEntity userEntity) throws SQLException;
+	
+	void update(UserEntity userEntity) throws SQLException;
+	
+	void delete(Integer id) throws SQLException;
 	
 }

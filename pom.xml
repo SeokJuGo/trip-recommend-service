@@ -32,17 +32,17 @@
 		</dependency>
 
 		<!-- Spring Boot Starter Security -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+		</dependency> -->
 
 		<!-- JSON Web Token Dependencies -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
-		</dependency>
+		</dependency> -->
 
 
 		<dependency>

@@ -1,111 +1,119 @@
 package com.ssafy.enjoytrip.user.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.admin.controller.AdminUserController;
-import com.ssafy.enjoytrip.member.model.UserDto;
-import com.ssafy.enjoytrip.member.model.service.UserService;
+import com.ssafy.enjoytrip.user.model.AuthRequestDto;
+import com.ssafy.enjoytrip.user.model.UserRequestDto;
+import com.ssafy.enjoytrip.user.model.UserResponseDto;
+import com.ssafy.enjoytrip.user.service.UserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
-@RestController
-@RequestMapping("/user")
-@CrossOrigin("*")
-@Api(tags = {"유저 컨트롤러 API"})
 @Slf4j
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/user")
+@RequiredArgsConstructor
+@Api(tags = {"유저 컨트롤러 API"})
 public class UserController {
+	private final UserService userService;
 	
-	private final Logger logger = LoggerFactory.getLogger(UserController.class);
-	
-	private UserService userService;
-
-	public UserController(UserService userService) {
-		super();
-		this.userService = userService;
-	}
-	
-	@ApiOperation(value = "id체크", notes = "id체크하기.")
-	@GetMapping("/{userid}")
-	@ResponseBody
-	public String idCheck(String id) throws Exception {
-		logger.debug("idCheck id : {}", id);
-		int cnt = userService.idCheck(id);
-		return cnt + "";
-	}
-	@ApiOperation(value = "회원등록", notes = "회원의 정보를 받아 처리.")
-	@PostMapping(value = "/join")
-	public ResponseEntity<?> join(@RequestBody UserDto userDto, Model model) {
-		logger.debug("userDto info : {}", userDto);
+	@GetMapping("")
+	@ApiOperation(value = "회원정보 조회", notes = "회원정보를 조회한다.")
+	public ResponseEntity<?> findByUsername(String username) {
+		log.debug("[UserController] findByUsername() function called, username = {}", username);
 		try {
-			userService.joinUser(userDto);
-//			return new ResponseEntity<Integer>(1, HttpStatus.OK);
-			return new ResponseEntity<Integer>(1, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return exceptionHandling(e);
-		}
-		
-	}
-	
-	@ApiOperation(value = "로그인", notes = "아이디랑 패스워드만 작성하시오.")
-	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody UserDto user) {
-		System.out.println("login gogogogo");
-		logger.debug("login map : {}", user);
-		try {
-			UserDto userDto = userService.loginUser(user);
-			logger.debug("login map : {}", userDto);
-			if(userDto != null) {
-//				session.setAttribute("userinfo", memberDto);
-//				
-//				Cookie cookie = new Cookie("ssafy_id", map.get("userid"));
-//				cookie.setPath("/board");
-//				if("ok".equals(saveid)) {
-//					cookie.setMaxAge(60*60*24*365*40);
-//				} else {
-//					cookie.setMaxAge(0);
-//				}
-//				response.addCookie(cookie);
-				return new ResponseEntity<Integer>(HttpStatus.OK);
-			} else {
-				return new ResponseEntity<Integer>(HttpStatus.NO_CONTENT);
-			}
+			UserResponseDto responseDto = userService.findByUsername(username);
+			return new ResponseEntity<>(responseDto, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			
-			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("")
+	@ApiOperation(value = "회원정보 등록", notes = "회원정보를 등록한다.")
+	public ResponseEntity<?> regist(@RequestBody UserRequestDto userRequestDto) {
+		log.debug("[UserController] regist() function called, userRequestDto = {}", userRequestDto);
+		try {
+			userService.regist(userRequestDto);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@ApiOperation(value = "로그아웃하기", notes = "로그아웃.")
+	
+	@PutMapping("")
+	@ApiOperation(value = "회원정보 수정", notes = "회원정보를 수정한다.")
+	public ResponseEntity<?> update(@RequestBody UserRequestDto userRequestDto) {
+		log.debug("[UserController] update() function called, userRequestDto = {}", userRequestDto);
+		try {
+			userService.update(userRequestDto);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@DeleteMapping("")
+	@ApiOperation(value = "회원정보 삭제", notes = "회원정보를 삭제한다.")
+	public ResponseEntity<?> delete(HttpSession httpSession) {
+		log.debug("[UserController] delete() function called, id = {}", httpSession.getAttribute("id"));
+		try {
+			userService.delete((Integer) httpSession.getAttribute("id"));
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/login")
+	@ApiOperation(value = "로그인", notes = "로그인")
+	public ResponseEntity<?> login(@RequestBody AuthRequestDto authRequestDto, HttpSession httpSession) {
+		log.debug("[UserController] login() function called, authRequestDto = {}", authRequestDto);
+		try {
+			UserResponseDto responseDto = userService.login(authRequestDto);
+			if (responseDto != null) {
+				// 추후 AuthResponseDto(JWT accessToken 및 refreshToken)를 반환하는 것으로 수정 필요
+				httpSession.setAttribute("user", responseDto);
+				return new ResponseEntity<>(responseDto, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/logout")
+	@ApiOperation(value = "로그아웃", notes = "로그아웃")
 	public ResponseEntity<?> logout(HttpSession session) {
 		session.invalidate();
-		return new ResponseEntity<Integer>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	private ResponseEntity<String> exceptionHandling(Exception e) {
-		e.printStackTrace();
-		return new ResponseEntity<String>("Error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+
 }
