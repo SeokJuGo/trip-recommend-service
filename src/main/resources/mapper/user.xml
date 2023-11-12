@@ -4,12 +4,12 @@
 
 <mapper namespace="com.ssafy.enjoytrip.member.model.mapper.UserMapper">
 
-	<resultMap type="userDto" id="user">
+	<!-- <resultMap type="userDto" id="user">
 		<result column="id" property="id"/>
 		<result column="name" property="name"/>
 	</resultMap>
 	
-	<!-- ADMIN -->
+	ADMIN
 	<resultMap type="userDto" id="userAll" extends="user">
 		<result column="password" property="password"/>
 		<result column="email" property="email"/>
@@ -34,7 +34,7 @@
 		where id = #{id} and password = #{password}
 	</select>
 	
-	<!-- ADMIN -->
+	ADMIN
 	<select id="listUser" resultMap="userAll">
 		select name, id, password, email, created_date,updated_date
 		from user
@@ -59,6 +59,17 @@
 	<delete id="deleteUser" parameterType="String">
 		delete from user
 		where id = #{id}
-	</delete>
+	</delete> -->
 	
+	<resultMap type="User" id="UserResultMap">
+		<id property="id" column="id" />
+		<result property="email" column="email" />
+		<result property="nickname" column="nickname" />
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+	</resultMap>
+	
+	<select id="findByUsername" resultMap="UserResultMap">
+		SELECT * FROM USER WHERE username = #{username}
+	</select>
 </mapper>
