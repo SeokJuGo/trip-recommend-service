@@ -2,63 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.enjoytrip.member.model.mapper.UserMapper">
-
-	<resultMap type="userDto" id="user">
-		<result column="id" property="id"/>
-		<result column="name" property="name"/>
-	</resultMap>
+<mapper namespace="com.ssafy.enjoytrip.user.mapper.UserMapper">
 	
-	<!-- ADMIN -->
-	<resultMap type="userDto" id="userAll" extends="user">
-		<result column="password" property="password"/>
-		<result column="email" property="email"/>
-		<result column="created_date" property="createdDate"/>
-		<result column="updated_date" property="updatedDate"/>
-	</resultMap>
-
-	<select id="idCheck" parameterType="String" resultType="int">
-		select count(id)
-		from user
-		where id = #{id}
+	<select id="findAll" resultType="UserEntity">
+		SELECT
+			ID AS id,
+			EMAIL AS email,
+			ROLE_ID AS roleId,
+			USERNAME AS username,
+			NICKNAME AS nickname,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM USER
 	</select>
-
-	<insert id="joinUser" parameterType="userDto">
-		insert into user (name, id, password, email, created_date,updated_date)
-		values (#{name}, #{id}, #{password}, #{email}, now(),now())
+	
+	<select id="findByUsername" parameterType="String" resultType="UserEntity">
+		SELECT
+			ID AS id,
+			EMAIL AS email,
+			ROLE_ID AS roleId,
+			USERNAME AS username,
+			PASSWORD AS password,
+			NICKNAME AS nickname,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM USER
+		WHERE USERNAME = #{username}
+	</select>
+	
+	<insert id="regist" parameterType="UserEntity">
+		INSERT INTO USER (USERNAME, PASSWORD, NICKNAME, EMAIL)
+		VALUES (#{username}, #{password}, #{nickname}, #{email})
 	</insert>
-
-	<select id="loginUser" parameterType="UserDto" resultMap="user">
-		select id, name
-		from user
-		where id = #{id} and password = #{password}
-	</select>
 	
-	<!-- ADMIN -->
-	<select id="listUser" resultMap="userAll">
-		select name, id, password, email, created_date,updated_date
-		from user
-		order by created_date
-	</select>
-	
-	<select id="getUser" parameterType="string" resultMap="userAll">
-		select id, name, password, email, created_date,updated_date
-		from user
-		where id = #{id}
-	</select>
-	
-	<update id="updateUser" parameterType="userDto">
-		update user
-		<trim prefix="set" suffixOverrides=",">
-			<if test="password != null">password = #{password},</if>
-			<if test="email != null">email = #{email},</if>
-		</trim>
-		where id = #{id}
+	<update id="update" parameterType="UserEntity">
+		UPDATE USER SET
+			EMAIL = #{email}
+			NICKNAME = #{nickname},
+			PASSWORD = #{password},
+		WHERE ID = #{id}
 	</update>
 	
-	<delete id="deleteUser" parameterType="String">
-		delete from user
-		where id = #{id}
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM USER WHERE ID = #{id}
 	</delete>
-	
+
 </mapper>
