@@ -19,5 +19,5 @@ public interface UserMapper {
 	void update(UserEntity userEntity) throws SQLException;
 	
 	void delete(Integer id) throws SQLException;
-	
+
 }

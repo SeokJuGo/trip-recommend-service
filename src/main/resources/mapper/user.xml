@@ -3,47 +3,33 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.enjoytrip.user.mapper.UserMapper">
-	
-	<select id="findAll" resultType="UserEntity">
-		SELECT
-			ID AS id,
-			EMAIL AS email,
-			ROLE_ID AS roleId,
-			USERNAME AS username,
-			NICKNAME AS nickname,
-			CREATED_DATE AS createdDate,
-			UPDATED_DATE AS updatedDate
-		FROM USER
+		
+	<select id="findAll" resultType="UserResponseDto">
+		SELECT A.id, A.email, A.username, A.nickname,
+			B.name rolename, B.description roledesc
+		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
 	</select>
 	
-	<select id="findByUsername" parameterType="String" resultType="UserEntity">
-		SELECT
-			ID AS id,
-			EMAIL AS email,
-			ROLE_ID AS roleId,
-			USERNAME AS username,
-			PASSWORD AS password,
-			NICKNAME AS nickname,
-			CREATED_DATE AS createdDate,
-			UPDATED_DATE AS updatedDate
-		FROM USER
-		WHERE USERNAME = #{username}
+	<select id="findByUsername" parameterType="String" resultType="UserResponseDto">
+		SELECT A.id, A.email, A.username, A.nickname,
+			B.name rolename, B.description roledesc
+		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
+		WHERE A.username = #{username}
 	</select>
 	
-	<insert id="regist" parameterType="UserEntity">
-		INSERT INTO USER (USERNAME, PASSWORD, NICKNAME, EMAIL)
+	<insert id="regist" parameterType="UserRequestDto">
+		INSERT INTO USER (username, password, nickname, email)
 		VALUES (#{username}, #{password}, #{nickname}, #{email})
 	</insert>
 	
-	<update id="update" parameterType="UserEntity">
+	<update id="update" parameterType="UserRequestDto">
 		UPDATE USER SET
-			EMAIL = #{email},
-			NICKNAME = #{nickname},
-			PASSWORD = #{password}
-		WHERE ID = #{id}
+			username = #{username}, password = #{password},
+			nickname = #{nickname}, email = #{email}
+		WHERE id = #{id}
 	</update>
 	
-	<delete id="delete" parameterType="Integer">
+	<delete id="delete" parameterType="UserRequestDto">
 		DELETE FROM USER WHERE ID = #{id}
 	</delete>
 
