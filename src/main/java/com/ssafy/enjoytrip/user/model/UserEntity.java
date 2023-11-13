@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@ApiModel(value = "UserEntity(회원정보)", description = "회원정보를 포함하고 있는 Domain Entity Class")
+@ApiModel(value = "UserEntity(회원정보)", description = "회원정보를 포함하고 있는 DomainEntity Class")
 public class UserEntity {
 	@ApiModelProperty(value = "Index")
 	private Long id;

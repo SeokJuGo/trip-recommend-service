@@ -78,10 +78,10 @@ public class UserController {
 	
 	@DeleteMapping("")
 	@ApiOperation(value = "회원정보 삭제", notes = "회원정보를 삭제한다.")
-	public ResponseEntity<?> delete(HttpSession httpSession) {
-		log.debug("[UserController] delete() function called, id = {}", httpSession.getAttribute("id"));
+	public ResponseEntity<?> delete(@RequestBody AuthRequestDto authRequestDto) {
+		log.debug("[UserController] delete() function called, authRequestDto = {}", authRequestDto);
 		try {
-			userService.delete((Integer) httpSession.getAttribute("id"));
+			userService.delete(authRequestDto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -37,9 +37,9 @@
 	
 	<update id="update" parameterType="UserEntity">
 		UPDATE USER SET
-			EMAIL = #{email}
+			EMAIL = #{email},
 			NICKNAME = #{nickname},
-			PASSWORD = #{password},
+			PASSWORD = #{password}
 		WHERE ID = #{id}
 	</update>
 	

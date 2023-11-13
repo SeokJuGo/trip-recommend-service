@@ -5,10 +5,11 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@ApiModel(value = "AuthRequestDto(로그인 정보)", description = "로그인 정보를 포함하고 있는 Request Dto Class")
+@ApiModel(value = "AuthRequestDto(로그인 요청 정보)", description = "로그인 요청 정보를 포함하고 있는 RequestDto Class")
 public class AuthRequestDto {
 	@ApiModelProperty(value = "아이디")
 	private String username;
 	@ApiModelProperty(value = "비밀번호")
 	private String password;
+	
 }

@@ -18,6 +18,6 @@ public interface UserService {
 
 	void update(UserRequestDto userRequestDto) throws Exception;
 
-	void delete(Integer id) throws Exception;
+	void delete(AuthRequestDto authRequestDto) throws Exception;
 	
 }

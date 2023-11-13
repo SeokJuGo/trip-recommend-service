@@ -72,8 +72,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void delete(Integer id) throws Exception {
-		userMapper.delete(id);
+	public void delete(AuthRequestDto authRequestDto) throws Exception {
+		UserResponseDto responseDto = login(authRequestDto);
+		if (responseDto != null)
+			userMapper.delete(responseDto.getId().intValue());
 	}
 
 	@Override
