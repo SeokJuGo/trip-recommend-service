@@ -100,8 +100,7 @@ const a = () =>{
     <!-- Title -->
     <div class="d-flex justify-content-center mb-3">
       <h1 class="display-4 fw-bold text-center border-bottom border-2 border-secondary">
-
-<button @click="a">aaa</button>
+관광지 정보
       </h1>
     </div>
     <!-- Grid Row -->
@@ -114,7 +113,7 @@ const a = () =>{
         <VSelect :selectOption="gugunList" @onKeySelect="onChangeGugun" />
       </div>
       <div class="col-md-4 mb-0 mb-md-0">
-        <select id="contentType" class="form-select" aria-label="Default select example">
+        <select @click="getAttractions" v-model="searchAtt.contentTypeId" id="contentType" class="form-select" aria-label="Default select example">
           <option selected>관광정보선택</option>
           <option value="12">관광지</option>
           <option value="14">문화시설</option>
