@@ -2,9 +2,16 @@ package com.ssafy.enjoytrip.user.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "UserEntity(회원정보)", description = "회원정보를 포함하고 있는 DomainEntity Class")
 public class UserEntity {
 	@ApiModelProperty(value = "Index")
@@ -23,5 +30,5 @@ public class UserEntity {
 	private String updatedDate;
 	@ApiModelProperty(value = "권한 Index")
 	private Long roleId;
-
+	
 }

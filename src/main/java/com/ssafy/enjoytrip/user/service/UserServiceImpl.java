@@ -1,7 +1,7 @@
 package com.ssafy.enjoytrip.user.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -20,55 +20,33 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserResponseDto> findAll() throws Exception {
-		List<UserEntity> userEntities = userMapper.findAll();
-		List<UserResponseDto> responseDtos = new ArrayList<>();
-		for (UserEntity userEntity : userEntities) {
-			UserResponseDto responseDto = new UserResponseDto();
-			responseDto.setId(userEntity.getId());
-			responseDto.setEmail(userEntity.getEmail());
-			responseDto.setNickname(userEntity.getNickname());
-			responseDto.setUsername(userEntity.getUsername());
-			// 추후 UserResponseDto에 rolename 필드 추가 및 setRolename() 처리 필요
-			responseDto.setCreatedDate(userEntity.getCreatedDate());
-			responseDto.setUpdatedDate(userEntity.getUpdatedDate());
-			responseDtos.add(responseDto);
-		}
-		return responseDtos;
+		return userMapper.findAll().stream().map(UserResponseDto::new).collect(Collectors.toList());
 	}
 
 	@Override
+	public UserResponseDto findById(Integer id) throws Exception {
+		return new UserResponseDto(userMapper.findById(id));
+	}
+
+	@Override
+	public UserResponseDto findByEmail(String email) throws Exception {
+		return new UserResponseDto(userMapper.findByEmail(email));
+	}
+	
+	@Override
 	public UserResponseDto findByUsername(String username) throws Exception {
-		UserEntity userEntity = userMapper.findByUsername(username);
-		if (userEntity == null) return null;
-		UserResponseDto userResponseDto = new UserResponseDto();
-		userResponseDto.setId(userEntity.getId());
-		userResponseDto.setEmail(userEntity.getEmail());
-		userResponseDto.setNickname(userEntity.getNickname());
-		userResponseDto.setUsername(userEntity.getUsername());
 		// 추후 UserResponseDto에 rolename 필드 추가 및 setRolename() 처리 필요
-		userResponseDto.setCreatedDate(userEntity.getCreatedDate());
-		userResponseDto.setUpdatedDate(userEntity.getUpdatedDate());
-		return userResponseDto;
+		return new UserResponseDto(userMapper.findByUsername(username));
 	}
 
 	@Override
 	public void regist(UserRequestDto userRequestDto) throws Exception {
-		UserEntity userEntity = new UserEntity();
-		userEntity.setEmail(userRequestDto.getEmail());
-		userEntity.setNickname(userRequestDto.getNickname());
-		userEntity.setUsername(userRequestDto.getUsername());
-		userEntity.setPassword(userRequestDto.getPassword());
-		userMapper.regist(userEntity);
+		userMapper.regist(userRequestDto.toEntity());
 	}
 
 	@Override
 	public void update(UserRequestDto userRequestDto) throws Exception {
-		String username = userRequestDto.getUsername();
-		UserEntity userEntity = userMapper.findByUsername(username);
-		userEntity.setEmail(userRequestDto.getEmail());
-		userEntity.setNickname(userRequestDto.getNickname());
-		userEntity.setPassword(userRequestDto.getPassword());
-		userMapper.update(userEntity);
+		userMapper.update(userRequestDto.toEntity());
 	}
 
 	@Override
@@ -83,15 +61,8 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = userMapper.findByUsername(authRequestDto.getUsername());
 		// 추후 BCryptPasswordEncoder 및 JWT로 암호화 처리 필요
 		if (userEntity != null && userEntity.getPassword().equals(authRequestDto.getPassword())) {
-			UserResponseDto userResponseDto = new UserResponseDto();
-			userResponseDto.setId(userEntity.getId());
-			userResponseDto.setEmail(userEntity.getEmail());
-			userResponseDto.setNickname(userEntity.getNickname());
-			userResponseDto.setUsername(userEntity.getUsername());
 			// 추후 UserResponseDto에 rolename 필드 추가 및 setRolename() 처리 필요
-			userResponseDto.setCreatedDate(userEntity.getCreatedDate());
-			userResponseDto.setUpdatedDate(userEntity.getUpdatedDate());
-			return userResponseDto;
+			return new UserResponseDto(userEntity);
 		}
 		return null;
 	}

@@ -2,9 +2,12 @@ package com.ssafy.enjoytrip.user.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "UserResponseDto(로그인 응답 정보)", description = "로그인 응답 정보를 포함하고 있는 ResponseDto Class")
 public class UserResponseDto {
 	@ApiModelProperty(value = "Index")
@@ -20,4 +23,13 @@ public class UserResponseDto {
 	@ApiModelProperty(value = "업데이트일")
 	private String updatedDate;
 
+	public UserResponseDto(UserEntity entity) {
+		this.id = entity.getId();
+		this.email = entity.getEmail();
+		this.username = entity.getUsername();
+		this.nickname = entity.getNickname();
+		this.createdDate = entity.getCreatedDate();
+		this.updatedDate = entity.getUpdatedDate();
+	}
+	
 }

@@ -12,6 +12,10 @@ public interface UserMapper {
 	
 	List<UserEntity> findAll() throws SQLException;
 	
+	UserEntity findById(Integer id) throws SQLException;
+	
+	UserEntity findByEmail(String email) throws SQLException;
+	
 	UserEntity findByUsername(String username) throws SQLException;
 	
 	void regist(UserEntity userEntity) throws SQLException;

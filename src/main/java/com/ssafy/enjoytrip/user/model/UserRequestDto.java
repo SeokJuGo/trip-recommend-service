@@ -2,9 +2,16 @@ package com.ssafy.enjoytrip.user.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "UserRequestDto(회원가입 요청 정보)", description = "회원가입 요청 정보를 포함하고 있는 RequestDto Class")
 public class UserRequestDto {
 	@ApiModelProperty(value = "아이디")
@@ -15,5 +22,14 @@ public class UserRequestDto {
 	private String nickname;
 	@ApiModelProperty(value = "이메일")
 	private String email;
-
+	
+	public UserEntity toEntity() {
+		return UserEntity.builder()
+				.email(email)
+				.nickname(nickname)
+				.username(username)
+				.password(password)
+				.build();
+	}
+	
 }
