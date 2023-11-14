@@ -118,7 +118,7 @@ public class BoardServiceImpl implements BoardService {
 				.id(boardRequestDto.getId())
 				.title(boardRequestDto.getTitle())
 				.content(boardRequestDto.getContent())
-				.userId(boardRequestDto.getId())
+				.userId(userEntity.getId())
 				.boardTypeId(boardTypeEntity.getId())
 				.build();
 		
