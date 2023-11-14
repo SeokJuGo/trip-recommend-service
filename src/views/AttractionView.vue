@@ -1,4 +1,95 @@
 <script setup>
+import { ref, onMounted } from "vue";
+import { listAttraction} from "../api/attraction";
+import { listSido, listGugun } from "@/api/map";
+
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
+import VSelect from "@/components/common/VSelect.vue";
+
+// const serviceKey = import.meta.env.VITE_OPEN_API_SERVICE_KEY;
+const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env;
+
+const sidoList = ref([]);
+const gugunList = ref([{ text: "구군선택", value: "" }]);
+const attractionList = ref([]);
+const selectAttraction = ref({});
+const searchAtt = ref({
+  sidoCode:0,
+  gugunCode:0,
+  contentTypeId:0
+});
+const param = ref({
+  serviceKey: VITE_OPEN_API_SERVICE_KEY,
+  pageNo: 1,
+  numOfRows: 20,
+  zscode: 0,
+});
+
+onMounted(() => {
+  // getAttractions();
+  getSidoList();
+});
+
+const getSidoList = () => {
+  listSido(
+    ({ data }) => {
+      let options = [];
+      options.push({ text: "시도선택", value: "" });
+      data.forEach((sido) => {
+        options.push({ text: sido.sidoName, value: sido.sidoCode });
+      });
+      sidoList.value = options;
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+};
+
+const onChangeSido = (val) => {
+  searchAtt.value.sidoCode = val;
+  listGugun(
+    { sido: val },
+    ({ data }) => {
+      let options = [];
+      options.push({ text: "구군선택", value: "" });
+      data.forEach((gugun) => {
+        options.push({ text: gugun.gugunName, value: gugun.gugunCode });
+      });
+      gugunList.value = options;
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+};
+
+const onChangeGugun = (val) => {
+  searchAtt.value.gugunCode = val;
+    getAttractions();
+};
+
+const getAttractions = () => {
+  listAttraction(
+    searchAtt.value,
+    ({ data }) => {
+      attractionList.value = data;
+      console.log(data);
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+  
+};
+
+const viewAttraction = (attraction) => {
+  selectAttraction.value = attraction;
+};
+const a = () =>{
+
+  console.log(attractionList.value);
+}
 
 </script>
 
@@ -9,26 +100,18 @@
     <!-- Title -->
     <div class="d-flex justify-content-center mb-3">
       <h1 class="display-4 fw-bold text-center border-bottom border-2 border-secondary">
-        관광지 정보 조회
+
+<button @click="a">aaa</button>
       </h1>
     </div>
     <!-- Grid Row -->
     <div class="row justify-content-center mb-3">
       <div class="col-md-4 mb-2 mb-md-0">
-        <select id="sido-select" class="form-select" aria-label="Default select example">
-          <option selected>시도선택</option>
-          <!--axios로 불러와서 for문 돌려야됨 <c:forEach var="sido" items="${sidoList}">
-            <option value="${sido.sidoCode}">${sido.sidoName}</option>
-          </c:forEach> -->
-        </select>
+        <VSelect  :selectOption="sidoList"  @onKeySelect="onChangeSido" class="form-select" aria-label="Default select example"/>
+        
       </div>
       <div class="col-md-4 mb-2 mb-md-0">
-        <select id="gugun-select" class="form-select" aria-label="Default select example">
-          <option selected>구군선택</option>
-          <!-- axios로 불러와서 for문 돌려야됨 <c:forEach var="gugun" items="${gugunList}">
-            <option value="${gugun.gugunCode}">${gugun.gugunName}</option>
-          </c:forEach> -->
-        </select>
+        <VSelect :selectOption="gugunList" @onKeySelect="onChangeGugun" />
       </div>
       <div class="col-md-4 mb-0 mb-md-0">
         <select id="contentType" class="form-select" aria-label="Default select example">
@@ -61,7 +144,7 @@
         </button>
       </div>
     </div>
-    <div id="map" style="width: 100%; height: 600px"></div>
+    <VKakaoMap :attractions="attractionList" :selectAttraction="selectAttraction" />
   </div>
 
   <div class="container-md pt-1 pb-5">
@@ -76,15 +159,20 @@
         </tr>
       </thead>
       <tbody>
-        <!-- <c:forEach var="attraction" items="${attractions}">
-          <tr>
-            <td class="text-center">${attraction.contentId}</td>
-            <td class="text-start">${attraction.title}</td>
-            <td class="text-center">${attraction.addr1}</td>
-            <td class="text-center">${attraction.addr2}</td>
-            <td class="text-center">${attraction.tel}</td>
-          </tr>
-        </c:forEach> -->
+        <tr
+          class="text-center"
+          v-for="attraction in attractionList"
+          :key="attraction.statId + attraction.chgerId"
+          @click="viewAttraction(attraction)"
+        >
+        <td><img :src="attraction.firstImage"></td>
+          <th>{{ attraction.title }}</th>
+          <td>{{ attraction.address }}</td>
+          
+          <td>{{ attraction.addr }}</td>
+          <td>{{ attraction.lat }}</td>
+          <td>{{ attraction.lng }}</td>
+        </tr>
       </tbody>
     </table>
 
@@ -195,5 +283,7 @@
 </template>
 
 <style scoped>
-
+img{
+  width:100px;
+}
 </style>
