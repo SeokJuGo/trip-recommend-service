@@ -2,11 +2,20 @@ package com.ssafy.enjoytrip.board.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "BoardRequestDto(게시글 요청 정보)", description = "게시글 요청 정보를 포함하고 있는 RequestDto Class")
 public class BoardRequestDto {
+	@ApiModelProperty(value = "Index")
+	private Long id;
 	@ApiModelProperty(value = "글제목")
 	private String title;
 	@ApiModelProperty(value = "글내용")
@@ -16,4 +25,10 @@ public class BoardRequestDto {
 	@ApiModelProperty(value = "게시판 타입")
 	private String boardType;
 	
+	public BoardEntity toEntity() {
+		return BoardEntity.builder()
+				.title(title)
+				.content(content)
+				.build();
+	}
 }

@@ -2,9 +2,16 @@ package com.ssafy.enjoytrip.board.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "BoardEntity(게시글 정보)", description = "게시글 정보를 포함하고 있는 DomainEntity Class")
 public class BoardEntity {
 	@ApiModelProperty(value = "Index")

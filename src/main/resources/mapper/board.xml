@@ -1,103 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.enjoytrip.board.mapper.BoardMapper"> 
-     
-    <select id="countTotalElements" parameterType="Map" resultType="Integer">
-		SELECT COUNT(A.ID) FROM USER A JOIN BOARD B ON A.ID = B.USER_ID
-		<where>
-	        <if test="title != null and title != ''">
-	            AND B.TITLE LIKE CONCAT('%', #{title}, '%')
-	        </if>
-	        <if test="userId != null and userId != ''">
-	            AND A.ID LIKE CONCAT('%', #{userId}, '%')
-	        </if>
-	        <if test="content != null and content != ''">
-	            AND B.CONTENT LIKE CONCAT('%', #{content}, '%')
-	        </if>
-	    </where>
+<mapper namespace="com.ssafy.enjoytrip.board.mapper.BoardMapper">
+
+    <select id="count" parameterType="Map" resultType="Integer">
+    	SELECT COUNT(ID) FROM BOARD WHERE 1 = 1
+    	<if test="title != null and title != ''">
+            AND TITLE LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="content != null and content != ''">
+            AND CONTENT LIKE CONCAT('%', #{content}, '%')
+        </if>
+        <if test="userId != null and userId != ''">
+            AND USER_ID = #{userId}
+        </if>
+        <if test="boardTypeId != null and boardTypeId != ''">
+            AND BOARD_TYPE_ID = #{boardTypeId}
+        </if>
 	</select>
 	
-	<select id="findAll" parameterType="Map" resultType="BoardDto">
-	    SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
-	           B.ID id, B.TITLE title, B.CONTENT content,
-	           B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
-	    FROM USER A JOIN BOARD B ON A.ID = B.USER_ID
-		<where>
-	        <if test="title != null and title != ''">
-	            AND B.TITLE LIKE CONCAT('%', #{title}, '%')
-	        </if>
-	        <if test="userId != null and userId != ''">
-	            AND A.ID LIKE CONCAT('%', #{userId}, '%')
-	        </if>
-	        <if test="content != null and content != ''">
-	            AND B.CONTENT LIKE CONCAT('%', #{content}, '%')
-	        </if>
-	    </where>
-	    ORDER BY B.ID DESC
+	<select id="findAll" parameterType="Map" resultType="BoardEntity">
+		SELECT
+			ID AS id,
+			TITLE AS title,
+			CONTENT AS content,
+			USER_ID AS userId,
+			BOARD_TYPE_ID AS boardTypeId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM BOARD WHERE 1 = 1
+		<if test="title != null and title != ''">
+            AND TITLE LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="content != null and content != ''">
+            AND CONTENT LIKE CONCAT('%', #{content}, '%')
+        </if>
+        <if test="userId != null and userId != ''">
+            AND USER_ID = #{userId}
+        </if>
+        <if test="boardTypeId != null and boardTypeId != ''">
+            AND BOARD_TYPE_ID = #{boardTypeId}
+        </if>
+	    ORDER BY ID DESC
 	    LIMIT #{offset}, #{pageSize}
 	</select>
-	
-<!-- 	<select id="findAll" resultType="BoardDto">
-		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
-			B.ID id, B.TITLE title, B.CONTENT content,
-			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
-		FROM USER A JOIN BOARD B
-		ON A.ID = B.USER_ID
-		ORDER BY B.ID DESC
-	</select> -->
-	
-<!-- 	<select id="findAllByUserId" parameterType="String" resultType="BoardDto">
-		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
-			B.ID id, B.TITLE title, B.CONTENT content,
-			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
-		FROM USER A JOIN BOARD B
-		ON A.ID = B.USER_ID
-		WHERE A.ID = #{userId}
-	</select> -->
-	
-<!-- 	<select id="findAllByTitleContains" parameterType="String" resultType="BoardDto">
-		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
-			B.ID id, B.TITLE title, B.CONTENT content,
-			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
-		FROM USER A JOIN BOARD B
-		ON A.ID = B.USER_ID
-		WHERE B.TITLE LIKE CONCAT('%', #{title}, '%')
-	</select> -->
-
-<!-- 	<select id="findAllByContentContains" parameterType="String" resultType="BoardDto">
-		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
-			B.ID id, B.TITLE title, B.CONTENT content,
-			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
-		FROM USER A JOIN BOARD B
-		ON A.ID = B.USER_ID
-		WHERE B.CONTENT LIKE CONCAT('%', #{content}, '%')
-	</select> -->
-	
-	<select id="findById" parameterType="Integer" resultType="BoardDto">
-		SELECT A.ID userId, A.NAME userName, A.EMAIL userEmail,
-			B.ID id, B.TITLE title, B.CONTENT content,
-			B.CREATED_DATE createdDate, B.UPDATED_DATE updatedDate
-		FROM USER A JOIN BOARD B
-		ON A.ID = B.USER_ID
-		WHERE B.ID = #{id}
+    
+	<select id="findById" parameterType="Integer" resultType="BoardEntity">
+		SELECT
+			ID AS id,
+			TITLE AS title,
+			CONTENT AS content,
+			USER_ID AS userId,
+			BOARD_TYPE_ID AS boardTypeId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM BOARD
+		WHERE ID = #{id}
 	</select>	
 
-	<insert id="writeBoard" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="id">
-	    INSERT INTO BOARD (title, content, user_id)
-	    VALUES (#{title}, #{content}, #{userId})
+	<insert id="insert" parameterType="BoardEntity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO BOARD (TITLE, CONTENT, USER_ID, BOARD_TYPE_ID)
+		VALUES (#{title}, #{content}, #{userId}, #{boardTypeId})
 	</insert>
 	
-	<update id="updateBoard" parameterType="BoardDto">
+	<update id="update" parameterType="BoardEntity">
 	    UPDATE BOARD SET
-	    	title = #{title},
-	    	content = #{content},
-	    	user_id = #{userId}
+	    	TITLE = #{title},
+	    	CONTENT = #{content},
+	    	BOARD_TYPE_ID = #{boardTypeId}
 	    WHERE ID = #{id}
 	</update>
 	
-	<update id="deleteBoard" parameterType="Integer">
-	    DELETE FROM BOARD WHERE id = #{id}
+	<update id="delete" parameterType="Integer">
+	    DELETE FROM BOARD WHERE ID = #{id}
 	</update>
 
 </mapper>

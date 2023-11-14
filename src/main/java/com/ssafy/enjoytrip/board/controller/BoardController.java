@@ -1,5 +1,8 @@
 package com.ssafy.enjoytrip.board.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.board.model.BoardDto;
-import com.ssafy.enjoytrip.board.model.BoardListDto;
-import com.ssafy.enjoytrip.board.model.BoardSearchDto;
+import com.ssafy.enjoytrip.board.model.BoardRequestDto;
+import com.ssafy.enjoytrip.board.model.BoardResponseDto;
+import com.ssafy.enjoytrip.board.model.BoardsResponseDto;
 import com.ssafy.enjoytrip.board.service.BoardService;
 
 import io.swagger.annotations.Api;
@@ -36,37 +39,36 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardController {
 	private final BoardService boardService;
 	
+	@GetMapping("")
 	@ApiOperation(value = "게시판 목록 조회", notes = "<h2><b>게시판 목록을 조회한다.</b></h2>")
-//	@ApiImplicitParams({
-//		@ApiImplicitParam(name = "pageNum", value = "페이지", required = false, dataType = "Integer", paramType = "query"),
-//		@ApiImplicitParam(name = "pageSize", value = "페이지", required = false, dataType = "Integer", paramType = "query"),
-//		@ApiImplicitParam(name = "keyword", value = "검색어", required = false, dataType = "String", paramType = "query"),
-//		@ApiImplicitParam(name = "searchType", value = "검색타입", required = false, dataType = "String", paramType = "query"),
-//	})
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK"),
 		@ApiResponse(code = 204, message = "No Content"),
 		@ApiResponse(code = 400, message = "Bad Request"),
 		@ApiResponse(code = 404, message = "404 Not Found"),
-		@ApiResponse(code = 500, message = "Internal Server Error")
-	})
-	@GetMapping("")
+		@ApiResponse(code = 500, message = "Internal Server Error")})
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "pageNum", value = "페이지", required = false, dataType = "Integer", paramType = "query"),
+		@ApiImplicitParam(name = "pageSize", value = "페이지", required = false, dataType = "Integer", paramType = "query"),
+		@ApiImplicitParam(name = "keyword", value = "검색어", required = false, dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "searchType", value = "검색타입", required = false, dataType = "String", paramType = "query")})
 	public ResponseEntity<?> findAll(
-			@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-			@RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize,
-			@RequestParam(value = "keyword", required = false) String keyword,
-			@RequestParam(value = "searchType", required = false) String searchType) {
-		BoardSearchDto boardSearchDto = new BoardSearchDto();
-		boardSearchDto.setPageNum(pageNum);
-		boardSearchDto.setPageSize(pageSize);
-		boardSearchDto.setKeyword(keyword);
-		boardSearchDto.setSearchType(searchType);
-		
-		log.debug("BoardController findAll() function called!!!, {}", boardSearchDto);
+			@RequestParam(required = false, value = "pageNum") Integer pageNum,
+			@RequestParam(required = false, value = "pageSize") Integer pageSize,
+			@RequestParam(required = false, value = "keyword") String keyword,
+			@RequestParam(required = false, value = "searchType") String searchType) {
+		log.debug("BoardController findAll() function called!!!");
+		log.debug("pageNum = {}, pageSize = {}, keyword = {}, searchType = {}", pageNum, pageSize, keyword, searchType);
 		try {
-			BoardListDto list = boardService.findAll(boardSearchDto);
-			if (list != null && !list.getBoards().isEmpty())
-				return new ResponseEntity<>(list, HttpStatus.OK);
+			Map<String, Object> params = new HashMap<>();
+			if (pageNum != null) params.put("pageNum", pageNum);
+			if (pageSize != null) params.put("pageSize", pageSize);
+			if (keyword != null) params.put("keyword", keyword);
+			if (searchType != null) params.put("searchType", searchType);
+			
+			BoardsResponseDto responseDto = boardService.findAll(params);
+			if (responseDto != null && !responseDto.getBoards().isEmpty())
+				return new ResponseEntity<>(responseDto, HttpStatus.OK);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT.name(), HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,65 +76,25 @@ public class BoardController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR.name(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-//	@ApiOperation(value = "게시판 목록 조회", notes = "<h2><b>게시판 목록을 조회한다.</b></h2>")
-//	@ApiImplicitParams({
-//		@ApiImplicitParam(name = "title", value = "제목", required = false, dataType = "String", paramType = "query"),
-//		@ApiImplicitParam(name = "content", value = "내용", required = false, dataType = "String", paramType = "query"),
-//		@ApiImplicitParam(name = "userId", value = "작성자", required = false, dataType = "String", paramType = "query"),
-//	})
-//	@ApiResponses({
-//		@ApiResponse(code = 200, message = "OK"),
-//		@ApiResponse(code = 204, message = "No Content"),
-//		@ApiResponse(code = 400, message = "Bad Request"),
-//		@ApiResponse(code = 404, message = "404 Not Found"),
-//		@ApiResponse(code = 500, message = "Internal Server Error")
-//	})
-//	@GetMapping("")
-//	public ResponseEntity<?> findAll(
-//			@RequestParam(value = "title", required = false) String title,
-//			@RequestParam(value = "content", required = false) String content,
-//			@RequestParam(value = "userId", required = false) String userId) {
-//		log.debug("BoardController findAll() function called!!!");
-//		try {
-//			List<BoardDto> list = null;
-//			
-//			if (userId != null)
-//				list = boardService.findAllByUserId(userId);
-//			else if (title != null)
-//				list = boardService.findAllByTitleContains(title);
-//			else if (content != null)
-//				list = boardService.findAllByContentContains(content);
-//			else
-//				list = boardService.findAll();
-//			
-//			if (list != null && !list.isEmpty())
-//				return new ResponseEntity<>(list, HttpStatus.OK);
-//			return new ResponseEntity<>("Data Empty", HttpStatus.OK);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			log.debug(e.getMessage());
-//			return new ResponseEntity<>("Error Occurred!!!", HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
 	
+	@GetMapping("/detail/{id}")
 	@ApiOperation(value = "게시글 상세 조회", notes = "<h2><b>게시글 상세를 조회한다.</b></h2>")
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "id", value = "게시글 아이디", required = true, dataType = "Integer", paramType = "path"),
-	})
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK"),
 		@ApiResponse(code = 204, message = "No Content"),
 		@ApiResponse(code = 400, message = "Bad Request"),
 		@ApiResponse(code = 404, message = "404 Not Found"),
-		@ApiResponse(code = 500, message = "Internal Server Error")
+		@ApiResponse(code = 500, message = "Internal Server Error"),
 	})
-	@GetMapping("/detail/{id}")
-	public ResponseEntity<?> findById(@PathVariable("id") int id) {
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "id", value = "게시글 아이디", required = true, dataType = "Integer", paramType = "path"),
+	})
+	public ResponseEntity<?> findById(@PathVariable("id") Integer id) {
 		log.debug("BoardController findById() function called!!!");
 		try {
-			BoardDto dto = boardService.findById(id);
-			if (dto != null)
-				return new ResponseEntity<>(dto, HttpStatus.OK);
+			BoardResponseDto responseDto = boardService.findById(id);
+			if (responseDto != null)
+				return new ResponseEntity<>(responseDto, HttpStatus.OK);
 			return new ResponseEntity<>("Data Not Exists", HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,6 +103,7 @@ public class BoardController {
 		}
 	}
 	
+	@PostMapping("/write")
 	@ApiOperation(value = "게시글 작성", notes = "<h2><b>게시글을 작성한다.</b></h2>")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK"),
@@ -149,12 +112,11 @@ public class BoardController {
 		@ApiResponse(code = 404, message = "404 Not Found"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@PostMapping("/write")
-	public ResponseEntity<?> writeBoard(@RequestBody BoardDto boardDto) {
+	public ResponseEntity<?> writeBoard(@RequestBody BoardRequestDto requestDto) {
 		log.debug("BoardController writeBoard() function called!!!");
 		try {
-			boardService.writeBoard(boardDto);
-			return new ResponseEntity<>(boardDto.getId(), HttpStatus.OK);
+			Integer id = boardService.insert(requestDto);
+			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
@@ -171,11 +133,11 @@ public class BoardController {
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
 	@PutMapping("/update")
-	public ResponseEntity<?> updateBoard(@RequestBody BoardDto boardDto) {
+	public ResponseEntity<?> updateBoard(@RequestBody BoardRequestDto requestDto) {
 		log.debug("BoardController updateBoard() function called!!!");
 		try {
-			boardService.updateBoard(boardDto);
-			return new ResponseEntity<>(boardDto.getId(), HttpStatus.OK);
+			Integer id = boardService.update(requestDto);
+			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
@@ -183,6 +145,7 @@ public class BoardController {
 		}
 	}
 	
+	@DeleteMapping("/delete/{id}")
 	@ApiOperation(value = "게시글 삭제", notes = "<h2><b>게시글을 삭제한다.</b></h2>")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "OK"),
@@ -191,12 +154,11 @@ public class BoardController {
 		@ApiResponse(code = 404, message = "404 Not Found"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	@DeleteMapping("/delete")
-	public ResponseEntity<?> deleteBoard(@RequestBody BoardDto boardDto) {
+	public ResponseEntity<?> deleteBoard(@PathVariable("id") Integer id) {
 		log.debug("BoardController deleteBoard() function called!!!");
 		try {
-			boardService.deleteBoard(boardDto.getId());
-			return new ResponseEntity<>(boardDto.getId(), HttpStatus.OK);
+			boardService.delete(id);
+			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());

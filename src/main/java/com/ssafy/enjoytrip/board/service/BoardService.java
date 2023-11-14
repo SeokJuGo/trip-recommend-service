@@ -1,27 +1,21 @@
 package com.ssafy.enjoytrip.board.service;
 
-import java.util.List;
+import java.util.Map;
 
-import com.ssafy.enjoytrip.board.model.BoardDto;
-import com.ssafy.enjoytrip.board.model.BoardListDto;
-import com.ssafy.enjoytrip.board.model.BoardSearchDto;
+import com.ssafy.enjoytrip.board.model.BoardRequestDto;
+import com.ssafy.enjoytrip.board.model.BoardResponseDto;
+import com.ssafy.enjoytrip.board.model.BoardsResponseDto;
 
 public interface BoardService {
 
-	BoardListDto findAll(BoardSearchDto boardSearchDto) throws Exception;
+	BoardsResponseDto findAll(Map<String, Object> params) throws Exception;
 
-	List<BoardDto> findAllByUserId(String userId) throws Exception;
+	BoardResponseDto findById(Integer id) throws Exception;
 
-	List<BoardDto> findAllByTitleContains(String title) throws Exception;
-
-	List<BoardDto> findAllByContentContains(String content) throws Exception;
-
-	BoardDto findById(int id) throws Exception;
-
-	void writeBoard(BoardDto boardDto) throws Exception;
+	Integer insert(BoardRequestDto boardRequestDto) throws Exception;
 	
-	void updateBoard(BoardDto boardDto) throws Exception;
+	Integer update(BoardRequestDto boardRequestDto) throws Exception;
 	
-	void deleteBoard(Integer id) throws Exception;
+	Integer delete(Integer id) throws Exception;
 	
 }

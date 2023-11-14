@@ -6,28 +6,21 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.ssafy.enjoytrip.board.model.BoardDto;
+import com.ssafy.enjoytrip.board.model.BoardEntity;
 
 @Mapper
 public interface BoardMapper {
 
-	Integer countTotalElements(Map<String, Object> map) throws SQLException;
+	Integer count(Map<String, Object> map) throws SQLException;
 
-	List<BoardDto> findAll(Map<String, Object> map) throws SQLException;
+	List<BoardEntity> findAll(Map<String, Object> map) throws SQLException;
 
-	List<BoardDto> findAllByUserId(String userId) throws SQLException;
+	BoardEntity findById(Integer id) throws SQLException;
 
-	List<BoardDto> findAllByTitleContains(String title) throws SQLException;
-
-	List<BoardDto> findAllByContentContains(String content) throws SQLException;
-
-	BoardDto findById(int id) throws SQLException;
-
-	void writeBoard(BoardDto boardDto) throws SQLException;
+	void insert(BoardEntity boardEntity) throws SQLException;
 	
-	void updateBoard(BoardDto boardDto) throws SQLException;
+	void update(BoardEntity boardEntity) throws SQLException;
 	
-	void deleteBoard(Integer id) throws SQLException;
-	
+	void delete(Integer id) throws SQLException;
 	
 }
