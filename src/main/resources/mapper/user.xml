@@ -25,9 +25,9 @@
 	</select>
 	
 	<select id="findByUsername" parameterType="String" resultType="UserEntity">
-		SELECT A.id, A.email, A.username, A.nickname,
-			B.name rolename, B.description roledesc
-		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
+		SELECT A.id, A.email, A.username, A.nickname, A.password
+			<!-- B.name rolename, B.description roledesc -->
+		FROM USER A <!-- JOIN ROLE B ON A.ROLE_ID = B.ID -->
 		WHERE A.username = #{username}
 	</select>
 	
@@ -40,7 +40,7 @@
 		UPDATE USER SET
 			username = #{username}, password = #{password},
 			nickname = #{nickname}, email = #{email}
-		WHERE id = #{id}
+		WHERE username = #{username}
 	</update>
 	
 	<delete id="delete" parameterType="UserRequestDto">
