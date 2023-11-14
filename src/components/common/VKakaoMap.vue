@@ -38,10 +38,10 @@ watch(
   () => props.attractions.value,
   () => {
     positions.value = [];
-    props.attractions.forEach((station) => {
+    props.attractions.forEach((attraction) => {
       let obj = {};
-      obj.latlng = new kakao.maps.LatLng(station.lat, station.lng);
-      obj.title = station.statNm;
+      obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+      obj.title = attraction.statNm;
 
       positions.value.push(obj);
     });
