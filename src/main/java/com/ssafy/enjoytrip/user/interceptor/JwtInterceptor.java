@@ -1,4 +1,4 @@
-package com.enjoytrip.ssafy.jwt.interceptor;
+package com.ssafy.enjoytrip.user.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.enjoytrip.ssafy.jwt.exception.UnAuthorizedException;
-import com.enjoytrip.ssafy.jwt.model.service.JwtService;
+import com.ssafy.enjoytrip.user.exception.UnAuthorizedException;
+import com.ssafy.enjoytrip.user.service.AuthService;
 
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
@@ -20,14 +20,14 @@ public class JwtInterceptor implements HandlerInterceptor {
 	private static final String HEADER_AUTH = "auth-token";
 
 	@Autowired
-	private JwtService jwtService;
+	private AuthService authService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		final String token = request.getHeader(HEADER_AUTH);
 
-		if (token != null && jwtService.checkToken(token)) {
+		if (token != null && authService.checkToken(token)) {
 			logger.info("토큰 사용 가능 : {}", token);
 			return true;
 		} else {

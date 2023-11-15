@@ -1,4 +1,4 @@
-package com.enjoytrip.ssafy.jwt.exception;
+package com.ssafy.enjoytrip.user.exception;
 
 public class UnAuthorizedException extends RuntimeException {
 	private static final long serialVersionUID = -2238030302650813813L;
