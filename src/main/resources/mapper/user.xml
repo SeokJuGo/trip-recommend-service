@@ -43,8 +43,5 @@
 		WHERE username = #{username}
 	</update>
 	
-	<delete id="delete" parameterType="UserRequestDto">
-		DELETE FROM USER WHERE ID = #{id}
-	</delete>
 
 </mapper>
