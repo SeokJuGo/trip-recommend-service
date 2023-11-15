@@ -8,7 +8,7 @@ import lombok.Data;
 @ApiModel(value = "AuthRequestDto(로그인 요청 정보)", description = "로그인 요청 정보를 포함하고 있는 RequestDto Class")
 public class AuthRequestDto {
 	@ApiModelProperty(value = "아이디")
-	private String username;
+	private String id;
 	@ApiModelProperty(value = "비밀번호")
 	private String password;
 	
