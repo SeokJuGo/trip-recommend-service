@@ -46,10 +46,10 @@ const getSidoList = () => {
   );
 };
 
-const onChangeSido = (val) => {
-  searchAtt.value.sidoCode = val;
+  const onChangeSido = (val) => {
+    searchAtt.value.sidoCode=val;
   listGugun(
-    { sido: val },
+    { sidoCode: val },
     ({ data }) => {
       let options = [];
       options.push({ text: "구군선택", value: "" });
@@ -62,34 +62,30 @@ const onChangeSido = (val) => {
       console.log(err);
     }
   );
+  
 };
-
 const onChangeGugun = (val) => {
   searchAtt.value.gugunCode = val;
-    getAttractions();
+   getAttractions();
 };
 
 const getAttractions = () => {
+  attractionList.value=([]);
   listAttraction(
     searchAtt.value,
     ({ data }) => {
       attractionList.value = data;
-      console.log(data);
     },
     (err) => {
       console.log(err);
     }
   );
-  
+  console.log(attractionList.value)
 };
 
 const viewAttraction = (attraction) => {
   selectAttraction.value = attraction;
 };
-const a = () =>{
-
-  console.log(attractionList.value);
-}
 
 </script>
 
@@ -110,6 +106,7 @@ const a = () =>{
         
       </div>
       <div class="col-md-4 mb-2 mb-md-0">
+        
         <VSelect :selectOption="gugunList" @onKeySelect="onChangeGugun" />
       </div>
       <div class="col-md-4 mb-0 mb-md-0">
@@ -161,7 +158,7 @@ const a = () =>{
         <tr
           class="text-center"
           v-for="attraction in attractionList"
-          :key="attraction.statId + attraction.chgerId"
+          :key="attraction.contentId"
           @click="viewAttraction(attraction)"
         >
         <td><img :src="attraction.firstImage"></td>
