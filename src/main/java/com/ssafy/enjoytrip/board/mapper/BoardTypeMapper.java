@@ -11,9 +11,9 @@ import com.ssafy.enjoytrip.board.model.BoardTypeEntity;
 @Mapper
 public interface BoardTypeMapper {
 
-	Integer count(Map<String, Object> map) throws SQLException;
+	Integer count(Map<String, Object> params) throws SQLException;
 
-	List<BoardTypeEntity> findAll(Map<String, Object> map) throws SQLException;
+	List<BoardTypeEntity> findAll(Map<String, Object> params) throws SQLException;
 	
 	BoardTypeEntity findById(Integer id) throws SQLException;
 	
