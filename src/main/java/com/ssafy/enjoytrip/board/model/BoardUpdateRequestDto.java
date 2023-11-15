@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "BoardRequestDto(게시글 요청 정보)", description = "게시글 요청 정보를 포함하고 있는 RequestDto Class")
-public class BoardRequestDto {
+public class BoardUpdateRequestDto {
 	@ApiModelProperty(value = "Index")
 	private Long id;
 	@ApiModelProperty(value = "글제목")
@@ -27,6 +27,7 @@ public class BoardRequestDto {
 	
 	public BoardEntity toEntity() {
 		return BoardEntity.builder()
+				.id(id)
 				.title(title)
 				.content(content)
 				.build();

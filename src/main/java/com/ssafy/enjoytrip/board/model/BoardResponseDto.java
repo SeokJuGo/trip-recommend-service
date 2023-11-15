@@ -1,5 +1,7 @@
 package com.ssafy.enjoytrip.board.model;
 
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeEntity;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeResponseDto;
 import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 

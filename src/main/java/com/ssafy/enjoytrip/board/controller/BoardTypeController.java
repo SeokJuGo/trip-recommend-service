@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.board.model.BoardTypeRequestDto;
-import com.ssafy.enjoytrip.board.model.BoardTypeResponseDto;
 import com.ssafy.enjoytrip.board.service.BoardTypeService;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeRequestDto;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeResponseDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 	@ApiResponse(code = 204, message = "NO CONTENT"),
 	@ApiResponse(code = 400, message = "BAD REQUEST"),
 	@ApiResponse(code = 401, message = "UNAUTHORIZED"),
+	@ApiResponse(code = 403, message = "FORBIDDEN"),
 	@ApiResponse(code = 404, message = "NOT FOUND"),
 	@ApiResponse(code = 500, message = "INTERNAL SERVER ERROR")})
 public class BoardTypeController {

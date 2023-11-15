@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service;
 import com.ssafy.enjoytrip.board.mapper.BoardMapper;
 import com.ssafy.enjoytrip.board.mapper.BoardTypeMapper;
 import com.ssafy.enjoytrip.board.model.BoardEntity;
-import com.ssafy.enjoytrip.board.model.BoardRequestDto;
+import com.ssafy.enjoytrip.board.model.BoardSaveRequestDto;
+import com.ssafy.enjoytrip.board.model.BoardUpdateRequestDto;
 import com.ssafy.enjoytrip.board.model.BoardResponseDto;
-import com.ssafy.enjoytrip.board.model.BoardTypeEntity;
 import com.ssafy.enjoytrip.board.model.BoardsResponseDto;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeEntity;
 import com.ssafy.enjoytrip.user.mapper.UserMapper;
 import com.ssafy.enjoytrip.user.model.UserEntity;
 
@@ -28,11 +29,19 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardsResponseDto findAll(Map<String, Object> requestParams) throws Exception {
-		String keyword = (String) requestParams.get("keyword");
-		String searchType = (String) requestParams.get("searchType");
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		/* 게시판 타입 파라미터 처리 */
+		String boardType = (String) requestParams.get("boardType"); 
+		if (boardType != null && !boardType.equals("")) {
+			Long boardTypeId = boardTypeMapper.findByName(boardType).getId();
+			params.put("boardTypeId", boardTypeId);
+		}
+			
 		
 		/* 검색어 쿼리 객체 생성 */
-		Map<String, Object> params = new HashMap<String, Object>();
+		String keyword = (String) requestParams.get("keyword");
+		String searchType = (String) requestParams.get("searchType");		
 		if (searchType != null && keyword != null) {
 			if (searchType.equals("title")) params.put("title", keyword);
 			else if (searchType.equals("content")) params.put("content", keyword);
@@ -90,7 +99,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Integer insert(BoardRequestDto boardRequestDto) throws Exception {
+	public Integer insert(BoardSaveRequestDto boardRequestDto) throws Exception {
 		String username = boardRequestDto.getUsername();
 		String boardType = boardRequestDto.getBoardType();
 		
@@ -108,7 +117,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Integer update(BoardRequestDto boardRequestDto) throws Exception {
+	public Integer update(BoardUpdateRequestDto boardRequestDto) throws Exception {
 		String username = boardRequestDto.getUsername();
 		String boardType = boardRequestDto.getBoardType();
 		

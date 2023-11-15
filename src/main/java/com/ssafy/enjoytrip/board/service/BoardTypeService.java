@@ -3,8 +3,8 @@ package com.ssafy.enjoytrip.board.service;
 import java.util.List;
 import java.util.Map;
 
-import com.ssafy.enjoytrip.board.model.BoardTypeRequestDto;
-import com.ssafy.enjoytrip.board.model.BoardTypeResponseDto;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeRequestDto;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeResponseDto;
 
 public interface BoardTypeService {
 

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.ssafy.enjoytrip.board.model.BoardTypeEntity;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeEntity;
 
 @Mapper
 public interface BoardTypeMapper {

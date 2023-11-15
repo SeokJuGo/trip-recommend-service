@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.enjoytrip.board.mapper.BoardTypeMapper;
-import com.ssafy.enjoytrip.board.model.BoardTypeEntity;
-import com.ssafy.enjoytrip.board.model.BoardTypeRequestDto;
-import com.ssafy.enjoytrip.board.model.BoardTypeResponseDto;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeEntity;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeRequestDto;
+import com.ssafy.enjoytrip.boardtype.model.BoardTypeResponseDto;
 
 import lombok.RequiredArgsConstructor;
 

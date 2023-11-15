@@ -1,19 +1,15 @@
-package com.ssafy.enjoytrip.board.model;
+package com.ssafy.enjoytrip.boardtype.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ApiModel(value = "BoardEntity(게시판 타입 정보)", description = "게시판 타입 정보를 포함하고 있는 DomainEntity Class")
-public class BoardTypeEntity {
+@ApiModel(value = "BoardTypeResponseDto(게시판 타입 응답 정보)", description = "게시판 타입 응답 정보를 포함하고 있는 ResponseDto Class")
+public class BoardTypeResponseDto {
 	@ApiModelProperty(value = "Index")
 	private Long id;
 	@ApiModelProperty(value = "게시판 타입명")
@@ -25,4 +21,11 @@ public class BoardTypeEntity {
 	@ApiModelProperty(value = "글수정일자")
 	private String updatedDate;
 	
+	public BoardTypeResponseDto(BoardTypeEntity boardTypeEntity) {
+		this.id = boardTypeEntity.getId();
+		this.name = boardTypeEntity.getName();
+		this.desc = boardTypeEntity.getDesc();
+		this.createdDate = boardTypeEntity.getCreatedDate();
+		this.updatedDate = boardTypeEntity.getUpdatedDate();
+	}
 }
