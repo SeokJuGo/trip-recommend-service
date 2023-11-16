@@ -68,20 +68,17 @@ const router = createRouter({
                 {
                     path: "view/:id",
                     name: "share-view",
-                    component: () =>
-                        import("@/components/share/ShareDetail.vue"),
+                    component: () => import("@/components/share/ShareDetail.vue"),
                 },
                 {
                     path: "write",
                     name: "share-write",
-                    component: () =>
-                        import("@/components/share/ShareWrite.vue"),
+                    component: () => import("@/components/share/ShareWrite.vue"),
                 },
                 {
                     path: "update/:id",
                     name: "share-update",
-                    component: () =>
-                        import("@/components/share/ShareUpdate.vue"),
+                    component: () => import("@/components/share/ShareUpdate.vue"),
                 },
             ],
         },
