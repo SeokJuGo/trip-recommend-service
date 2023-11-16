@@ -29,11 +29,11 @@ public class BoardResponseDto {
 	@ApiModelProperty(value = "글수정일자")
 	private String updatedDate;
 	
-	public BoardResponseDto(BoardEntity boardEntity, UserEntity userEntity, BoardTypeEntity boardTypeEntity) {
+	public BoardResponseDto(BoardEntity boardEntity, UserResponseDto userResponseDto, BoardTypeEntity boardTypeEntity) {
 		this.id = boardEntity.getId();
 		this.title = boardEntity.getTitle();
 		this.content = boardEntity.getContent();
-		this.author = new UserResponseDto(userEntity);
+		this.author = new UserResponseDto(userResponseDto);
 		this.boardType = new BoardTypeResponseDto(boardTypeEntity);
 		this.createdDate = boardEntity.getCreatedDate();
 		this.updatedDate = boardEntity.getUpdatedDate();

@@ -15,7 +15,7 @@ import com.ssafy.enjoytrip.board.model.BoardResponseDto;
 import com.ssafy.enjoytrip.board.model.BoardTypeEntity;
 import com.ssafy.enjoytrip.board.model.BoardsResponseDto;
 import com.ssafy.enjoytrip.user.mapper.UserMapper;
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,7 +59,7 @@ public class BoardServiceImpl implements BoardService {
 		for (BoardEntity boardEntity : boardEntities) {
 			Integer userId = boardEntity.getUserId().intValue();
 			Integer boardTypeId = boardEntity.getBoardTypeId().intValue();
-			UserEntity userEntity = userMapper.findById(userId);
+			UserResponseDto userEntity = userMapper.findById(userId);
 			BoardTypeEntity boardTypeEntity = boardTypeMapper.findById(boardTypeId);
 			boards.add(new BoardResponseDto(boardEntity, userEntity, boardTypeEntity));
 		}
@@ -84,7 +84,7 @@ public class BoardServiceImpl implements BoardService {
 		Integer userId = boardEntity.getUserId().intValue();
 		Integer boardTypeId = boardEntity.getBoardTypeId().intValue();
 		
-		UserEntity userEntity = userMapper.findById(userId);
+		UserResponseDto userEntity = userMapper.findById(userId);
 		BoardTypeEntity boardTypeEntity = boardTypeMapper.findById(boardTypeId);
 		return new BoardResponseDto(boardEntity, userEntity, boardTypeEntity);
 	}
@@ -94,7 +94,7 @@ public class BoardServiceImpl implements BoardService {
 		String username = boardRequestDto.getUsername();
 		String boardType = boardRequestDto.getBoardType();
 		
-		UserEntity userEntity = userMapper.findByUsername(username);
+		UserResponseDto userEntity = userMapper.findByUsername(username);
 		BoardTypeEntity boardTypeEntity = boardTypeMapper.findByName(boardType);
 		BoardEntity boardEntity = BoardEntity.builder()
 				.title(boardRequestDto.getTitle())
@@ -112,7 +112,7 @@ public class BoardServiceImpl implements BoardService {
 		String username = boardRequestDto.getUsername();
 		String boardType = boardRequestDto.getBoardType();
 		
-		UserEntity userEntity = userMapper.findByUsername(username);
+		UserResponseDto userEntity = userMapper.findByUsername(username);
 		BoardTypeEntity boardTypeEntity = boardTypeMapper.findByName(boardType);
 		BoardEntity boardEntity = BoardEntity.builder()
 				.id(boardRequestDto.getId())
