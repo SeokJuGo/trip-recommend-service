@@ -7,21 +7,22 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserRequestDto;
+import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 @Mapper
 public interface UserMapper {
 	
-	List<UserEntity> findAll() throws SQLException;
+	List<UserResponseDto> findAll() throws SQLException;
 	
-	UserEntity findById(Integer id) throws SQLException;
+	UserResponseDto findById(Integer id) throws SQLException;
 	
-	UserEntity findByEmail(String email) throws SQLException;
+	UserResponseDto findByEmail(String email) throws SQLException;
 	
-	UserEntity findByUsername(String username) throws SQLException;
+	UserResponseDto findByUsername(String username) throws SQLException;
 	
 	void regist(UserRequestDto userRequestDto) throws SQLException;
 	
-	void update(UserEntity userEntity) throws SQLException;
+	void update(UserRequestDto userRequestDto) throws SQLException;
 
 	void delete(UserRequestDto userRequestDto) throws Exception;
 }

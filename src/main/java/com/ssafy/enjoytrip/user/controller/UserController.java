@@ -41,7 +41,7 @@ public class UserController {
 	private final UserService userService;
 	private final AuthService authService;
 
-	@GetMapping("")
+	@GetMapping(value = "/{username}")
 	@ApiOperation(value = "회원정보 조회", notes = "회원정보를 조회한다.")
 	@ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 404, message = "404 Not Found"),
@@ -52,7 +52,7 @@ public class UserController {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
 		if (authService.checkToken(request.getHeader("access-token"))) {
-			log.info("사용 가능한 토큰!!!");
+			log.info("사용 가능한 토큰");
 			try {
 				UserResponseDto responseDto = userService.findByUsername(username);
 				resultMap.put("message", "success");

@@ -22,7 +22,9 @@ public class UserResponseDto {
 	private String createdDate;
 	@ApiModelProperty(value = "업데이트일")
 	private String updatedDate;
-
+	@ApiModelProperty(value = "권한")
+	private String rolename;
+	
 	public UserResponseDto(UserEntity entity) {
 		this.id = entity.getId();
 		this.email = entity.getEmail();
@@ -30,6 +32,7 @@ public class UserResponseDto {
 		this.nickname = entity.getNickname();
 		this.createdDate = entity.getCreatedDate();
 		this.updatedDate = entity.getUpdatedDate();
+		this.rolename = entity.getRolename();
 	}
 	
 }
