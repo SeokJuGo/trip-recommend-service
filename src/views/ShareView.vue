@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-    <div class="vh-100">
+    <div>
         <router-view />
     </div>
 </template>

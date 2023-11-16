@@ -26,59 +26,9 @@ const fetchBoards = async () => {
             console.log("[ShareList.vue] fetchBoards() >> pageInfo = ", pageInfo.value);
         })
         .catch((error) => {
-            console.error("[ShareList.vue] fetchBoards() >> ", error);
+            console.error("[ShareList.vue] fetchBoards() Error >> ", error);
         });
 };
-
-// 리스트
-// const params = ref({
-//     pageNum: 1,
-//     pageSize: 10,
-//     keyword: "",
-//     searchType: "",
-// });
-
-// const pageNum = ref(1);
-// const totalPages = ref(0);
-
-// const boardlist = async () => {
-//     await api
-//         .get(`http://localhost:8080/enjoytrip/board`, { params: params.value })
-//         .then((response) => {
-//             console.log(response);
-//             pageNum.value = response.data.pageNum;
-//             totalPages.value = response.data.totalPages;
-//             boards.value = response.data.boards;
-//             console.log(response.data);
-//         })
-//         .catch((e) => {
-//             console.log("1. boards catch >> ", e);
-//         });
-// };
-
-// const getBoardList = async () => {
-//     console.log("서버에서 글목록 얻어오자!!!", params.value);
-//     // API 호출
-//     await api
-//         .get(`http://localhost:8080/enjoytrip/board`, { params: params.value })
-//         .then((response) => {
-//             console.log(response);
-//             pageNum.value = response.data.pageNum;
-//             totalPages.value = response.data.totalPages;
-//             boards.value = response.data.boards;
-//             console.log(response.data);
-//         })
-//         .catch((e) => {
-//             console.log("2. boards catch >> ", e);
-//         });
-// };
-
-// const onPageChange = (val) => {
-//     console.log(val + "번 페이지로 이동 준비 끝!!!");
-//     pageNum.value = val;
-//     params.value.pageNum = val;
-//     getBoardList();
-// };
 
 //글 작성 라우터
 // const router = useRouter();
@@ -87,6 +37,7 @@ const fetchBoards = async () => {
 //     router.push({ name: "share-write" });
 // };
 
+// PageNavigation 이동
 const onChangePageNum = (pageNum) => {
     console.log("[ShareList.vue] onChangePageNum(), pageNum = ", pageNum);
     params.value.pageNum = pageNum;
@@ -115,40 +66,28 @@ onMounted(() => {
                         </tr>
                     </thead>
 
-                    <ShareListItem v-for="board in boards" :key="board.id" :board="board">
-                    </ShareListItem>
+                    <ShareListItem v-for="board in boards" :key="board.id" :board="board" />
                 </table>
 
                 <!-- Button -->
                 <div class="d-flex justify-content-center">
                     <div class="col-md-3 text-start"></div>
+
+                    <!-- Pagination -->
                     <div class="col-md-6 text-center">
-                        <!-- <PageNavigation
-                            :page-num="params.pageNum"
-                            :total-pages="params.totalPages"
-                            @pageChange="onPageChange"
-                        ></PageNavigation> -->
                         <PageNavigation
                             :page-num="pageInfo.pageNum"
                             :total-pages="pageInfo.totalPages"
                             @on-change-page-num="onChangePageNum"
                         ></PageNavigation>
-                        {{ boards.totalPages }}
                     </div>
 
                     <div class="col-md-3 text-end">
                         <button class="btn btn-dark" @click="$router.push(`/share/write`)">
-                            등록하기
+                            글쓰기
                         </button>
                     </div>
                 </div>
-
-                <!-- Pagination -->
-                <!-- <PageNavigation
-                        :current-page="pageNum"
-                        :total-page="totalPages"
-                        @pageChange="onPageChange"
-                    ></PageNavigation> -->
 
                 <!-- Search Form -->
                 <!-- <div class="col-md-9 ms-auto mb-3 w-50">
@@ -183,4 +122,8 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.btn {
+    min-width: 100px;
+}
+</style>
