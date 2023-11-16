@@ -5,7 +5,7 @@
 <mapper namespace="com.ssafy.enjoytrip.user.mapper.AuthMapper">
 
 	<resultMap type="AuthRequestDto" id="authRequestDto">
-		<result column="id" property="id"/>
+		<result column="username" property="username"/>
 		<result column="password" property="password"/>
 	</resultMap>
 	
@@ -19,31 +19,28 @@
 	</resultMap>
 	
 	<select id="login" parameterType="AuthRequestDto" resultMap="userEntity">
-		SELECT ID, NAME, ROLD_ID
+		SELECT ID,USERNAME,NICKNAME,ROLE_ID
 		FROM user
-		WHERE id=#{id} AND PASSWORD=#{password}
+		WHERE username=#{username} AND PASSWORD=#{password}
 	</select>
 	
-	<delete id="delete" parameterType="AuthRequestDto">
-		DELETE FROM USER WHERE ID = #{id}
-	</delete>
 	
-	<select id="getRefreshToken" parameterType="string"
+	<select id="getRefreshToken" parameterType="AuthResponseDto"
 		resultType="string">
 		SELECT token
-		FROM user_token
-		WHERE id = #{id}
+		FROM auth
+		WHERE username=#{username}
 	</select>
 
 	<insert id="saveRefreshToken" parameterType="map">
 		INSERT INTO
-		user_token
-		VALUES(#{id}, #{token})
+		auth
+		VALUES(#{username}, #{token})
 	</insert>
 
 	<delete id="deleteRefreshToken" parameterType="map">
 		DELETE FROM
-		user_token
-		WHERE id = #{id}
+		auth
+		WHERE username = #{username}
 	</delete>
 </mapper>

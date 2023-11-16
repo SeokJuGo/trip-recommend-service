@@ -11,13 +11,14 @@ public interface AuthService {
 
 	UserEntity login(AuthRequestDto authRequestDto) throws SQLException;
 
-	void delete(AuthRequestDto authRequestDto) throws Exception;
 
-	void saveRefreshToken(String id, String refreshToken) throws Exception;
+	
+	
+	void saveRefreshToken(String username, String refreshToken) throws Exception;
 
-	Object getRefreshToken(String id) throws Exception;
+	Object getRefreshToken(String username) throws Exception;
 
-	void deleRefreshToken(String id) throws Exception;
+	void deleRefreshToken(String username) throws Exception;
 	
 	
 	//JWT
