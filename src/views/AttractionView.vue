@@ -26,7 +26,6 @@ const param = ref({
 });
 
 onMounted(() => {
-  // getAttractions();
   getSidoList();
 });
 
@@ -173,108 +172,9 @@ const viewAttraction = (attraction) => {
     </table>
 
     <div class="mx-auto" aria-label="Page navigation example">
-      <!-- <div class="row">${navigation.navigator}</div> -->
     </div>
   </div>
 </div>
-
-<!-- JavaScripts -->
-<!--
-<script
-  type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5e32a76c8b5f1bc4d07d3957e5f24edb"
-></script>
-<script
-  type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5e32a76c8b5f1bc4d07d3957e5f24edb&libraries=services,clusterer,drawing"
-></script> 
-// Custom JavaScripts
-<script type="text/javascript">
-  if ("${title}") document.getElementById("title").value = "${title}";
-  if (${sidoCode}) document.getElementById("sido-select").value = ${sidoCode};
-  if (${gugunCode}) document.getElementById("gugun-select").value = ${gugunCode};
-  if (${contentTypeId}) document.getElementById("contentType").value = ${contentTypeId};
-
-  document.addEventListener("DOMContentLoaded", () => {
-      // Page has finished loading
-      pageLoaded = true;
-
-    //시도 선택 시
-      document.getElementById("sido-select").addEventListener("change", () => {
-          let contentTypeId = document.getElementById("contentType").value;
-          let gugunCode = document.getElementById("gugun-select").value;
-          let sidoCode = document.getElementById("sido-select").value;
-          let title = document.getElementById("title").value;
-
-          let baseURL = "${root}/attraction?action=list";
-          let queryString = "";
-
-          if (title) queryString += "&title=" + title;
-          if (sidoCode) queryString += "&sidoCode=" + sidoCode;
-          if (gugunCode) queryString += "&gugunCode=" + gugunCode;
-          if (contentTypeId) queryString += "&contentTypeId=" + contentTypeId;
-
-          window.location.href = baseURL + queryString;
-      });
-      //구군 선택 시
-      document.getElementById("gugun-select").addEventListener("change", () => {
-          let contentTypeId = document.getElementById("contentType").value;
-          let gugunCode = document.getElementById("gugun-select").value;
-          let sidoCode = document.getElementById("sido-select").value;
-          let title = document.getElementById("title").value;
-
-          let baseURL = "${root}/attraction?action=list";
-          let queryString = "";
-
-          if (title) queryString += "&title=" + title;
-          if (sidoCode) queryString += "&sidoCode=" + sidoCode;
-          if (gugunCode) queryString += "&gugunCode=" + gugunCode;
-          if (contentTypeId) queryString += "&contentTypeId=" + contentTypeId;
-
-          window.location.href = baseURL + queryString;
-      });
-      //관광지 타입 선택 시
-      document.getElementById("contentType").addEventListener("change", () => {
-          let contentTypeId = document.getElementById("contentType").value;
-          let gugunCode = document.getElementById("gugun-select").value;
-          let sidoCode = document.getElementById("sido-select").value;
-          let title = document.getElementById("title").value;
-
-          let baseURL = "${root}/attraction?action=list";
-          let queryString = "";
-
-          if (title) queryString += "&title=" + title;
-          if (sidoCode) queryString += "&sidoCode=" + sidoCode;
-          if (gugunCode) queryString += "&gugunCode=" + gugunCode;
-          if (contentTypeId) queryString += "&contentTypeId=" + contentTypeId;
-
-          window.location.href = baseURL + queryString;
-      });
-
-      document.getElementById("btn-search-attraction").addEventListener("click", () => {
-          let contentTypeId = document.getElementById("contentType").value;
-          let gugunCode = document.getElementById("gugun-select").value;
-          let sidoCode = document.getElementById("sido-select").value;
-          let title = document.getElementById("title").value;
-
-          let baseURL = "${root}/attraction?action=list";
-          let queryString = "";
-
-          if (title) queryString += "&title=" + title;
-          if (sidoCode) queryString += "&sidoCode=" + sidoCode;
-          if (gugunCode) queryString += "&gugunCode=" + gugunCode;
-          if (contentTypeId) queryString += "&contentTypeId=" + contentTypeId;
-
-          window.location.href = baseURL + queryString;
-      });
-
-      window.onload = function() {
-          displayMarker("${attractions}");
-      }
-  });
-</script>
-<script type="text/javascript" src="./assets/js/maps.js"></script>
--->
 
 </template>
 
