@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.user.service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,33 +39,19 @@ public class UserServiceImpl implements UserService {
 		// 추후 UserResponseDto에 rolename 필드 추가 및 setRolename() 처리 필요
 		return new UserResponseDto(userMapper.findByUsername(username));
 	}
-
+	
 	@Override
-	public void regist(UserRequestDto userRequestDto) throws Exception {
-		userMapper.regist(userRequestDto.toEntity());
+	public void regist(UserRequestDto userRequestDto) throws SQLException {
+		userMapper.regist(userRequestDto);
 	}
-
+	
 	@Override
 	public void update(UserRequestDto userRequestDto) throws Exception {
 		userMapper.update(userRequestDto.toEntity());
 	}
-
-	@Override
-	public void delete(AuthRequestDto authRequestDto) throws Exception {
-		UserResponseDto responseDto = login(authRequestDto);
-		if (responseDto != null)
-			userMapper.delete(responseDto.getId().intValue());
-	}
-
-	@Override
-	public UserResponseDto login(AuthRequestDto authRequestDto) throws Exception {
-		UserEntity userEntity = userMapper.findByUsername(authRequestDto.getUsername());
-		// 추후 BCryptPasswordEncoder 및 JWT로 암호화 처리 필요
-		if (userEntity != null && userEntity.getPassword().equals(authRequestDto.getPassword())) {
-			// 추후 UserResponseDto에 rolename 필드 추가 및 setRolename() 처리 필요
-			return new UserResponseDto(userEntity);
-		}
-		return null;
-	}
 	
+	@Override
+	public void delete(UserRequestDto userRequestDto) throws Exception {
+		userMapper.delete(userRequestDto);
+	}
 }

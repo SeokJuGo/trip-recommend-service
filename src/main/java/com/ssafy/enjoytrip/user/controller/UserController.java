@@ -25,25 +25,20 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
-
 @Slf4j
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@Api(tags = {"유저 컨트롤러 API"})
+@Api(tags = { "유저 컨트롤러 API" })
 public class UserController {
 	private final UserService userService;
-	
+
 	@GetMapping("")
 	@ApiOperation(value = "회원정보 조회", notes = "회원정보를 조회한다.")
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "OK"),
-		@ApiResponse(code = 204, message = "No Content"),
-		@ApiResponse(code = 400, message = "Bad Request"),
-		@ApiResponse(code = 404, message = "404 Not Found"),
-		@ApiResponse(code = 500, message = "Internal Server Error")
-	})
+	@ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 404, message = "404 Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity<?> findByUsername(String username) {
 		log.debug("[UserController] findByUsername() function called, username = {}", username);
 		try {
@@ -55,16 +50,12 @@ public class UserController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PostMapping("")
 	@ApiOperation(value = "회원정보 등록", notes = "회원정보를 등록한다.")
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "OK"),
-		@ApiResponse(code = 204, message = "No Content"),
-		@ApiResponse(code = 400, message = "Bad Request"),
-		@ApiResponse(code = 404, message = "404 Not Found"),
-		@ApiResponse(code = 500, message = "Internal Server Error")
-	})
+	@ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 404, message = "404 Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity<?> regist(@RequestBody UserRequestDto userRequestDto) {
 		log.debug("[UserController] regist() function called, userRequestDto = {}", userRequestDto);
 		try {
@@ -77,16 +68,11 @@ public class UserController {
 		}
 	}
 
-	
 	@PutMapping("")
 	@ApiOperation(value = "회원정보 수정", notes = "회원정보를 수정한다.")
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "OK"),
-		@ApiResponse(code = 204, message = "No Content"),
-		@ApiResponse(code = 400, message = "Bad Request"),
-		@ApiResponse(code = 404, message = "404 Not Found"),
-		@ApiResponse(code = 500, message = "Internal Server Error")
-	})
+	@ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 404, message = "404 Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity<?> update(@RequestBody UserRequestDto userRequestDto) {
 		log.debug("[UserController] update() function called, userRequestDto = {}", userRequestDto);
 		try {
@@ -108,56 +94,16 @@ public class UserController {
 		@ApiResponse(code = 404, message = "404 Not Found"),
 		@ApiResponse(code = 500, message = "Internal Server Error")
 	})
-	public ResponseEntity<?> delete(@RequestBody AuthRequestDto authRequestDto) {
-		log.debug("[UserController] delete() function called, authRequestDto = {}", authRequestDto);
+	public ResponseEntity<?> delete(@RequestBody  UserRequestDto userRequestDto) {
+		log.debug("[UserController] delete() function called, authRequestDto = {}", userRequestDto);
 		try {
-			userService.delete(authRequestDto);
+			userService.delete(userRequestDto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e.getMessage());
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
-	
-	@PostMapping("/login")
-	@ApiOperation(value = "로그인", notes = "로그인")
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "OK"),
-		@ApiResponse(code = 204, message = "No Content"),
-		@ApiResponse(code = 400, message = "Bad Request"),
-		@ApiResponse(code = 404, message = "404 Not Found"),
-		@ApiResponse(code = 500, message = "Internal Server Error")
-	})
-	public ResponseEntity<?> login(@RequestBody AuthRequestDto authRequestDto, HttpSession httpSession) {
-		log.debug("[UserController] login() function called, authRequestDto = {}", authRequestDto);
-		try {
-			UserResponseDto responseDto = userService.login(authRequestDto);
-			if (responseDto != null) {
-				// 추후 AuthResponseDto(JWT accessToken 및 refreshToken)를 반환하는 것으로 수정 필요
-				httpSession.setAttribute("user", responseDto);
-				return new ResponseEntity<>(responseDto, HttpStatus.OK);
-			}
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e.getMessage());
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@GetMapping("/logout")
-	@ApiOperation(value = "로그아웃", notes = "로그아웃")
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "OK"),
-		@ApiResponse(code = 204, message = "No Content"),
-		@ApiResponse(code = 400, message = "Bad Request"),
-		@ApiResponse(code = 404, message = "404 Not Found"),
-		@ApiResponse(code = 500, message = "Internal Server Error")
-	})
-	public ResponseEntity<?> logout(HttpSession session) {
-		session.invalidate();
-		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
