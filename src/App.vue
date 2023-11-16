@@ -1,23 +1,20 @@
 <script setup>
-import HeaderNav from './components/common/HeaderNav.vue';
-import FooterNav from './components/common/FooterNav.vue';
+import HeaderNav from "./components/common/HeaderNav.vue";
+import FooterNav from "./components/common/FooterNav.vue";
 import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <header-nav></header-nav>
-  
+    <header-nav></header-nav>
 
-  <router-view></router-view>
+    <router-view></router-view>
 
-  
-  <footer-nav></footer-nav>
+    <footer-nav></footer-nav>
 </template>
 
 <style>
-
-  @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-  *{
-  font-family: 'Jua', sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+* {
+    font-family: "Jua", sans-serif;
 }
 </style>
