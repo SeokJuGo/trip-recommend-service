@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.user.model.AuthRequestDto;
 import com.ssafy.enjoytrip.user.model.UserRequestDto;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 import com.ssafy.enjoytrip.user.service.AuthService;

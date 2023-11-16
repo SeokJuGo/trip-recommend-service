@@ -39,14 +39,12 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public UserResponseDto login(AuthRequestDto authRequestDto) throws SQLException {
 			// 추후 BCryptPasswordEncoder 암호화 처리 필요
-			// 추후 UserResponseDto에 rolename 필드 추가 및 setRolename() 처리 필요
 		return authMapper.login(authRequestDto);
 	}
 
 
 	@Override
 	public void saveRefreshToken(String username, String refreshToken) throws Exception {
-		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("username", username);
 		map.put("token", refreshToken);
