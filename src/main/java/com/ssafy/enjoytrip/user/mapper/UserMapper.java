@@ -23,4 +23,5 @@ public interface UserMapper {
 	
 	void update(UserEntity userEntity) throws SQLException;
 
+	void delete(UserRequestDto userRequestDto) throws Exception;
 }
