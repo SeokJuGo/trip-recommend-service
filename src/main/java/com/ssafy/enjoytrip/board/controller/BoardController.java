@@ -119,10 +119,12 @@ public class BoardController {
 	
 	@ApiOperation(value = "게시글 수정", notes = "<h2><b>게시글을 수정한다.</b></h2>")
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateBoard(@RequestBody BoardUpdateRequestDto requestDto) {
+	public ResponseEntity<?> updateBoard(
+			@PathVariable Integer id,
+			@RequestBody BoardUpdateRequestDto requestDto) {
 		log.debug("BoardController updateBoard() function called!!!");
 		try {
-			Integer id = boardService.update(requestDto);
+			boardService.update(requestDto);
 			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
