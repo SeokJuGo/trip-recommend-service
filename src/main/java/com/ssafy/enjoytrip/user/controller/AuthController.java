@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.enjoytrip.user.model.AuthRequestDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.UserResponseDto;
 import com.ssafy.enjoytrip.user.service.AuthService;
 
 import io.swagger.annotations.Api;
@@ -49,7 +49,7 @@ public class AuthController {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = null;
 		try {
-			UserEntity loginUser = authService.login(authRequestDto);
+			UserResponseDto loginUser = authService.login(authRequestDto);
 			if (loginUser != null) {
 				String accessToken = authService.createAccessToken("userid", loginUser.getId());
 				String refreshToken = authService.createRefreshToken("userid", loginUser.getId());

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.enjoytrip.user.mapper.UserMapper;
 import com.ssafy.enjoytrip.user.model.AuthRequestDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserRequestDto;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 

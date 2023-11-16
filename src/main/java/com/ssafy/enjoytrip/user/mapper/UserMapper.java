@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserRequestDto;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 

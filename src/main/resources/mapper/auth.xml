@@ -4,24 +4,25 @@
 
 <mapper namespace="com.ssafy.enjoytrip.user.mapper.AuthMapper">
 
-	<resultMap type="AuthRequestDto" id="authRequestDto">
-		<result column="username" property="username"/>
-		<result column="password" property="password"/>
-	</resultMap>
-	
-	<resultMap type="UserEntity" id="userEntity" extends="authRequestDto">
-		<result column="email" property="email"/>
-		<result column="username" property="username"/>
-		<result column="nickname" property="nickname"/>
-		<result column="created_date" property="createdDate"/>
-		<result column="updated_date" property="updatedDate"/>
-		<result column="rold_id" property="roldId"/>
-	</resultMap>
-	
-	<select id="login" parameterType="AuthRequestDto" resultMap="userEntity">
-		SELECT ID,USERNAME,NICKNAME,ROLE_ID
-		FROM user
-		WHERE username=#{username} AND PASSWORD=#{password}
+		<!-- @ApiModelProperty(value = "Index")
+	private Long id;
+	@ApiModelProperty(value = "이메일")
+	private String email;
+	@ApiModelProperty(value = "아이디")
+	private String username;
+	@ApiModelProperty(value = "이름")
+	private String nickname;
+	@ApiModelProperty(value = "가입생성일")
+	private String createdDate;
+	@ApiModelProperty(value = "업데이트일")
+	private String updatedDate;
+	@ApiModelProperty(value = "권한")
+	private String rolename; -->
+	<select id="login" parameterType="AuthRequestDto" resultType="UserResponseDto">
+		SELECT A.id,username,nickname,B.name rolename FROM user A
+		JOIN role B 
+		ON A.role_id = B.id
+		WHERE username=#{username} AND password=#{password};
 	</select>
 	
 	

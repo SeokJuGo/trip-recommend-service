@@ -1,6 +1,5 @@
 package com.ssafy.enjoytrip.board.model;
 
-import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 import io.swagger.annotations.ApiModel;
