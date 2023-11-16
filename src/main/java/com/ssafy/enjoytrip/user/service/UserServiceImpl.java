@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void update(UserRequestDto userRequestDto) throws Exception {
-		userMapper.update(userRequestDto.toEntity());
+		userMapper.update(userRequestDto);
 	}
 	
 	@Override
