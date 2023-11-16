@@ -44,7 +44,7 @@
 	</update>
 	
 	<delete id="delete" parameterType="UserRequestDto">
-		DELETE FROM USER WHERE ID = #{id}
+		DELETE FROM USER WHERE username = #{username}
 	</delete>
 
 </mapper>
