@@ -19,10 +19,24 @@ public class BoardTypeRequestDto {
 	@ApiModelProperty(value = "게시판 타입 설명")
 	private String desc;
 	
-	public BoardTypeEntity toEntity() {
-		return BoardTypeEntity.builder()
+	public BoardType toEntity() {
+		return BoardType.builder()
 				.name(name)
 				.desc(desc)
 				.build();
 	}
+
+	public BoardType toEntity(Integer id) {
+		return BoardType.builder()
+				.id(Long.valueOf(id))
+				.name(name)
+				.desc(desc)
+				.build();
+	}
+
+	@Override
+	public String toString() {
+		return "BoardTypeRequestDto [name=" + name + ", desc=" + desc + "]";
+	}
+	
 }

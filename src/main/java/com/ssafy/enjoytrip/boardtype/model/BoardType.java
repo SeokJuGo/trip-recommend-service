@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "BoardEntity(게시판 타입 정보)", description = "게시판 타입 정보를 포함하고 있는 DomainEntity Class")
-public class BoardTypeEntity {
+public class BoardType {
 	@ApiModelProperty(value = "Index")
 	private Long id;
 	@ApiModelProperty(value = "게시판 타입명")
