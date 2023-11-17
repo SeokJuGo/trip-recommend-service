@@ -1,93 +1,125 @@
-<script setup>
-
-</script>
-
 <template>
+	
+<div class="container-fluid bg-warning-subtle">
+  <div class="container-md pt-5 pb-1">
+	  
+	  <div class="card card-body mx-3 mx-md-4 mt-n6">
+		<div class="row gx-4">
+		  <div class="col-auto">
+			<div class="avatar avatar-xl position-relative">
+			  <img
+				src="@/assets/img/강릉.jpg"
+				alt="profile_image"
+				class="profile shadow-sm w-100 border-radius-lg"
 
-<section class="container-fluid" style="height: 100vh">
-	<div class="container p-5"></div>
-	<div
-		class="container w-25 mt-5 p-3 border border-3 border-success rounded-4">
-		<div class="d-flex justify-content-center fs-2 p-3">회원정보수정</div>
-		<form id="form-join" method="POST" action="">
-			<input type="hidden" name="action" value="update" />
-			<div class="form-floating m-3">
-				<input type="text" class="form-control" id="id"
-					placeholder="Enter email" name="id" value=""
-					readonly /> <label for="id">ID</label>
+			  />
 			</div>
-			<div class="form-floating m-3">
-				<input type="password" class="form-control" id="password"
-					placeholder="Enter password" name="password"
-					value="" /> <label for="pwd">Password</label>
+		  </div>
+		  <div class="col-auto my-auto">
+			<div class="h-100">
+			  <h5 class="mb-1">Richard Davis</h5>
+			  <p class="mb-0 font-weight-normal text-sm">CEO / Co-Founder</p>
 			</div>
-			<div class="form-floating m-3">
-				<input type="text" class="form-control" id="name"
-					placeholder="Enter name" name="name" value="" />
-				<label for="name">Name</label>
+		  </div>
+		  <div
+			class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0"
+		  >
+			<div class="nav-wrapper position-relative end-0">
+			  <ul
+				class="p-1 bg-transparent nav nav-pills nav-fill"
+				role="tablist"
+			  >
+				<li class="nav-item">
+					
+					<h4>계획</h4>
+				</li>
+				<li class="nav-item">
+					
+					<h4>게시글</h4>
+				</li>
+				<li class="nav-item">
+				  <h4>내 정보</h4>
+				</li>
+			  </ul>
 			</div>
-			<div class="form-floating m-3">
-				<input type="text" class="form-control" id="email"
-					placeholder="Enter email" name="email"
-					value="" /> <label for="email">Email</label>
+		  </div>
+		</div>
+		<div class="row">
+			<div class="nav-wrapper position-relative end-0">
+			  <ul
+				class="p-1 bg-transparent nav nav-pills nav-fill"
+				role="tablist"
+			  >
+				<li class="nav-item">
+					
+				  <h1><font-awesome-icon :icon="['fas', 'location-dot']" bounce size="2xl" style="color: #2a69d5;" /></h1>
+				</li>	
+				<li class="nav-item">
+				</li>
+				<li class="nav-item">
+				  
+				</li>
+			  </ul>
 			</div>
-			<div class="form-floating m-3">
-				<input type="text" class="form-control" id="age"
-					placeholder="Enter password" name="age" value="" />
-				<label for="age">Age</label>
+			<div class="mt-3 row">
+			<div class="col-12"> 
+				
+			  <div class="mb-5 ps-3">
+				<h2 class="mb-1">내 여행 계획</h2>
+				<p class="text-sm">Architects design houses</p>
+				
+			  </div>
+			  
 			</div>
-			<div class="form-floating m-3 d-flex justify-content-center">
-				<button type="button" id="btn-update"
-					class="btn btn-outline-success m-3">회원정보수정</button>
-				<button type="button" class="btn btn-outline-success m-3"
-					id="btn-go-to-delete">회원탈퇴</button>
 			</div>
-		</form>
-	</div>
-</section>
-<!-- <script>
-	document.querySelector("#btn-update").addEventListener("click", function() {
-		if (!document.querySelector("#name").value) {
-			alert("이름을 입력해주세요.");
-			return;
-		} else if (!document.querySelector("#id").value) {
-			alert("아이디를 입력해주세요.");
-			return;
-		} else if (!document.querySelector("#password").value) {
-			alert("비밀번호를 입력해주세요.");
-			return;
-		} else if (!document.querySelector("#email").value) {
-			alert("이메일을 입력해주세요.");
-			return;
-		} else if (!document.querySelector("#age").value) {
-			alert("나이를 입력해주세요.");
-			return;
-		} else {
-			let form = document.querySelector("#form-join");
-			form.setAttribute("action", "${root}/user");
-			form.submit();
-		}
-	});
+		  <div class="mt-3 row">
+			
+			<div class="col-12 position-relative">
+				
+			  <profile-info-card
+				title="Profile Information"
+				description="Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
+				:info="{
+				  fullName: 'Alec M. Thompson',
+				  mobile: '(44) 123 1234 123',
+				  email: 'alecthompson@mail.com',
+				  location: 'USA',
+				}"
+			  />
+			  <hr class="vertical dark" />
+			</div>
+			<div class="mt-4 col-12 col-xl-4 mt-xl-0">
+			  <div class="card card-plain h-100">
+				<div class="p-3 pb-0 card-header">
+				  <h6 class="mb-0">Conversations</h6>
+				</div>
+				<div class="p-3 card-body">
+				  <ul class="list-group">
+					
+				  </ul>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	  </div>
+</div>
+  </template>
+  
+  <script setup>
+  import ProfileInfoCard from "./components/ProfileInfoCard.vue";
+  
 
-	document.querySelector("#btn-go-to-delete").addEventListener("click",
-			function() {
-				window.location.href = "${root}/user?action=remove";
-			});
+  
+	
 
-	// 바꾼 input에 대해서는 색깔을 바꾼다
-	/*
-	 */
-	var inputElements = document.querySelectorAll(".form-control");
-	inputElements.forEach(function(inputElement) {
-		inputElement.addEventListener("change", function() {
-			// 현재 변경된 input 요소의 배경색만 변경합니다.
-			inputElement.style.backgroundColor = "#f2f2f2";
-		});
-	});
-</script> -->
-
-</template>
-
-<style scoped>
-
+  </script>
+  <style scoped>
+.profile{
+	width: 100px;
+    height: 100px; 
+    border-radius: 70%;
+    overflow: hidden;
+	}
 </style>

@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, reactive,ref} from "vue";
 import { userStore } from "@/stores/userPiniaStore";
+
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 const store = userStore();
@@ -10,7 +11,6 @@ const user = reactive({
 });
 const noticeId = ref("");
 const noticePassword = ref("");
-
 const router = useRouter();
 
 function changeNoticeId(){
@@ -25,9 +25,11 @@ function changeNoticeId(){
 function changeNoticePassword(){
 	if(user.password.length<8){
 		noticePassword.value="비밀번호는는 8글자보다 커야합니다."
-	}else if(user.password.length>15){
-		noticePassword.value="비밀번호는 15자이하여야 합니다."
-	}else{
+	}else if(user.password.length>200){
+		noticePassword.value="비밀번호는 200자이하여야 합니다."
+	}else{ 
+		// 성공 시
+		
 		noticePassword.value="확인"
 	}
 }
@@ -55,19 +57,24 @@ async function signIn() {
         autoClose: 1000,
       });
     }
-   
+	console.log()
+	await storeIDByCookie(user.username);	
     router.push({ name: "main" }); 
   } else {
     error.message = "아이디 또는 비밀번호가 잘못되었습니다.";
   }
 }
-
+function preview(){
+	router.go(-1);
+}
 </script>
 
 <template>
+	
 <div class="container-fluid pt-5" style="height: 75vh">
 	<section class="container" style="height: 300px">
 		<div class="container p-5"></div>
+		
 		<div
 			class="container w-25 mt-5 p-3 border border-3 border-success rounded-4">
 			<form @submit.prevent id="form-login" method="POST" action="">
@@ -86,7 +93,7 @@ async function signIn() {
 					<button type="button" class="btn btn-outline-success m-3"
 						id="btn-login" @click="signIn" >로그인</button>
 					<button type="button" class="btn btn-outline-success m-3"
-						id="btn-go-to-index">이전으로</button>
+						id="btn-go-to-index" @click="preview">이전으로</button>
 				</div>
 			</form>
 		</div>
