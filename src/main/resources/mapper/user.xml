@@ -6,20 +6,20 @@
 		
 	<select id="findAll" resultType="UserEntity">
 		SELECT A.id, A.email, A.username, A.nickname,
-			B.name rolename, B.description roledesc
+		B.name rolename
 		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
 	</select>
 	
 	<select id="findById" parameterType="Integer" resultType="UserEntity">
 		SELECT A.id, A.email, A.username, A.nickname,
-			B.name rolename, B.description roledesc
+		B.name rolename
 		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
 		WHERE A.id = #{id}
 	</select>
 	
 	<select id="findByEmail" parameterType="String" resultType="UserEntity">
 		SELECT A.id, A.email, A.username, A.nickname,
-			B.name rolename, B.description roledesc
+			B.name rolename
 		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
 		WHERE A.email = #{email}
 	</select>
@@ -44,7 +44,7 @@
 	</update>
 	
 	<delete id="delete" parameterType="UserRequestDto">
-		DELETE FROM USER WHERE ID = #{id}
+		DELETE FROM USER WHERE username = #{username}
 	</delete>
 
 </mapper>

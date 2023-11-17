@@ -30,5 +30,6 @@ public class UserEntity {
 	private String updatedDate;
 	@ApiModelProperty(value = "권한 Index")
 	private Long roleId;
-	
+	@ApiModelProperty(value = "권한 이름")
+	private String rolename;
 }

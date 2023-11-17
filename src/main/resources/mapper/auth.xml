@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.user.mapper.AuthMapper">
+
+	<select id="login" parameterType="AuthRequestDto" resultType="UserResponseDto">
+		SELECT A.id,username,nickname,B.name rolename FROM user A
+		JOIN role B 
+		ON A.role_id = B.id
+		WHERE username=#{username} AND password=#{password};
+	</select>
+	
+	
+	<select id="getRefreshToken" parameterType="AuthResponseDto"
+		resultType="string">
+		SELECT token
+		FROM auth
+		WHERE username=#{username}
+	</select>
+
+	<insert id="saveRefreshToken" parameterType="map">
+		INSERT INTO
+		auth
+		VALUES(#{username}, #{token})
+	</insert>
+
+	<delete id="deleteRefreshToken" parameterType="map">
+		DELETE FROM
+		auth
+		WHERE username = #{username}
+	</delete>
+</mapper>

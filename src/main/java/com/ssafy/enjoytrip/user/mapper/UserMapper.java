@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.UserRequestDto;
 
 @Mapper
 public interface UserMapper {
@@ -18,10 +19,10 @@ public interface UserMapper {
 	
 	UserEntity findByUsername(String username) throws SQLException;
 	
-	void regist(UserEntity userEntity) throws SQLException;
+	void regist(UserRequestDto userRequestDto) throws SQLException;
 	
 	void update(UserEntity userEntity) throws SQLException;
-	
-	void delete(Integer id) throws SQLException;
 
+	void delete(UserRequestDto userRequestDto) throws Exception;
 }
+
