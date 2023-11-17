@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { listAttraction} from "../api/attraction";
+import { listAttraction} from "@/api/attraction";
 import { listSido, listGugun } from "@/api/map";
 
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
