@@ -17,7 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.ssafy.enjoytrip.user.exception.UnAuthorizedException;
 import com.ssafy.enjoytrip.user.mapper.AuthMapper;
 import com.ssafy.enjoytrip.user.model.AuthRequestDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -37,16 +37,14 @@ public class AuthServiceImpl implements AuthService {
 	private static final int REFRESH_TOKEN_EXPIRE_MINUTES = 60; // 주단위
 
 	@Override
-	public UserEntity login(AuthRequestDto authRequestDto) throws SQLException {
+	public UserResponseDto login(AuthRequestDto authRequestDto) throws SQLException {
 			// 추후 BCryptPasswordEncoder 암호화 처리 필요
-			// 추후 UserResponseDto에 rolename 필드 추가 및 setRolename() 처리 필요
 		return authMapper.login(authRequestDto);
 	}
 
 
 	@Override
 	public void saveRefreshToken(String username, String refreshToken) throws Exception {
-		// TODO Auto-generated method stub
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("username", username);
 		map.put("token", refreshToken);

@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.enjoytrip.user.mapper.UserMapper;
-import com.ssafy.enjoytrip.user.model.AuthRequestDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserRequestDto;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
@@ -36,7 +34,6 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public UserResponseDto findByUsername(String username) throws Exception {
-		// 추후 UserResponseDto에 rolename 필드 추가 및 setRolename() 처리 필요
 		return new UserResponseDto(userMapper.findByUsername(username));
 	}
 	

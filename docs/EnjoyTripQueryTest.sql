@@ -90,3 +90,10 @@ INSERT INTO BOARD (title, content, user_id, board_type_id) VALUES
 ("Board Title Sample Data 010", "Board Content Sample Data 010", 4, 1),
 ("Board Title Sample Data 011", "Board Content Sample Data 011", 6, 2),
 ("Board Title Sample Data 012", "Board Content Sample Data 012", 7, 3);
+
+    CREATE TABLE IF NOT EXISTS AUTH (
+    username      VARCHAR(50) PRIMARY KEY,
+    token         VARCHAR(300)      ,
+    CONSTRAINT        FK_AUTH_USER
+    FOREIGN KEY (username) REFERENCES USER (username)
+);

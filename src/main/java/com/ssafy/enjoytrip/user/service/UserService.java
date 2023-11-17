@@ -3,8 +3,6 @@ package com.ssafy.enjoytrip.user.service;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.ssafy.enjoytrip.user.model.AuthRequestDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserRequestDto;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
@@ -24,3 +22,4 @@ public interface UserService {
 	
 	void delete(UserRequestDto userRequestDto) throws Exception;
 }
+

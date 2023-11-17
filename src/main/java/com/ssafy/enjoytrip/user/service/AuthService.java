@@ -4,12 +4,11 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import com.ssafy.enjoytrip.user.model.AuthRequestDto;
-import com.ssafy.enjoytrip.user.model.AuthResponseDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 public interface AuthService {
 
-	UserEntity login(AuthRequestDto authRequestDto) throws SQLException;
+	UserResponseDto login(AuthRequestDto authRequestDto) throws SQLException;
 
 
 	

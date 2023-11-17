@@ -4,16 +4,14 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import com.ssafy.enjoytrip.user.model.AuthRequestDto;
-import com.ssafy.enjoytrip.user.model.AuthResponseDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 @Mapper
 public interface AuthMapper {
 
-	UserEntity login(AuthRequestDto authRequestDto) throws SQLException;
+	UserResponseDto login(AuthRequestDto authRequestDto) throws SQLException;
 
 	void saveRefreshToken(Map<String, String> map) throws SQLException;
 

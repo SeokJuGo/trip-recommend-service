@@ -25,3 +25,4 @@ public interface UserMapper {
 
 	void delete(UserRequestDto userRequestDto) throws Exception;
 }
+
