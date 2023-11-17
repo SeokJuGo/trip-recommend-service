@@ -1,5 +1,6 @@
 package com.ssafy.enjoytrip.board.model;
 
+import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 import io.swagger.annotations.ApiModel;
@@ -28,11 +29,11 @@ public class BoardResponseDto {
 	@ApiModelProperty(value = "글수정일자")
 	private String updatedDate;
 	
-	public BoardResponseDto(BoardEntity boardEntity, UserResponseDto userResponseDto, BoardTypeEntity boardTypeEntity) {
+	public BoardResponseDto(BoardEntity boardEntity, UserEntity userEntity, BoardTypeEntity boardTypeEntity) {
 		this.id = boardEntity.getId();
 		this.title = boardEntity.getTitle();
 		this.content = boardEntity.getContent();
-		this.author = new UserResponseDto(userResponseDto);
+		this.author = new UserResponseDto(userEntity);
 		this.boardType = new BoardTypeResponseDto(boardTypeEntity);
 		this.createdDate = boardEntity.getCreatedDate();
 		this.updatedDate = boardEntity.getUpdatedDate();
