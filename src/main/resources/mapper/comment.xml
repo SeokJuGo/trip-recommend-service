@@ -15,7 +15,7 @@
 			BOARD_ID AS boardId,
 			CREATED_DATE AS createdDate,
 			UPDATED_DATE AS updatedDate
-		FROM COMMENT WHERE 1 = 1
+		FROM COMMENT WHERE BOARD_ID = #{boardId}
 	</select>
 
 	<select id="findAll" resultType="Comment">

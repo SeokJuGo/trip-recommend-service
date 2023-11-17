@@ -19,7 +19,7 @@
         </if>
 	</select>
 	
-	<select id="findAll" parameterType="Map" resultType="BoardEntity">
+	<select id="findAll" parameterType="Map" resultType="Board">
 		SELECT
 			ID AS id,
 			TITLE AS title,
@@ -45,7 +45,7 @@
 	    LIMIT #{offset}, #{pageSize}
 	</select>
     
-	<select id="findById" parameterType="Integer" resultType="BoardEntity">
+	<select id="findById" parameterType="Integer" resultType="Board">
 		SELECT
 			ID AS id,
 			TITLE AS title,
@@ -58,12 +58,12 @@
 		WHERE ID = #{id}
 	</select>	
 
-	<insert id="insert" parameterType="BoardEntity" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insert" parameterType="Board" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO BOARD (TITLE, CONTENT, USER_ID, BOARD_TYPE_ID)
 		VALUES (#{title}, #{content}, #{userId}, #{boardTypeId})
 	</insert>
 	
-	<update id="update" parameterType="BoardEntity">
+	<update id="update" parameterType="Board">
 	    UPDATE BOARD SET
 	    	TITLE = #{title},
 	    	CONTENT = #{content},

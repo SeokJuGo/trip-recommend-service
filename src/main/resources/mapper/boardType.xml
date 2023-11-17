@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ssafy.enjoytrip.board.mapper.BoardTypeMapper"> 
+<mapper namespace="com.ssafy.enjoytrip.boardtype.mapper.BoardTypeMapper"> 
      
     <select id="count" parameterType="Map" resultType="Integer">
     	SELECT COUNT(ID) FROM BOARD_TYPE WHERE 1 = 1
@@ -13,7 +13,7 @@
         </if>
 	</select>
 	
-	<select id="findAll" parameterType="Map" resultType="BoardTypeEntity">
+	<select id="findAll" parameterType="Map" resultType="BoardType">
 		SELECT
 			ID AS id,
 			NAME AS name,
@@ -29,7 +29,7 @@
         </if>
 	</select>
 	
-	<select id="findById" parameterType="Integer" resultType="BoardTypeEntity">
+	<select id="findById" parameterType="Integer" resultType="BoardType">
 		SELECT
 			ID AS id,
 			NAME AS name,
@@ -40,7 +40,7 @@
 		WHERE ID = #{id}
 	</select>
 	
-	<select id="findByName" parameterType="String" resultType="BoardTypeEntity">
+	<select id="findByName" parameterType="String" resultType="BoardType">
 		SELECT
 			ID AS id,
 			NAME AS name,
@@ -51,11 +51,11 @@
 		WHERE NAME = #{name}
 	</select>
 
-	<insert id="insert" parameterType="BoardTypeEntity" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insert" parameterType="BoardType" useGeneratedKeys="true" keyProperty="id">
 	    INSERT INTO BOARD_TYPE (NAME, DESCRIPTION) VALUES (#{name}, #{desc})
 	</insert>
 	
-	<update id="update" parameterType="BoardTypeEntity">
+	<update id="update" parameterType="BoardType">
 	    UPDATE BOARD_TYPE SET
 	    	NAME = #{name},
 	    	DESCRIPTION = #{desc}
