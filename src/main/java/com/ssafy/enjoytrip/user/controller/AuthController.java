@@ -51,8 +51,8 @@ public class AuthController {
 		try {
 			UserResponseDto loginUser = authService.login(authRequestDto);
 			if (loginUser != null) {
-				String accessToken = authService.createAccessToken("userid", loginUser.getId());
-				String refreshToken = authService.createRefreshToken("userid", loginUser.getId());
+				String accessToken = authService.createAccessToken("username", loginUser.getUsername());
+				String refreshToken = authService.createRefreshToken("username", loginUser.getUsername());
 				authService.deleRefreshToken(authRequestDto.getUsername());
 				authService.saveRefreshToken(authRequestDto.getUsername(), refreshToken);
 				log.debug("LOGIN : Token 정보  Access {} \n Refresh {}", accessToken,refreshToken);
@@ -72,12 +72,12 @@ public class AuthController {
 
 	}
 
-	@GetMapping(value = "/logout/{id}")
-	public ResponseEntity<?> removeToken(@PathVariable("id") String userid) {
+	@GetMapping(value = "/logout/{username}")
+	public ResponseEntity<?> removeToken(@PathVariable("username") String username) {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
 		try {
-			authService.deleRefreshToken(userid);
+			authService.deleRefreshToken(username);
 			resultMap.put("message", "success");
 			status = HttpStatus.ACCEPTED;
 		} catch (Exception e) {
@@ -98,7 +98,7 @@ public class AuthController {
 		log.debug("token : {}", token);
 		if (authService.checkToken(token)) {
 			if (token.equals(authService.getRefreshToken(authRequestDto.getUsername()))) {
-				String accessToken = authService.createAccessToken("userid", authRequestDto.getUsername());
+				String accessToken = authService.createAccessToken("username", authRequestDto.getUsername());
 				log.debug("token : {}", accessToken);
 				log.debug("REFRESH : 정상적으로 액세스토큰 재발급!!!");
 				resultMap.put("access-token", accessToken);
