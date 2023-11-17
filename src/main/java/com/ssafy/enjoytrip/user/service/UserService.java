@@ -22,3 +22,4 @@ public interface UserService {
 	
 	void delete(UserRequestDto userRequestDto) throws Exception;
 }
+

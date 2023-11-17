@@ -3,6 +3,8 @@ package com.ssafy.enjoytrip.user.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +22,13 @@ public class UserRequestDto {
 	@ApiModelProperty(value = "이메일")
 	private String email;
 	
-	
+	public UserEntity toEntity() {
+		return UserEntity.builder()
+				.email(email)
+				.nickname(nickname)
+				.username(username)
+				.password(password)
+				.build();
+	}
 	
 }

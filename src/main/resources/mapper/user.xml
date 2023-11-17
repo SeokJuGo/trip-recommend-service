@@ -4,27 +4,27 @@
 
 <mapper namespace="com.ssafy.enjoytrip.user.mapper.UserMapper">
 		
-	<select id="findAll" resultType="UserResponseDto">
+	<select id="findAll" resultType="UserEntity">
 		SELECT A.id, A.email, A.username, A.nickname,
 		B.name rolename
 		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
 	</select>
 	
-	<select id="findById" parameterType="Integer" resultType="UserResponseDto">
+	<select id="findById" parameterType="Integer" resultType="UserEntity">
 		SELECT A.id, A.email, A.username, A.nickname,
 		B.name rolename
 		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
 		WHERE A.id = #{id}
 	</select>
 	
-	<select id="findByEmail" parameterType="String" resultType="UserResponseDto">
+	<select id="findByEmail" parameterType="String" resultType="UserEntity">
 		SELECT A.id, A.email, A.username, A.nickname,
 			B.name rolename
 		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
 		WHERE A.email = #{email}
 	</select>
 	
-	<select id="findByUsername" parameterType="String" resultType="UserResponseDto">
+	<select id="findByUsername" parameterType="String" resultType="UserEntity">
 		SELECT A.id, A.email, A.username, A.nickname, A.password
 			<!-- B.name rolename, B.description roledesc -->
 		FROM USER A <!-- JOIN ROLE B ON A.ROLE_ID = B.ID -->
