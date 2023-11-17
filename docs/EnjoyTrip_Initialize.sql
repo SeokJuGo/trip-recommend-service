@@ -1,6 +1,8 @@
 CREATE SCHEMA IF NOT EXISTS ENJOYTRIP;
 
 -- DROP TABLES FOR INITIALIZE
+DROP TABLE IF EXISTS FILEINFO;
+DROP TABLE IF EXISTS COMMENT;
 DROP TABLE IF EXISTS BOARD;
 DROP TABLE IF EXISTS BOARD_TYPE;
 DROP TABLE IF EXISTS USER;
@@ -45,6 +47,15 @@ INSERT INTO USER (username, password, nickname, email, role_id) VALUES
 ("user2", "1234", "NickName_User2", "user2@ssafy.com", 2),
 ("user3", "1234", "NickName_User3", "user3@ssafy.com", 3);
 
+-- CREATE TABLE AUTH
+CREATE TABLE IF NOT EXISTS AUTH (
+    username      VARCHAR(50) PRIMARY KEY,
+    token         VARCHAR(300),
+    CONSTRAINT        FK_AUTH_USER
+		FOREIGN KEY (username)
+		REFERENCES USER (username)
+);
+
 
 /* CREATE TABLES AND INSERT SAMPLE DATA RELATED TO BOARD */
 
@@ -66,6 +77,7 @@ CREATE TABLE IF NOT EXISTS BOARD (
     id 				INT AUTO_INCREMENT PRIMARY KEY,
     title 			VARCHAR(255) 	NOT NULL,
     content			TEXT 			NOT NULL,
+    hit				INT DEFAULT 0,
     created_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id			INT,
@@ -91,9 +103,30 @@ INSERT INTO BOARD (title, content, user_id, board_type_id) VALUES
 ("Board Title Sample Data 011", "Board Content Sample Data 011", 6, 2),
 ("Board Title Sample Data 012", "Board Content Sample Data 012", 7, 3);
 
-    CREATE TABLE IF NOT EXISTS AUTH (
-    username      VARCHAR(50) PRIMARY KEY,
-    token         VARCHAR(300)      ,
-    CONSTRAINT        FK_AUTH_USER
-    FOREIGN KEY (username) REFERENCES USER (username)
+CREATE TABLE IF NOT EXISTS COMMENT (
+    id 				INT AUTO_INCREMENT PRIMARY KEY,
+    content			VARCHAR(500) NOT NULL COMMENT '내용',
+    created_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id			INT,
+    board_id		INT,
+	CONSTRAINT FK_COMMENT_USER
+		FOREIGN KEY (user_id)
+        REFERENCES USER (id),
+	CONSTRAINT FK_COMMENT_BOARD
+		FOREIGN KEY (board_id)
+        REFERENCES BOARD (id)
+);
+
+CREATE TABLE IF NOT EXISTS FILEINFO (
+    id 				INT AUTO_INCREMENT PRIMARY KEY,
+    filesize		INT NOT NULL COMMENT '파일 크기',
+    filename		VARCHAR(255) NOT NULL COMMENT '원본 파일이름',
+    filepath		VARCHAR(255) NOT NULL COMMENT '파일 저장경로',
+    created_date	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    board_id	INT,
+	CONSTRAINT FK_FILEINFO_BOARD
+		FOREIGN KEY (board_id)
+        REFERENCES BOARD (id)
 );
