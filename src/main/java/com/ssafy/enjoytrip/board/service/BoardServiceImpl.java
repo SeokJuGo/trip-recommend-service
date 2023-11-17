@@ -8,13 +8,12 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.enjoytrip.board.mapper.BoardMapper;
-import com.ssafy.enjoytrip.board.mapper.BoardTypeMapper;
-import com.ssafy.enjoytrip.board.model.BoardEntity;
-import com.ssafy.enjoytrip.board.model.BoardSaveRequestDto;
-import com.ssafy.enjoytrip.board.model.BoardUpdateRequestDto;
+import com.ssafy.enjoytrip.board.model.Board;
+import com.ssafy.enjoytrip.board.model.BoardRequestDto;
 import com.ssafy.enjoytrip.board.model.BoardResponseDto;
 import com.ssafy.enjoytrip.board.model.BoardsResponseDto;
-import com.ssafy.enjoytrip.boardtype.model.BoardTypeEntity;
+import com.ssafy.enjoytrip.boardtype.mapper.BoardTypeMapper;
+import com.ssafy.enjoytrip.boardtype.model.BoardType;
 import com.ssafy.enjoytrip.user.mapper.UserMapper;
 import com.ssafy.enjoytrip.user.model.UserEntity;
 
@@ -32,12 +31,14 @@ public class BoardServiceImpl implements BoardService {
 		Map<String, Object> params = new HashMap<String, Object>();
 		
 		/* 게시판 타입 파라미터 처리 */
-		String boardType = (String) requestParams.get("boardType"); 
-		if (boardType != null && !boardType.equals("")) {
-			Long boardTypeId = boardTypeMapper.findByName(boardType).getId();
+		Long boardTypeId = (Long) requestParams.get("boardTypeId");
+		if (boardTypeId != null)
 			params.put("boardTypeId", boardTypeId);
-		}
-			
+//		String boardType = (String) requestParams.get("boardType"); 
+//		if (boardType != null && !boardType.equals("")) {
+//			Long boardTypeId = boardTypeMapper.findByName(boardType).getId();
+//			params.put("boardTypeId", boardTypeId);
+//		}
 		
 		/* 검색어 쿼리 객체 생성 */
 		String keyword = (String) requestParams.get("keyword");
@@ -63,17 +64,24 @@ public class BoardServiceImpl implements BoardService {
 		int cntTotalPages = (cntTotalElements - 1) / pageSize + 1;
 
 		/* 리턴 객체 생성 */
-		List<BoardResponseDto> boards = new ArrayList<>();
-		List<BoardEntity> boardEntities = boardMapper.findAll(params);
-		for (BoardEntity boardEntity : boardEntities) {
-			Integer userId = boardEntity.getUserId().intValue();
-			Integer boardTypeId = boardEntity.getBoardTypeId().intValue();
-			UserEntity userEntity = userMapper.findById(userId);
-			BoardTypeEntity boardTypeEntity = boardTypeMapper.findById(boardTypeId);
-			boards.add(new BoardResponseDto(boardEntity, userEntity, boardTypeEntity));
+		List<BoardResponseDto> responseDtos = new ArrayList<>();
+		List<Board> boards = boardMapper.findAll(params);
+		for (Board board : boards) {
+			UserEntity user = userMapper.findById(board.getUserId().intValue());
+			BoardType boardType = boardTypeMapper.findById(board.getBoardTypeId().intValue());
+			responseDtos.add(new BoardResponseDto(board, user, boardType));
 		}
+//		List<BoardResponseDto> boards = new ArrayList<>();
+//		List<Board> boardEntities = boardMapper.findAll(params);
+//		for (Board boardEntity : boardEntities) {
+//			Integer userId = boardEntity.getUserId().intValue();
+//			Integer boardTypeId = boardEntity.getBoardTypeId().intValue();
+//			UserEntity userEntity = userMapper.findById(userId);
+//			BoardType boardTypeEntity = boardTypeMapper.findById(boardTypeId);
+//			boards.add(new BoardResponseDto(boardEntity, userEntity, boardTypeEntity));
+//		}
 				
-		BoardsResponseDto responseDto = BoardsResponseDto.builder()
+		return BoardsResponseDto.builder()
 				.offset(offset)
 				.pageNum(pageNum)
 				.pageSize(pageSize)
@@ -81,64 +89,74 @@ public class BoardServiceImpl implements BoardService {
 				.totalElements(cntTotalElements)
 				.first(pageNum == 1 ? true : false)
 				.last(pageNum == cntTotalPages ? true : false)
-				.boards(boards)
+				.boards(responseDtos)
 				.build();
-		
-		return responseDto;
 	}
 
 	@Override
 	public BoardResponseDto findById(Integer id) throws Exception {
-		BoardEntity boardEntity = boardMapper.findById(id);
-		Integer userId = boardEntity.getUserId().intValue();
-		Integer boardTypeId = boardEntity.getBoardTypeId().intValue();
+		Board board = boardMapper.findById(id);
+		UserEntity user = userMapper.findById(board.getUserId().intValue());
+		BoardType boardType = boardTypeMapper.findById(board.getBoardTypeId().intValue());
+		return new BoardResponseDto(board, user, boardType);
 		
-		UserEntity userEntity = userMapper.findById(userId);
-		BoardTypeEntity boardTypeEntity = boardTypeMapper.findById(boardTypeId);
-		return new BoardResponseDto(boardEntity, userEntity, boardTypeEntity);
+//		Board boardEntity = boardMapper.findById(id);
+//		Integer userId = boardEntity.getUserId().intValue();
+//		Integer boardTypeId = boardEntity.getBoardTypeId().intValue();
+//		
+//		UserEntity userEntity = userMapper.findById(userId);
+//		BoardType boardTypeEntity = boardTypeMapper.findById(boardTypeId);
+//		return new BoardResponseDto(boardEntity, userEntity, boardTypeEntity);
 	}
 
 	@Override
-	public Integer insert(BoardSaveRequestDto boardRequestDto) throws Exception {
-		String username = boardRequestDto.getUsername();
-		String boardType = boardRequestDto.getBoardType();
+	public Integer insert(BoardRequestDto requestDto) throws Exception {
+		Board entity = requestDto.toEntity();
+		boardMapper.insert(entity);
+		return entity.getId().intValue();
 		
-		UserEntity userEntity = userMapper.findByUsername(username);
-		BoardTypeEntity boardTypeEntity = boardTypeMapper.findByName(boardType);
-		BoardEntity boardEntity = BoardEntity.builder()
-				.title(boardRequestDto.getTitle())
-				.content(boardRequestDto.getContent())
-				.userId(userEntity.getId())
-				.boardTypeId(boardTypeEntity.getId())
-				.build();
-		
-		boardMapper.insert(boardEntity);
-		return boardEntity.getId().intValue();
+//		String username = boardRequestDto.getUsername();
+//		String boardType = boardRequestDto.getBoardType();
+//		
+//		UserEntity userEntity = userMapper.findByUsername(username);
+//		BoardType boardTypeEntity = boardTypeMapper.findByName(boardType);
+//		Board boardEntity = Board.builder()
+//				.title(boardRequestDto.getTitle())
+//				.content(boardRequestDto.getContent())
+//				.userId(userEntity.getId())
+//				.boardTypeId(boardTypeEntity.getId())
+//				.build();
+//		
+//		boardMapper.insert(boardEntity);
+//		return boardEntity.getId().intValue();
 	}
 
 	@Override
-	public Integer update(BoardUpdateRequestDto boardRequestDto) throws Exception {
-		String username = boardRequestDto.getUsername();
-		String boardType = boardRequestDto.getBoardType();
+	public Integer update(Integer id, BoardRequestDto requestDto) throws Exception {
+		Board entity = requestDto.toEntity(id);
+		boardMapper.update(entity);
+		return entity.getId().intValue();
 		
-		UserEntity userEntity = userMapper.findByUsername(username);
-		BoardTypeEntity boardTypeEntity = boardTypeMapper.findByName(boardType);
-		BoardEntity boardEntity = BoardEntity.builder()
-				.id(boardRequestDto.getId())
-				.title(boardRequestDto.getTitle())
-				.content(boardRequestDto.getContent())
-				.userId(userEntity.getId())
-				.boardTypeId(boardTypeEntity.getId())
-				.build();
-		
-		boardMapper.update(boardEntity);
-		return boardEntity.getId().intValue();
+//		String username = boardRequestDto.getUsername();
+//		String boardType = boardRequestDto.getBoardType();
+//		
+//		UserEntity userEntity = userMapper.findByUsername(username);
+//		BoardType boardTypeEntity = boardTypeMapper.findByName(boardType);
+//		Board boardEntity = Board.builder()
+//				.id(boardRequestDto.getId())
+//				.title(boardRequestDto.getTitle())
+//				.content(boardRequestDto.getContent())
+//				.userId(userEntity.getId())
+//				.boardTypeId(boardTypeEntity.getId())
+//				.build();
+//		
+//		boardMapper.update(boardEntity);
+//		return boardEntity.getId().intValue();
 	}
 
 	@Override
-	public Integer delete(Integer id) throws Exception {
+	public void delete(Integer id) throws Exception {
 		boardMapper.delete(id);
-		return id;
 	}
 
 }

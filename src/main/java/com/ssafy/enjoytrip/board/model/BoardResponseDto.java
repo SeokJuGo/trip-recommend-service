@@ -1,6 +1,6 @@
 package com.ssafy.enjoytrip.board.model;
 
-import com.ssafy.enjoytrip.boardtype.model.BoardTypeEntity;
+import com.ssafy.enjoytrip.boardtype.model.BoardType;
 import com.ssafy.enjoytrip.boardtype.model.BoardTypeResponseDto;
 import com.ssafy.enjoytrip.user.model.UserEntity;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
@@ -31,7 +31,7 @@ public class BoardResponseDto {
 	@ApiModelProperty(value = "글수정일자")
 	private String updatedDate;
 	
-	public BoardResponseDto(BoardEntity boardEntity, UserEntity userEntity, BoardTypeEntity boardTypeEntity) {
+	public BoardResponseDto(Board boardEntity, UserEntity userEntity, BoardType boardTypeEntity) {
 		this.id = boardEntity.getId();
 		this.title = boardEntity.getTitle();
 		this.content = boardEntity.getContent();

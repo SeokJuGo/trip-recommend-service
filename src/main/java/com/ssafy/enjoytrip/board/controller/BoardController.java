@@ -1,9 +1,11 @@
 package com.ssafy.enjoytrip.board.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,13 +16,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.ssafy.enjoytrip.board.model.BoardSaveRequestDto;
-import com.ssafy.enjoytrip.board.model.BoardUpdateRequestDto;
+import com.ssafy.enjoytrip.board.model.BoardRequestDto;
 import com.ssafy.enjoytrip.board.model.BoardResponseDto;
 import com.ssafy.enjoytrip.board.model.BoardsResponseDto;
 import com.ssafy.enjoytrip.board.service.BoardService;
+import com.ssafy.enjoytrip.fileinfo.service.FileInfoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,6 +32,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,6 +53,7 @@ import lombok.extern.slf4j.Slf4j;
 	@ApiResponse(code = 500, message = "INTERNAL SERVER ERROR")})
 public class BoardController {
 	private final BoardService boardService;
+	private final FileInfoService fileInfoService;
 	
 	@GetMapping("")
 	@ApiOperation(value = "게시판 목록 조회", notes = "<h2><b>게시판 목록을 조회한다.</b></h2>")
@@ -63,9 +69,9 @@ public class BoardController {
 			@RequestParam(required = false, value = "keyword") String keyword,
 			@RequestParam(required = false, value = "searchType") String searchType,
 			@RequestParam(required = false, value = "boardType") String boardType) {
-		log.debug("BoardController findAll() function called!!!");
-		log.debug("boardType = {}, pageNum = {}, pageSize = {}, keyword = {}, searchType = {}", boardType, pageNum, pageSize, keyword, searchType);
 		try {
+			log.debug("BoardController findAll() function called!!!");
+			log.debug("boardType = {}, pageNum = {}, pageSize = {}, keyword = {}, searchType = {}", boardType, pageNum, pageSize, keyword, searchType);
 			Map<String, Object> params = new HashMap<>();
 			if (pageNum != null) params.put("pageNum", pageNum);
 			if (pageSize != null) params.put("pageSize", pageSize);
@@ -90,8 +96,8 @@ public class BoardController {
 		@ApiImplicitParam(name = "id", value = "게시글 아이디", required = true, dataType = "Integer", paramType = "path"),
 	})
 	public ResponseEntity<?> findById(@PathVariable("id") Integer id) {
-		log.debug("BoardController findById() function called!!!");
 		try {
+			log.debug("BoardController findById() function called!!!");
 			BoardResponseDto responseDto = boardService.findById(id);
 			if (responseDto != null)
 				return new ResponseEntity<>(responseDto, HttpStatus.OK);
@@ -103,12 +109,17 @@ public class BoardController {
 		}
 	}
 	
-	@PostMapping("")
+	@PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "게시글 작성", notes = "<h2><b>게시글을 작성한다.</b></h2>")
-	public ResponseEntity<?> writeBoard(@RequestBody BoardSaveRequestDto requestDto) {
-		log.debug("BoardController writeBoard() function called!!!");
+	public ResponseEntity<?> writeBoard(
+			@Schema(name = "data", description = "게시글 데이터", required = true, example = "")
+			@RequestPart(value = "data") BoardRequestDto requestDto,
+			@Schema(name = "files", description = "첨부파일 데이터", required = false, example = "")
+			@RequestPart(value = "files", required = false) List<MultipartFile> files) {
 		try {
+			log.debug("BoardController writeBoard() function called!!!");
 			Integer id = boardService.insert(requestDto);
+			fileInfoService.insert(id, files);
 			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -121,10 +132,10 @@ public class BoardController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateBoard(
 			@PathVariable Integer id,
-			@RequestBody BoardUpdateRequestDto requestDto) {
-		log.debug("BoardController updateBoard() function called!!!");
+			@RequestBody BoardRequestDto requestDto) {
 		try {
-			boardService.update(requestDto);
+			log.debug("BoardController updateBoard() function called!!!");
+			boardService.update(id, requestDto);
 			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
