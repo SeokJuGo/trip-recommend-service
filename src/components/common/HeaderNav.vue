@@ -1,15 +1,20 @@
 <script setup>
-import logo from "@/assets/img/logo.png";
-import { userStore} from "@/stores/userPiniaStore";
-import { logout } from "@/api/user";
+import logo from "@/assets/img/logo.png"
+import { userStore} from "@/stores/userPiniaStore"
 
 const store = userStore();
-
 let token = sessionStorage.getItem("access-token");
 store.getUserInfo(token);
 const username = store.userInfo;
-console.log(username);
 
+async function logout() {
+  console.log("로그아웃 -> " + store.userInfo.id);
+  await store.userLogout(store.userInfo.id);
+  toast.success("로그아웃 완료", {
+    autoClose: 2000,
+  });
+  router.push({ name: "presentation" }); // 메인 페이지로 이동
+}
 </script>
 
 <template>
@@ -71,7 +76,7 @@ console.log(username);
                 <ul class="navbar-nav ms-auto" id="logout">
                     <i class="mt-auto mb-auto bi bi-person-circle"></i>
                     <li class="nav-item">
-                        <a class="nav-link"  v-show="store.isLogin">로그아웃</a>
+                        <a class="nav-link"  v-show="store.isLogin" @click="logout()">로그아웃</a>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'mypage' }"
