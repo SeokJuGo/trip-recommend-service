@@ -1,93 +1,3 @@
-<script setup>
-import { ref, onMounted } from "vue";
-import { listAttraction} from "@/api/attraction";
-import { listSido, listGugun } from "@/api/map";
-
-import VKakaoMap from "@/components/common/VKakaoMap.vue";
-import VSelect from "@/components/common/VSelect.vue";
-
-// const serviceKey = import.meta.env.VITE_OPEN_API_SERVICE_KEY;
-const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env;
-
-const sidoList = ref([]);
-const gugunList = ref([{ text: "구군선택", value: "" }]);
-const attractionList = ref([]);
-const selectAttraction = ref({});
-const searchAtt = ref({
-  sidoCode:0,
-  gugunCode:0,
-  contentTypeId:0
-});
-const param = ref({
-  serviceKey: VITE_OPEN_API_SERVICE_KEY,
-  pageNo: 1,
-  numOfRows: 20,
-  zscode: 0,
-});
-
-onMounted(() => {
-  getSidoList();
-});
-
-const getSidoList = () => {
-  listSido(
-    ({ data }) => {
-      let options = [];
-      options.push({ text: "시도선택", value: "" });
-      data.forEach((sido) => {
-        options.push({ text: sido.sidoName, value: sido.sidoCode });
-      });
-      sidoList.value = options;
-    },
-    (err) => {
-      console.log(err);
-    }
-  );
-};
-
-  const onChangeSido = (val) => {
-    searchAtt.value.sidoCode=val;
-  listGugun(
-    { sidoCode: val },
-    ({ data }) => {
-      let options = [];
-      options.push({ text: "구군선택", value: "" });
-      data.forEach((gugun) => {
-        options.push({ text: gugun.gugunName, value: gugun.gugunCode });
-      });
-      gugunList.value = options;
-    },
-    (err) => {
-      console.log(err);
-    }
-  );
-  
-};
-const onChangeGugun = (val) => {
-  searchAtt.value.gugunCode = val;
-   getAttractions();
-};
-
-const getAttractions = () => {
-  attractionList.value=([]);
-  listAttraction(
-    searchAtt.value,
-    ({ data }) => {
-      attractionList.value = data;
-    },
-    (err) => {
-      console.log(err);
-    }
-  );
-  console.log(attractionList.value)
-};
-
-const viewAttraction = (attraction) => {
-  selectAttraction.value = attraction;
-};
-
-</script>
-
 <template>
 <!-- Main Content -->
 <div class="container-fluid bg-warning-subtle">
@@ -177,7 +87,95 @@ const viewAttraction = (attraction) => {
 </div>
 
 </template>
+<script setup>
+import { ref, onMounted } from "vue";
+import { listAttraction} from "@/api/attraction";
+import { listSido, listGugun } from "@/api/map";
 
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
+import VSelect from "@/components/common/VSelect.vue";
+
+// const serviceKey = import.meta.env.VITE_OPEN_API_SERVICE_KEY;
+const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env;
+
+const sidoList = ref([]);
+const gugunList = ref([{ text: "구군선택", value: "" }]);
+const attractionList = ref([]);
+const selectAttraction = ref({});
+const searchAtt = ref({
+  sidoCode:0,
+  gugunCode:0,
+  contentTypeId:0
+});
+const param = ref({
+  serviceKey: VITE_OPEN_API_SERVICE_KEY,
+  pageNo: 1,
+  numOfRows: 20,
+  zscode: 0,
+});
+
+onMounted(() => {
+  getSidoList();
+});
+
+const getSidoList = () => {
+  listSido(
+    ({ data }) => {
+      let options = [];
+      options.push({ text: "시도선택", value: "" });
+      data.forEach((sido) => {
+        options.push({ text: sido.sidoName, value: sido.sidoCode });
+      });
+      sidoList.value = options;
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+};
+
+  const onChangeSido = (val) => {
+    searchAtt.value.sidoCode=val;
+  listGugun(
+    { sidoCode: val },
+    ({ data }) => {
+      let options = [];
+      options.push({ text: "구군선택", value: "" });
+      data.forEach((gugun) => {
+        options.push({ text: gugun.gugunName, value: gugun.gugunCode });
+      });
+      gugunList.value = options;
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+  
+};
+const onChangeGugun = (val) => {
+  searchAtt.value.gugunCode = val;
+   getAttractions();
+};
+
+const getAttractions = () => {
+  attractionList.value=([]);
+  listAttraction(
+    searchAtt.value,
+    ({ data }) => {
+      attractionList.value = data;
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+  console.log(attractionList.value)
+};
+
+const viewAttraction = (attraction) => {
+  selectAttraction.value = attraction;
+};
+
+</script>
 <style scoped>
 img{
   width:100px;

@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  name: "ProfileInfoCard",
+  name: "UserInfoCard",
   props: {
     title: {
       type: String,
