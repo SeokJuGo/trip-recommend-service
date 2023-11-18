@@ -1,26 +1,30 @@
 package com.ssafy.enjoytrip.fileinfo.service;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ssafy.enjoytrip.fileinfo.model.FileInfoRequestDto;
 import com.ssafy.enjoytrip.fileinfo.model.FileInfoResponseDto;
 
 public interface FileInfoService {
+	
+	Integer count() throws Exception;
 
-	Integer countByBoardId(Integer boardId) throws SQLException;
+	Integer countByBoardId(Long boardId) throws Exception;
 	
-	List<FileInfoResponseDto> findAllByBoardId(Integer boardId) throws SQLException;
+	List<FileInfoResponseDto> findAll() throws Exception;
 	
-	List<FileInfoResponseDto> findAll() throws SQLException;
+	List<FileInfoResponseDto> findAllByBoardId(Long boardId) throws Exception;
 	
-	Integer insert(Integer id, List<MultipartFile> files) throws SQLException, IOException;
+	FileInfoResponseDto findById(Long id) throws Exception;
 	
-	Integer update(FileInfoRequestDto requestDto) throws SQLException;
+	Long insert(Long boardId, MultipartFile file) throws Exception;
 	
-	void delete(Integer id) throws SQLException;
+	Long update(Long boardId, MultipartFile file) throws Exception;
+	
+	void delete(Long id) throws Exception;
+	
+	Resource downloadFile(Long id) throws Exception;
 	
 }
