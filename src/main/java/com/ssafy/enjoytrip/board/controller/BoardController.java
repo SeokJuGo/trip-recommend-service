@@ -1,11 +1,9 @@
 package com.ssafy.enjoytrip.board.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,15 +14,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.enjoytrip.board.model.BoardRequestDto;
 import com.ssafy.enjoytrip.board.model.BoardResponseDto;
 import com.ssafy.enjoytrip.board.model.BoardsResponseDto;
 import com.ssafy.enjoytrip.board.service.BoardService;
-import com.ssafy.enjoytrip.fileinfo.service.FileInfoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,15 +27,11 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RestController
 @CrossOrigin("*")
-@RequestMapping("/board")
-@RequiredArgsConstructor
 @Api(tags = { "게시판 컨트롤러 API" })
 @ApiResponses({
 	@ApiResponse(code = 200, message = "OK"),
@@ -51,9 +42,12 @@ import lombok.extern.slf4j.Slf4j;
 	@ApiResponse(code = 403, message = "FORBIDDEN"),
 	@ApiResponse(code = 404, message = "NOT FOUND"),
 	@ApiResponse(code = 500, message = "INTERNAL SERVER ERROR")})
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/board")
 public class BoardController {
+	
 	private final BoardService boardService;
-	private final FileInfoService fileInfoService;
 	
 	@GetMapping("")
 	@ApiOperation(value = "게시판 목록 조회", notes = "<h2><b>게시판 목록을 조회한다.</b></h2>")
@@ -86,7 +80,7 @@ public class BoardController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR.name(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -105,56 +99,50 @@ public class BoardController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>("Error Occurred!!!", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
-	@PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping("")
 	@ApiOperation(value = "게시글 작성", notes = "<h2><b>게시글을 작성한다.</b></h2>")
-	public ResponseEntity<?> writeBoard(
-			@Schema(name = "data", description = "게시글 데이터", required = true, example = "")
-			@RequestPart(value = "data") BoardRequestDto requestDto,
-			@Schema(name = "files", description = "첨부파일 데이터", required = false, example = "")
-			@RequestPart(value = "files", required = false) List<MultipartFile> files) {
+	public ResponseEntity<?> writeBoard(@RequestBody BoardRequestDto requestDto) {
 		try {
-			log.debug("BoardController writeBoard() function called!!!");
+			log.debug("[BoardController] writeBoard() function called");
 			Integer id = boardService.insert(requestDto);
-			fileInfoService.insert(id, files);
 			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>("Error Occurred!!!", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@ApiOperation(value = "게시글 수정", notes = "<h2><b>게시글을 수정한다.</b></h2>")
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateBoard(
-			@PathVariable Integer id,
-			@RequestBody BoardRequestDto requestDto) {
+	public ResponseEntity<?> updateBoard(@PathVariable Integer id, @RequestBody BoardRequestDto requestDto) {
 		try {
-			log.debug("BoardController updateBoard() function called!!!");
+			log.debug("[BoardController] updateBoard() function called");
 			boardService.update(id, requestDto);
 			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>("Error Occurred!!!", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "게시글 삭제", notes = "<h2><b>게시글을 삭제한다.</b></h2>")
 	public ResponseEntity<?> deleteBoard(@PathVariable("id") Integer id) {
-		log.debug("BoardController deleteBoard() function called!!!");
 		try {
+			log.debug("[BoardController] deleteBoard() function called");
 			boardService.delete(id);
 			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>("Error Occurred!!!", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 }
