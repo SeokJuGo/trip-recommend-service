@@ -65,4 +65,29 @@ const pages = computed(() => {
 a {
     cursor: pointer;
 }
+
+.pagination > li > a {
+    background-color: white;
+    color: #000000;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover {
+    color: #5a5a5a;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > div > .active > a {
+    color: white;
+    background-color: #000000 !Important;
+    border: solid 1px #ddd !Important;
+}
+
+.pagination > div > .active > a:hover {
+    background-color: #000000 !Important;
+    border: solid 1px #ddd;
+}
 </style>

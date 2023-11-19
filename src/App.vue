@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-    <header-nav></header-nav>
+    <HeaderNav />
 
     <router-view></router-view>
 

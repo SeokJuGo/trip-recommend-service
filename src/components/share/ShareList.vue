@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import ShareAPI from "@/api/board.js";
-import { useRoute, useRouter } from "vue-router";
 
 import ShareListItem from "./item/ShareListItem.vue";
 import PageNavigation from "../common/PageNavigation.vue";
@@ -30,13 +29,6 @@ const fetchBoards = async () => {
         });
 };
 
-//글 작성 라우터
-// const router = useRouter();
-
-// const goWrite = function () {
-//     router.push({ name: "share-write" });
-// };
-
 // PageNavigation 이동
 const onChangePageNum = (pageNum) => {
     console.log("[ShareList.vue] onChangePageNum(), pageNum = ", pageNum);
@@ -50,80 +42,71 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container-fluid bg-danger-subtle">
-        <div class="container-md py-5 text-white-emphasis">
-            <!-- Title -->
+    <!-- border border-2 border-dark -->
+    <div class="container-md py-4">
+        <!-- Title -->
+        <div class="d-flex justify-content-center pb-3">
             <h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
-            <div class="border border-2 border-dark-subtle rounded bg-white shadow p-4 h-100">
-                <table class="table table-bordered table-striped table-hover text-center">
-                    <thead>
-                        <tr>
-                            <th class="text-center" style="width: 7.5%">#</th>
-                            <th class="text-start" style="width: 65%">제목</th>
-                            <th class="text-center" style="width: 7.5%">작성자</th>
-                            <th class="text-center" style="width: 7.5%">조회수</th>
-                            <th class="text-center" style="width: 12.5%">작성일</th>
-                        </tr>
-                    </thead>
+        </div>
 
-                    <ShareListItem v-for="board in boards" :key="board.id" :board="board" />
-                </table>
+        <!-- Search -->
+        <div class="d-flex justify-content-center pb-3">
+            <div class="input-group mb-3 w-75">
+                <select class="form-select border border-secondary" id="inputGroupSelect01">
+                    <option disabled>선택</option>
+                    <option value="1" selected>제목</option>
+                    <option value="2">내용</option>
+                    <option value="3">작성자</option>
+                </select>
+                <input type="text" class="form-control border border-secondary" placeholder="떠나고 싶은 곳을 찾아보세요!">
+                <button class="btn btn-light border border-secondary" type="button" id="button-addon2">검색</button>
+            </div>
+        </div>
 
-                <!-- Button -->
-                <div class="d-flex justify-content-center">
-                    <div class="col-md-3 text-start"></div>
+        <!-- Content -->
+        <div class="border border-2 border-dark-subtle rounded shadow bg-white p-4">
+            <table class="table table-bordered table-striped table-hover text-center">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 7.5%">#</th>
+                        <th class="text-start" style="width: 55%">제목</th>
+                        <th class="text-center" style="width: 12.5%">작성자</th>
+                        <th class="text-center" style="width: 7.5%">조회수</th>
+                        <th class="text-center" style="width: 17.5%">작성일</th>
+                    </tr>
+                </thead>
+                <ShareListItem v-for="board in boards" :board="board" :key="board.id" />
+            </table>
 
-                    <!-- Pagination -->
-                    <div class="col-md-6 text-center">
-                        <PageNavigation
-                            :page-num="pageInfo.pageNum"
-                            :total-pages="pageInfo.totalPages"
-                            @on-change-page-num="onChangePageNum"
-                        ></PageNavigation>
-                    </div>
+            <!-- Button -->
+            <div class="d-flex justify-content-center">
+                <div class="col-md-3 text-start"></div>
 
-                    <div class="col-md-3 text-end">
-                        <button class="btn btn-dark" @click="$router.push(`/share/write`)">
-                            글쓰기
-                        </button>
-                    </div>
+                <!-- Pagination -->
+                <div class="col-md-6 text-center">
+                    <PageNavigation
+                        :page-num="pageInfo.pageNum"
+                        :total-pages="pageInfo.totalPages"
+                        @on-change-page-num="onChangePageNum"
+                    ></PageNavigation>
                 </div>
 
-                <!-- Search Form -->
-                <!-- <div class="col-md-9 ms-auto mb-3 w-50">
-                    <form class="d-flex" id="form-search" action="">
-                        <input type="hidden" name="action" value="list" />
-                        <input type="hidden" name="pgno" value="1" />
-                        <select
-                            name="key"
-                            id="key"
-                            class="form-select form-select-sm ms-5 me-1 w-25"
-                            aria-label="검색조건"
-                        >
-                            <option value="" selected="">검색조건</option>
-                            <option value="article_no">글번호</option>
-                            <option value="subject">제목</option>
-                            <option value="user_id">작성자</option>
-                        </select>
-                        <div class="input-group input-group-sm w-50">
-                            <input
-                                type="text"
-                                name="word"
-                                id="word"
-                                class="form-control"
-                                placeholder="검색어..."
-                            />
-                            <button id="btn-search" class="btn btn-dark" type="button">검색</button>
-                        </div>
-                    </form>
-                </div> -->
+                <div class="col-md-3 text-end">
+                    <button class="btn btn-dark" @click="$router.push(`/share/write`)">
+                        글쓰기
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-.btn {
+button {
     min-width: 100px;
+}
+
+select {
+    max-width: 110px;
 }
 </style>
