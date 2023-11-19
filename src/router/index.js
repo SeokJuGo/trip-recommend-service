@@ -58,6 +58,11 @@ const router = createRouter({
                             path: "user-info",
                             name: "user-info",
                             component: () => import("@/components/user/components/UserInfo.vue"),
+                        },
+                        {
+                            path: "user-update",
+                            name: "user-update",
+                            component: () => import("@/components/user/components/UserInfoUpdate.vue"),
                         }
                     ],
                 },

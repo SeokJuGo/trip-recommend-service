@@ -52,7 +52,7 @@
 				  >
 					<li class="nav-item">
 						
-					  <h1><font-awesome-icon :icon="['fas', 'location-dot']" bounce size="2xl" style="color: #2a69d5;" /></h1>
+					  
 					</li>	
 					<li class="nav-item">
 					</li>

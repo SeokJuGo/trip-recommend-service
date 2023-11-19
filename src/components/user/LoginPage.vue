@@ -9,28 +9,29 @@ const user = reactive({
   username: "",
   password: "",
 });
-const noticeId = ref("");
-const noticePassword = ref("");
 const router = useRouter();
-
+const notice = reactive({username:"",password:""})
+const styleType = reactive({username:"error-message",password:"error-message"})
 function changeNoticeId(){
 	if(user.username.length<4){
-		noticeId.value="아이디는 4글자보다 커야합니다."
+		notice.username="아이디는 4글자보다 커야합니다."
+		styleType.username="error-message"
 	}else if(user.username.length>10){
-		noticeId.value="아이디는 10자이하여야 합니다."
+		notice.username="아이디는 10자이하여야 합니다."
+		styleType.username="error-message"
 	}else{
-		noticeId.value="확인"
+		notice.username=""
 	}
 }
 function changeNoticePassword(){
 	if(user.password.length<8){
-		noticePassword.value="비밀번호는는 8글자보다 커야합니다."
+		notice.password="비밀번호는는 8글자보다 커야합니다."
 	}else if(user.password.length>200){
-		noticePassword.value="비밀번호는 200자이하여야 합니다."
+		notice.password="비밀번호는 200자이하여야 합니다."
 	}else{ 
 		// 성공 시
 		
-		noticePassword.value="확인"
+		notice.password=""
 	}
 }
 // 쿠키 아이디 저장
@@ -83,12 +84,12 @@ function preview(){
 					<input type="text" class="form-control" id="id"
 						placeholder="Enter id" name="id" v-model="user.username" @blur="changeNoticeId"/> <label for="id">ID</label>
 				</div>
-				<div>{{ noticeId }}</div>
+				<span :class="styleType.username">{{ notice.username }}</span>
 				<div class="form-floating m-3">
 					<input type="password" class="form-control" id="password"
 						placeholder="Enter password" name="password" v-model="user.password"  @blur="changeNoticePassword" /> <label for="pwd">Password</label>
 				</div>
-				<div>{{ noticePassword }}</div>
+				<span :class="styleType.password">{{ notice.password }}</span>
 				<div class="form-floating m-3 d-flex justify-content-center">
 					<button type="button" class="btn btn-outline-success m-3"
 						id="btn-login" @click="signIn" >로그인</button>
@@ -103,5 +104,12 @@ function preview(){
 </template>
 
 <style scoped>
-
+.success-message {
+  color: rgba(57, 158, 240, 0.829);
+  font-size: 14px;
+}
+.error-message {
+  color: rgba(231, 78, 78, 0.829);
+  font-size: 14px;
+}
 </style>
