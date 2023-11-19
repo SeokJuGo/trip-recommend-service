@@ -25,9 +25,9 @@
 	</select>
 	
 	<select id="findByUsername" parameterType="String" resultType="UserEntity">
-		SELECT A.id, A.email, A.username, A.nickname, A.password
-			<!-- B.name rolename, B.description roledesc -->
-		FROM USER A <!-- JOIN ROLE B ON A.ROLE_ID = B.ID -->
+SELECT A.id, A.email, A.username, A.nickname,
+			B.name rolename
+		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
 		WHERE A.username = #{username}
 	</select>
 	
@@ -46,5 +46,9 @@
 	<delete id="delete" parameterType="UserRequestDto">
 		DELETE FROM USER WHERE username = #{username}
 	</delete>
-
+	
+	<select id="idCheck" parameterType="String" resultType="Integer">
+		select count(username) from user
+		where username=#{username};
+	</select>
 </mapper>
