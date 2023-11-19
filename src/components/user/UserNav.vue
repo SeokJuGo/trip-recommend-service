@@ -6,7 +6,7 @@
 
 
         <router-link class="nav-link" :to="{ name: 'user-myplan' }">
-          <a-menu-item key="mail">
+          <a-menu-item class="scale" key="mail">
             <template #icon>
               <mail-outlined />
             </template>
@@ -15,7 +15,7 @@
         </router-link>
 
         <router-link class="nav-link" :to="{ name: 'user-board' }">
-          <a-menu-item key="app">
+          <a-menu-item class="scale" key="app">
             <template #icon>
               <appstore-outlined />
             </template>
@@ -23,7 +23,7 @@
           </a-menu-item>
         </router-link>
         <router-link class="nav-link" :to="{ name: 'user-info' }">
-          <a-menu-item key="board">
+          <a-menu-item class="scale" key="board">
             <template #icon>
               <appstore-outlined />
             </template>
@@ -44,3 +44,29 @@ import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/ico
 const current = ref(['mail']);
 
 </script>
+
+<style>
+.scale {
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+  transition: all 0.3s ease-in-out; /* 부드러운 모션을 위해 추가*/
+}
+.scale:hover {
+  transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+}
+.scale img {
+  width: 200px;
+  height: 200px;
+  display:inline-block;
+  background: crimson;
+  
+}
+
+</style>
