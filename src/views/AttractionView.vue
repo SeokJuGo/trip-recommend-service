@@ -1,7 +1,7 @@
 <template>
 <!-- Main Content -->
-<div class="container-fluid bg-warning-subtle">
-  <div class="container-md pt-5 pb-1">
+<div class="container-fluid ">
+  <div class="pt-5 pb-1">
     <!-- Title -->
     <div class="d-flex justify-content-center mb-3">
       <h1 class="display-4 fw-bold text-center border-bottom border-2 border-secondary">
@@ -49,41 +49,31 @@
         </button>
       </div>
     </div>
+    
+    <div class="row">
+<div class="col-md-3">
+  <a-card hoverable class="w-75 acard">
+    <template #cover>
+      <img
+        alt="example"
+        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+      />
+    </template>
+    <template #actions>
+      <setting-outlined key="setting" />
+      <edit-outlined key="edit" />
+      <ellipsis-outlined key="ellipsis" />
+    </template>
+    <a-card-meta title="Card title" description="This is the description">
+    </a-card-meta>
+  </a-card>
+</div>
+      <div class="col-md-6">
     <VKakaoMap :attractions="attractionList" :selectAttraction="selectAttraction" />
   </div>
-
-  <div class="container-md pt-1 pb-5">
-    <table class="table table-bordered table-striped table-hover text-center">
-      <thead>
-        <tr>
-          <th class="text-center" style="width: 7.5%">#</th>
-          <th class="text-start" style="width: 32.5%">관광지</th>
-          <th class="text-center" style="width: 25%">주소1</th>
-          <th class="text-center" style="width: 25%">주소2</th>
-          <th class="text-center" style="width: 10%">전화번호</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          class="text-center"
-          v-for="attraction in attractionList"
-          :key="attraction.contentId"
-          @click="viewAttraction(attraction)"
-        >
-        <td><img :src="attraction.firstImage"></td>
-          <th>{{ attraction.title }}</th>
-          <td>{{ attraction.address }}</td>
-          
-          <td>{{ attraction.addr }}</td>
-          <td>{{ attraction.lat }}</td>
-          <td>{{ attraction.lng }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="mx-auto" aria-label="Page navigation example">
-    </div>
+  <div class="col-md-3"></div>
   </div>
+</div>
 </div>
 
 </template>
@@ -95,6 +85,9 @@ import { listSido, listGugun } from "@/api/map";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import VSelect from "@/components/common/VSelect.vue";
 
+
+import img1 from "@/assets/img/강릉.jpg"
+import MyPlanCard from "@/components/user/items/MyPlanCard.vue";
 // const serviceKey = import.meta.env.VITE_OPEN_API_SERVICE_KEY;
 const { VITE_OPEN_API_SERVICE_KEY } = import.meta.env;
 
@@ -177,7 +170,34 @@ const viewAttraction = (attraction) => {
 
 </script>
 <style scoped>
+.acard{
+
+  margin: 0 auto;
+}
 img{
-  width:100px;
+  width:50px;
+}
+
+@media (min-width: 992px) {
+  .navbar,
+  .navbar-collapse {
+    flex-direction: column;
+  }
+  .navbar-expand-lg .navbar-nav {
+    flex-direction: column;
+  }
+  .navbar {
+    width: 28%;
+    height: 100vh;
+    align-items: flex-start;
+  }
+  .navbar-brand {
+    margin-left: 0.5em;
+    padding-bottom: 0;
+    border-bottom: 4px solid #464646;
+  }
+  form input {
+    margin-bottom: 0.7em;
+  }
 }
 </style>
