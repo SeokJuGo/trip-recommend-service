@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	private final UserService userService;
 	private final AuthService authService;
-
+	
 	@GetMapping(value = "/{username}")
 	@ApiOperation(value = "회원정보 조회", notes = "회원정보를 조회한다.")
 	@ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 204, message = "No Content"),
@@ -47,7 +47,7 @@ public class UserController {
 			@ApiResponse(code = 500, message = "Internal Server Error") })
 	public ResponseEntity<?> findByUsername(@PathVariable("username") String username, Locale locale,
 			HttpServletRequest request) {
-		log.debug("[UserController] findByUsername() function called, username = {}", username);
+		log.debug("[UserController] findByName() function called, useremail = {}", username);
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
 		if (authService.checkToken(request.getHeader("access-token"))) {
@@ -68,6 +68,22 @@ public class UserController {
 			status = HttpStatus.UNAUTHORIZED;
 		}
 		return new ResponseEntity<>(resultMap, status);
+	}
+	@GetMapping(value = "/idcheck/{username}")
+	@ApiOperation(value = "username Check", notes = "중복검사를 한다.")
+	@ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 204, message = "No Content"),
+			@ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 404, message = "404 Not Found"),
+			@ApiResponse(code = 500, message = "Internal Server Error") })
+	public ResponseEntity<?> idCheck(@PathVariable("email") String username) {
+		log.debug("[UserController] idCheck() function called, username = {}", username);
+		try {
+			int result = userService.idCheck(username);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@PostMapping("")
