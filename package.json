@@ -18,10 +18,11 @@
     "ant-design-vue": "^4.0.7",
     "axios": "^1.6.1",
     "bootstrap": "^5.3.2",
+    "bootstrap-vue-3": "^0.5.1",
     "i": "^0.3.7",
     "jwt-decode": "^3.1.2",
     "pinia": "^2.1.7",
-    "vue": "^3.3.4",
+    "vue": "^3.3.8",
     "vue-router": "^4.2.5",
     "vue3-toastify": "^0.1.9",
     "vuex-persistedstate": "^4.1.0"
