@@ -2,115 +2,122 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ShareAPI from "@/api/board.js";
+import FileInfoAPI from "@/api/fileinfo.js";
+import FileInputForm from "@/components/common/FileInputForm.vue";
 
 const route = useRoute();
 const { id } = route.params;
 
-const board = ref({});
+const data = ref({
+    id: id,
+    title: "",
+    content: "",
+    boardTypeId: 4, // SHARE
+    userId: 1, // admin
+});
+
+// Fetch Board
 const fetchBoard = async () => {
     await ShareAPI.fetchBoard(id)
         .then((response) => {
-            console.log("[ShareUpdate.vue] fetchBoard() >> ", response);
-            board.value = response;
-            board.value.boardType = "BOARD";
-            board.value.username = response.author.username;
+            data.value = response;
+            data.value.userId = response.author.id;
+            data.value.boardTypeId = response.boardType.id;
         })
         .catch((error) => {
-            console.log("[ShareUpdate.vue] fetchBoard() Error >> ", error);
+            console.log("[ShareDetail.vue] fetchBoard() Error >> ", error);
         });
+};
+
+// Fetch Files
+const files = ref([]);
+const fetchFiles = async () => {
+    await FileInfoAPI.fetchFiles(id)
+        .then((response) => {
+            files.value = response;
+        })
+        .catch((error) => {
+            console.log("[ShareDetail.vue] fetchFiles() Error >> ", error);
+        });
+};
+
+const onChangeFiles = (updatedFiles) => {
+    files.value = updatedFiles;
+    console.log("[ShareWrite.vue] onChangeFiles() >> ", files);
 };
 
 const router = useRouter();
 const updateBoard = async () => {
-    await ShareAPI.updateBoard(id, board.value)
-        .then((response) => {
-            router.replace(`/share/view/${id}`);
-        })
+    await ShareAPI.updateBoard(data.value.id, data.value)
+        .then((response) => {})
         .catch((error) => {
-            console.log("[ShareUpdate.vue] updateBoard() Error >> ", error);
+            console.log("[ShareWrite.vue] updateBoard(), Error >> ", error);
         });
+
+    // if (files.value.length != 0) {
+    //     await FileInfoAPI.uploadFiles(id.value, files.value)
+    //         .then((response) => {})
+    //         .catch((error) => {
+    //             console.log("[ShareWrite.vue] uploadFiles(), Error >> ", error);
+    //         });
+    // }
+    router.push(`/share/view/${id}`);
 };
-
-// import axios from "axios";
-// const b = async () => {
-//     await axios
-//         .get(`http://localhost:8080/enjoytrip/board/detail/${id}`)
-//         .then(({ data }) => {
-//             board.value = data;
-//             console.log("1. board data >> ", board.value);
-//             //console.log("----------------------------->", response);
-//         })
-//         .catch((e) => {
-//             console.log("1. board catch >> ", e);
-//         });
-// };
-
-// const deleleShare = () => {
-//     axios
-//         .delete(`http://localhost:8080/enjoytrip/board/delete`, {
-//             data: {
-//                 id: id,
-//             },
-//         })
-//         .then((response) => console.log(response))
-//         .catch((error) => console.log(error));
-// };
-
-// const update = async () => {
-//     await axios
-//         .put(`http://localhost:8080/enjoytrip/board/update`, board.value)
-//         .then((response) => console.log(response));
-// };
 
 onMounted(() => {
     fetchBoard();
+    fetchFiles();
 });
 </script>
 
 <template>
-    <div class="container-fluid bg-danger-subtle">
-        <div class="container-md py-5 text-white-emphasis vh-100">
-            <!-- Title -->
-            <h1 class="border-bottom border-2 border-secondary">여행지 정보공유 수정</h1>
-            <div class="border border-2 border-dark-subtle rounded bg-white shadow p-4">
-                <form id="form-board-modify" action="" class="d-flex flex-column">
-                    <input type="hidden" name="action" value="modify" />
-                    <input type="hidden" name="boardId" :value="board.id" />
-                    <div class="mb-3">
-                        <label for="title" class="form-label">제목</label>
-                        <input
-                            type="text"
-                            name="title"
-                            id="title"
-                            class="form-control"
-                            placeholder="제목"
-                            v-model="board.title"
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label for="content" class="form-label">내용</label>
-                        <textarea
-                            name="content"
-                            id="content"
-                            class="form-control"
-                            style="height: 40vh"
-                            placeholder="내용"
-                            v-model="board.content"
-                            >{{ board.content }}</textarea
-                        >
-                    </div>
-                </form>
-                <div class="d-grid gap-2">
-                    <button id="btn-board-modify" class="btn btn-dark" @click="updateBoard">
-                        수정하기
-                    </button>
-                    <button id="btn-board-delete" class="btn btn-dark" @click="deleleShare">
-                        삭제하기
-                    </button>
+    <div class="container-md py-5">
+        <!-- Title -->
+        <h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
+
+        <div class="border border-2 border-dark-subtle rounded-0 shadow bg-white pt-4 px-4">
+            <h2 class="fst-italic border-bottom border-2 border-secondary">여행지정보 공유하기</h2>
+            <form @submit.prevent="onSubmit" action="">
+                <div class="mb-3">
+                    <label for="title" class="form-label">제목</label>
+                    <input
+                        type="text"
+                        class="form-control rounded-0"
+                        id="title"
+                        placeholder="제목"
+                        v-model="data.title"
+                    />
                 </div>
-            </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">내용</label>
+                    <textarea
+                        class="form-control rounded-0"
+                        id="content"
+                        placeholder="내용"
+                        v-model="data.content"
+                        rows="20"
+                    ></textarea>
+                </div>
+                <div class="mb-3">
+                    <FileInputForm @on-change-files="onChangeFiles" />
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-6 mb-3 text-center text-md-end">
+                        <button class="btn btn-outline-dark" @click="$router.push('/share/list')">
+                            목록으로
+                        </button>
+                    </div>
+                    <div class="col-md-6 mb-3 text-center text-md-start">
+                        <button class="btn btn-dark" @click="updateBoard">수정하기</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.btn {
+    min-width: 110px;
+}
+</style>

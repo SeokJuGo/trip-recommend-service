@@ -9,7 +9,7 @@ defineProps({
         <tr>
             <td class="text-center">{{ board.id }}</td>
             <td class="text-start">
-                <router-link :to="{ name: 'share-view', params: { id: board.id }}">
+                <router-link :to="{ name: 'share-view', params: { id: board.id } }">
                     {{ board.title }}
                 </router-link>
             </td>

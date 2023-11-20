@@ -58,14 +58,24 @@ onMounted(() => {
                     <option value="2">내용</option>
                     <option value="3">작성자</option>
                 </select>
-                <input type="text" class="form-control border border-secondary" placeholder="떠나고 싶은 곳을 찾아보세요!">
-                <button class="btn btn-light border border-secondary" type="button" id="button-addon2">검색</button>
+                <input
+                    type="text"
+                    class="form-control border border-secondary"
+                    placeholder="떠나고 싶은 곳을 찾아보세요!"
+                />
+                <button
+                    class="btn btn-light border border-secondary"
+                    type="button"
+                    id="button-addon2"
+                >
+                    검색
+                </button>
             </div>
         </div>
 
         <!-- Content -->
         <div class="border border-2 border-dark-subtle rounded shadow bg-white p-4">
-            <table class="table table-bordered table-striped table-hover text-center">
+            <table class="table border table-hover text-center">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 7.5%">#</th>

@@ -66,11 +66,16 @@ a {
     cursor: pointer;
 }
 
+div > li > a,
 .pagination > li > a {
     background-color: white;
     color: #000000;
 }
 
+div > li > a:focus,
+div > li > a:hover,
+div > li > span:focus,
+div > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > a:hover,
 .pagination > li > span:focus,
@@ -82,12 +87,12 @@ a {
 
 .pagination > div > .active > a {
     color: white;
-    background-color: #000000 !Important;
-    border: solid 1px #ddd !Important;
+    background-color: #000000 !important;
+    border: solid 1px #ddd !important;
 }
 
 .pagination > div > .active > a:hover {
-    background-color: #000000 !Important;
+    background-color: #000000 !important;
     border: solid 1px #ddd;
 }
 </style>
