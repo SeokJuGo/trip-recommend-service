@@ -70,8 +70,9 @@ CREATE TABLE IF NOT EXISTS BOARD_TYPE (
     updated_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 INSERT INTO BOARD_TYPE (id, name, description) VALUES (1, 'BOARD', '일반 게시판');
-INSERT INTO BOARD_TYPE (id, name, description) VALUES (2, 'PLAN', '여행계획 게시판');
+INSERT INTO BOARD_TYPE (id, name, description) VALUES (2, 'PLAN', '나의여행계획 게시판');
 INSERT INTO BOARD_TYPE (id, name, description) VALUES (3, 'HOTPLACE', '핫플레이스 게시판');
+INSERT INTO BOARD_TYPE (id, name, description) VALUES (4, 'SHARE', '정보공유 게시판');
 
 -- CREATE TABLE BOARD
 CREATE TABLE IF NOT EXISTS BOARD (

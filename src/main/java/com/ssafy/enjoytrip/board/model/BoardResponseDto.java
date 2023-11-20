@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 public class BoardResponseDto {
 	@ApiModelProperty(value = "Index")
 	private Long id;
+	@ApiModelProperty(value = "조회수")
+	private Long hit;
 	@ApiModelProperty(value = "글제목")
 	private String title;
 	@ApiModelProperty(value = "글내용")
@@ -33,6 +35,7 @@ public class BoardResponseDto {
 	
 	public BoardResponseDto(Board boardEntity, UserEntity userEntity, BoardType boardTypeEntity) {
 		this.id = boardEntity.getId();
+		this.hit = boardEntity.getHit();
 		this.title = boardEntity.getTitle();
 		this.content = boardEntity.getContent();
 		this.author = new UserResponseDto(userEntity);

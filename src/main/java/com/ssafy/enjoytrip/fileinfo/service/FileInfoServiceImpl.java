@@ -96,6 +96,11 @@ public class FileInfoServiceImpl implements FileInfoService {
 		Path basePath = Paths.get(System.getProperty("user.dir"));
 		Path savePath = basePath.getParent().resolve("attachments");
 		
+		File directory = new File(savePath.toString());
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
+		
 		String uuid = UUID.randomUUID().toString();
 		String filename = file.getOriginalFilename();
 		
@@ -117,6 +122,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 	}
 	
 	/** 실제파일 삭제 */
+	@Transactional
 	private void deleteFile(FileInfo entity) {
 		File file = new File(entity.getFilepath());
 		if (file.exists() && file.delete())

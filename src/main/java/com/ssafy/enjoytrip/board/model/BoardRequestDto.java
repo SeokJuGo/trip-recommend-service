@@ -25,6 +25,8 @@ public class BoardRequestDto {
 	
 	public Board toEntity() {
 		return Board.builder()
+				.boardTypeId(boardTypeId)
+				.userId(userId)
 				.content(content)
 				.title(title)
 				.build();
@@ -33,6 +35,8 @@ public class BoardRequestDto {
 	public Board toEntity(Integer id) {
 		return Board.builder()
 				.id(Long.valueOf(id))
+				.boardTypeId(boardTypeId)
+				.userId(userId)
 				.content(content)
 				.title(title)
 				.build();

@@ -107,7 +107,7 @@ public class BoardController {
 	@ApiOperation(value = "게시글 작성", notes = "<h2><b>게시글을 작성한다.</b></h2>")
 	public ResponseEntity<?> writeBoard(@RequestBody BoardRequestDto requestDto) {
 		try {
-			log.debug("[BoardController] writeBoard() function called");
+			log.debug("[BoardController] writeBoard() function called, requestDto = {}", requestDto);
 			Integer id = boardService.insert(requestDto);
 			return new ResponseEntity<>(id, HttpStatus.OK);
 		} catch (Exception e) {

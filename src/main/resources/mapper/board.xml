@@ -22,6 +22,7 @@
 	<select id="findAll" parameterType="Map" resultType="Board">
 		SELECT
 			ID AS id,
+			HIT AS hit,
 			TITLE AS title,
 			CONTENT AS content,
 			USER_ID AS userId,

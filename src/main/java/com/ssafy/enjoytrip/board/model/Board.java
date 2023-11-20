@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 public class Board {
 	@ApiModelProperty(value = "PK")
 	private Long id;
+	@ApiModelProperty(value = "조회수")
+	private Long hit;
 	@ApiModelProperty(value = "글제목")
 	private String title;
 	@ApiModelProperty(value = "글내용")
