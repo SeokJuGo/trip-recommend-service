@@ -1,13 +1,13 @@
 import { localAxios } from "@/util/http-commons";
 
-const local = localAxios();
+const axios = localAxios();
 
 function listSido(success, fail) {
-  local.get(`/sido`).then(success).catch(fail);
+  axios.get(`/sido`).then(success).catch(fail);
 }
 
 function listGugun(param, success, fail) {
-  local.get(`/gugun`, { params: param }).then(success).catch(fail);
+  axios.get(`/gugun`, { params: param }).then(success).catch(fail);
 }
 
 export { listSido, listGugun };
