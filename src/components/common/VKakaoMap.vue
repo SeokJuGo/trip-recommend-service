@@ -42,11 +42,9 @@ watch(
       let obj = {};
       obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
       obj.title = attraction.title;
-      obj.contentId = attraction.contentId;
       obj.address = attraction.address;
       obj.image = attraction.firstImage;
       obj.overview = attraction.overview;
-
 
       positions.value.push(obj);
     });
