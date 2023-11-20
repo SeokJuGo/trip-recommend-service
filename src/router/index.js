@@ -42,6 +42,29 @@ const router = createRouter({
                     path: "mypage",
                     name: "mypage",
                     component: () => import("@/components/user/MyPage.vue"),
+                    redirect:{name:"user-myplan"},
+                    children: [
+                        {
+                            path: "user-myplan",
+                            name: "user-myplan",
+                            component: () => import("@/components/user/components/UserMyplan.vue"),
+                        },
+                        {
+                            path: "user-board",
+                            name: "user-board",
+                            component: () => import("@/components/user/components/UserBoardList.vue"),
+                        },
+                        {
+                            path: "user-info",
+                            name: "user-info",
+                            component: () => import("@/components/user/components/UserInfo.vue"),
+                        },
+                        {
+                            path: "user-update",
+                            name: "user-update",
+                            component: () => import("@/components/user/components/UserInfoUpdate.vue"),
+                        }
+                    ],
                 },
             ],
         },
