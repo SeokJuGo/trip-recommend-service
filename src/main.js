@@ -15,12 +15,10 @@ import Antd from 'ant-design-vue';
 
 import 'ant-design-vue/dist/reset.css';
 
-import App from './App.vue'
-import router from './router'
+library.add(fas, far, fab);
 
-library.add(fas,far,fab);
+const app = createApp(App);
 
-const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.component('font-awesome-icon',FontAwesomeIcon)

@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-    <header-nav></header-nav>
+    <HeaderNav />
 
     <router-view></router-view>
 
@@ -13,6 +13,7 @@ import { RouterLink, RouterView } from "vue-router";
 </template>
 
 <style>
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
 @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
 * {
     font-family: "Jua", sans-serif;

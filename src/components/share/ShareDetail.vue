@@ -2,15 +2,19 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import ShareAPI from "@/api/board.js";
+import CommentAPI from "@/api/comment.js";
+import FileInfoAPI from "@/api/fileinfo.js";
+
+import Comment from "@/components/common/Comment.vue";
 
 const route = useRoute();
 const { id } = route.params;
 
+// Fetch Board
 const board = ref({});
 const fetchBoard = async () => {
     await ShareAPI.fetchBoard(id)
         .then((response) => {
-            console.log("[ShareDetail.vue] fetchBoard() >> ", response);
             board.value = response;
         })
         .catch((error) => {
@@ -18,18 +22,91 @@ const fetchBoard = async () => {
         });
 };
 
+// Fetch Files
+const files = ref([]);
+const fetchFiles = async () => {
+    await FileInfoAPI.fetchFiles(id)
+        .then((response) => {
+            files.value = response;
+        })
+        .catch((error) => {
+            console.log("[ShareDetail.vue] fetchFiles() Error >> ", error);
+        });
+};
+
+// Comment Data
+const data = ref({
+    boardId: id,
+    content: "",
+    userId: 1,
+});
+
+// Fetch Comments
+const comments = ref([]);
+const fetchComments = async () => {
+    await CommentAPI.fetchComments(id)
+        .then((response) => {
+            console.log("[ShareDetail.vue] fetchComments() >> ", response);
+            comments.value = response;
+        })
+        .catch((error) => {
+            console.log("[ShareDetail.vue] fetchComments() Error >> ", error);
+        });
+};
+
+// Insert Comment
+const insertComment = async () => {
+    await CommentAPI.insertComment(data.value)
+        .then((response) => {})
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
 const router = useRouter();
 const moveToShareList = () => router.push(`/share/list`);
+const moveToShareWrite = () => router.push(`/share/write`);
 const moveToShareUpdate = () => router.push(`/share/update/${id}`);
 
 const deleteShare = async () => {
+    if (files.value.length) {
+        for (const file of files.value) {
+            await FileInfoAPI.deleteFile(file.id)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
+
     await ShareAPI.deleteBoard(id)
-        .then(() => moveToShareList())
-        .catch((error) => console.log("[ShareDetail.vue] deleteShare() Error >> ", error));
+        .then((response) => {
+            moveToShareList();
+        })
+        .catch((error) => {
+            console.log("[ShareDetail.vue] deleteBoard() Error >> ", error);
+        });
+};
+
+const formatFileSize = (sizeInBytes) => {
+    // 변환 공식: 1MB = 1024KB, 1KB = 1024Bytes
+    let i = 0;
+    let fileSize = sizeInBytes;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    while (fileSize > 1024 && i < sizes.length - 1) {
+        fileSize /= 1024;
+        i++;
+    }
+
+    return fileSize.toFixed(2) + " " + sizes[i];
 };
 
 onMounted(() => {
     fetchBoard();
+    fetchFiles();
+    fetchComments();
 });
 
 // const board = ref([]);
@@ -62,144 +139,75 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container-fluid bg-primary-subtle min-vh-100">
-        <!-- Component Head -->
-        <div class="row justify-content-center pt-5 pb-3">
-            <div class="col-md-9">
-                <h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
+    <div class="container-md py-5">
+        <h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
+        <div class="row d-flex justify-content-center rounded-0 shadow bg-white pt-4 px-4 mb-3">
+            <!-- Title -->
+            <div class="d-flex justify-content-center border-bottom border-1 border-black-50">
+                <div class="d-flex align-items-center fst-italic me-auto">
+                    <h2 class="m-0">{{ board?.title }}</h2>
+                </div>
+                <div class="text-black-50 fst-italic ms-auto">
+                    <small class="d-block text-end"
+                        >작성자:&nbsp;{{ board?.author?.username }}</small
+                    >
+                    <small class="d-block text-end">작성일:&nbsp;{{ board?.createdDate }}</small>
+                    <small class="d-block text-end">수정일:&nbsp;{{ board?.updatedDate }}</small>
+                </div>
             </div>
-        </div>
-        <!-- Component Body -->
-        <div class="row justify-content-center px-3 pb-3">
-            <div class="col-md-9 bg-white shadow p-3">
-                <!-- Title -->
-                <div class="d-flex justify-content-center">
+            <!-- Content -->
+            <div class="border-bottom border-1 border-black-50 py-3" style="min-height: 40vh">
+                {{ board?.content }}
+            </div>
+            <!-- FileList -->
+            <div v-if="files.length" class="border border-1 border-secondary-subtle my-3">
+                <div
+                    class="d-flex justify-content-center px-2"
+                    v-for="(file, index) in files"
+                    :key="index"
+                >
                     <div class="me-auto">
-                        <h1 class="fw-bold fst-italic">{{ board?.title }}</h1>
+                        {{ file.filename }}
                     </div>
-                    <div class="ms-auto fst-italic text-black-50">
-                        <div class="text-end">작성자:{{ board?.author?.username }}</div>
-                        <div class="text-end">작성일:{{ board?.createdDate }}</div>
-                        <div class="text-end">수정일:{{ board?.updatedDate }}</div>
+                    <div class="ms-auto">
+                        {{ formatFileSize(file.filesize) }}
                     </div>
                 </div>
-                <!-- Content -->
-                <div class="border border-1 border-black-50 p-2">
-                    {{ board?.content }}
-                </div>
-                <!-- Buttons -->
-                <div class="d-flex justify-content-center mt-2">
-                    <div @click="moveToShareList" class="btn btn-dark me-auto">목록</div>
-                    <div @click="moveToShareUpdate" class="btn btn-primary ms-auto">수정</div>
-                    <div @click="deleteShare" class="btn btn-danger ms-2">삭제</div>
-                </div>
+            </div>
+            <!-- Buttons -->
+            <div
+                :class="{ 'mt-3': !files || files.length === 0 }"
+                class="d-flex justify-content-center pb-3"
+            >
+                <button @click="moveToShareList" class="me-1 btn btn-outline-dark">목록으로</button>
+                <button @click="moveToShareWrite" class="ms-1 me-auto btn btn-dark">
+                    새글작성
+                </button>
+                <button @click="deleteShare" class="me-1 ms-auto btn btn-danger">삭제하기</button>
+                <button @click="moveToShareUpdate" class="ms-1 btn btn-primary">수정하기</button>
             </div>
         </div>
+
         <!-- Comment -->
-        <div class="row justify-content-center px-3 pb-4">
-            <div class="col-md-9 bg-white shadow p-3">
-                <h3 class="fw-bold fst-normal">댓글(0)</h3>
-                <!-- Comment Content -->
-                <div class="border border-1 border-black-50 shadow px-3 py-2">
-                    <div class="d-flex justify-content-between text-black-50">
-                        <div class="fst-normal">
-                            <span>작성자&nbsp;</span>
-                            <small>2023-11-16 10:24:25</small>
-                        </div>
-                        <div class="fst-italic">
-                            <small>수정</small>
-                            <small>&nbsp;/&nbsp;</small>
-                            <small>삭제</small>
-                        </div>
-                    </div>
-                    <div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit reiciendis
-                        nulla, dicta sunt doloribus nobis culpa accusantium provident laboriosam.
-                        Dolorum aperiam libero quas aut, qui facere commodi ipsa. Fuga,
-                        consequuntur. Debitis corporis consequatur neque reprehenderit delectus
-                        culpa ducimus nemo, ad quaerat quisquam omnis eius, suscipit rem repellendus
-                        quo ab provident ratione non, commodi dolores ut incidunt aliquid quam
-                        aperiam! Unde? Atque deleniti cupiditate consectetur, fugiat neque suscipit
-                        in placeat omnis molestias vel animi quas non autem commodi quidem dolor
-                        eligendi error. Quam nulla dolorum possimus impedit. Velit corporis eveniet
-                        autem. Omnis et aut culpa. Ducimus perspiciatis soluta vel molestias, minus
-                        eum quos aut voluptatum architecto aliquid inventore neque eligendi
-                        voluptatem assumenda ullam reprehenderit facere est totam temporibus dolorum
-                        iusto odio! Omnis vel porro molestiae praesentium laboriosam consequatur
-                        nemo unde eum voluptas animi, veritatis impedit, tempore culpa minus. Facere
-                        vero, ipsa fugiat, natus beatae, iste eaque explicabo exercitationem sint
-                        itaque consequuntur!
-                    </div>
-                </div>
-                <!-- Comment Form -->
-                <form class="pt-3" method="post">
-                    <textarea class="form-control" rows="5"></textarea>
-                </form>
+        <div class="row d-flex justify-content-center rounded-0 shadow bg-white pt-4 px-4">
+            <h3 class="border-bottom border-1 border-dark-50">댓글(0)</h3>
+            <!-- Comment Content -->
+            <Comment v-for="comment in comments" :comment="comment" :key="comment.id" />
+            <form class="py-4" action="">
+                <textarea
+                    class="form-control rounded-0"
+                    id="content"
+                    placeholder="댓글"
+                    v-model="data.content"
+                    rows="3"
+                ></textarea>
                 <!-- Buttons -->
-                <div class="d-flex justify-content-end mt-2">
-                    <div class="btn btn-dark">등록</div>
+                <div class="d-flex justify-content-end pt-2">
+                    <button class="btn btn-dark" @click="insertComment">등록</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-    <!-- <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 col-sm-12">
-            <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-                <mark class="sky">글보기</mark>
-            </h2>
-        </div>
-        <div class="col-lg-8 col-md-10 col-sm-12">
-            <div class="row my-2">
-                <h2 class="text-secondary px-5">{{ board.title }}</h2>
-            </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="clearfix align-content-center">
-                        <img
-                            class="avatar me-2 float-md-start bg-light p-2"
-                            src="https://raw.githubusercontent.com/twbs/icons/main/icons/person-fill.svg"
-                        />
-                        <p>
-                            <span class="fw-bold">{{ board.userId }}</span> <br />
-                            <span class="text-secondary fw-light"> {{ board.createdDate }} </span>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-4 align-self-center text-end">댓글 : 17</div>
-                <div class="divider mb-3"></div>
-                <div class="text-secondary">
-                    {{ board.content }}
-                </div>
-                <div class="divider mt-3 mb-3"></div>
-                <div class="d-flex justify-content-end">
-                    <button
-                        @click="goList"
-                        type="button"
-                        id="btn-list"
-                        class="btn btn-outline-primary mb-3"
-                    >
-                        글목록
-                    </button>
-                    <button
-                        @click="goUpdate"
-                        type="button"
-                        id="btn-mv-modify"
-                        class="btn btn-outline-success mb-3 ms-1"
-                    >
-                        글수정
-                    </button>
-                    <button
-                        type="button"
-                        @click="deleleShare"
-                        id="btn-delete"
-                        class="btn btn-outline-danger mb-3 ms-1"
-                    >
-                        글삭제
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </template>
 
 <style scoped>
