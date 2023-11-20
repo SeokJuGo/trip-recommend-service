@@ -51,4 +51,9 @@ public class UserServiceImpl implements UserService {
 	public void delete(UserRequestDto userRequestDto) throws Exception {
 		userMapper.delete(userRequestDto);
 	}
+
+	@Override
+	public int idCheck(String username) throws SQLException {
+		return userMapper.idCheck(username);
+	}
 }

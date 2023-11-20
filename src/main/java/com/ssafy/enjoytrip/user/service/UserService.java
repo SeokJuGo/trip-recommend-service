@@ -21,5 +21,7 @@ public interface UserService {
 	void update(UserRequestDto userRequestDto) throws Exception;
 	
 	void delete(UserRequestDto userRequestDto) throws Exception;
+	
+	int idCheck(String username) throws SQLException;
 }
 
