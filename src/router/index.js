@@ -8,11 +8,6 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
-            path: "/hotplace",
-            name: "hotplace",
-            component: HotPlaceView,
-        },
-        {
             path: "/attraction",
             name: "attraction",
             component: AttractionView,
@@ -42,7 +37,7 @@ const router = createRouter({
                     path: "mypage",
                     name: "mypage",
                     component: () => import("@/components/user/MyPage.vue"),
-                    redirect:{name:"user-myplan"},
+                    redirect: { name: "user-myplan" },
                     children: [
                         {
                             path: "user-myplan",
@@ -52,7 +47,8 @@ const router = createRouter({
                         {
                             path: "user-board",
                             name: "user-board",
-                            component: () => import("@/components/user/components/UserBoardList.vue"),
+                            component: () =>
+                                import("@/components/user/components/UserBoardList.vue"),
                         },
                         {
                             path: "user-info",
@@ -62,8 +58,9 @@ const router = createRouter({
                         {
                             path: "user-update",
                             name: "user-update",
-                            component: () => import("@/components/user/components/UserInfoUpdate.vue"),
-                        }
+                            component: () =>
+                                import("@/components/user/components/UserInfoUpdate.vue"),
+                        },
                     ],
                 },
             ],
@@ -105,6 +102,19 @@ const router = createRouter({
                 },
             ],
         },
+        {
+            path: "/hotplace",
+            name: "hotplace",
+            component: HotPlaceView,
+            redirect: { path: "/hotplace/list" },
+            children: [
+                {
+                    path: "list",
+                    name: "hotplace-list",
+                    component: () => import("@/components/hotplace/HotplaceList.vue"),
+                },
+            ],
+        },
 
         // {
         //   path: '/about',
@@ -113,6 +123,7 @@ const router = createRouter({
         //   // this generates a separate chunk (About.[hash].js) for this route
         //   // which is lazy-loaded when the route is visited.
         //   component: () => import('../views/AboutView.vue')
+        // }
     ],
 });
 
