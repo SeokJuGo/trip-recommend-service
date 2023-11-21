@@ -11,7 +11,7 @@ import com.ssafy.enjoytrip.comment.model.CommentResponseDto;
 import com.ssafy.enjoytrip.comment.model.CommentSaveRequestDto;
 import com.ssafy.enjoytrip.comment.model.CommentUpdateRequestDto;
 import com.ssafy.enjoytrip.user.mapper.UserMapper;
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 		List<Comment> comments = commentMapper.findAllByBoardId(boardId);
 		List<CommentResponseDto> responseDtos = new ArrayList<>();
 		for (Comment comment : comments) {
-			UserEntity user = userMapper.findById(comment.getUserId().intValue());
+			User user = userMapper.findById(comment.getUserId().intValue());
 			responseDtos.add(new CommentResponseDto(comment, user));
 		}
 		return responseDtos;
@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
 		List<Comment> comments = commentMapper.findAll();
 		List<CommentResponseDto> responseDtos = new ArrayList<>();
 		for (Comment comment : comments) {
-			UserEntity user = userMapper.findById(comment.getUserId().intValue());
+			User user = userMapper.findById(comment.getUserId().intValue());
 			responseDtos.add(new CommentResponseDto(comment, user));
 		}
 		return responseDtos;

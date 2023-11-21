@@ -10,7 +10,7 @@ public interface UserService {
 	
 	List<UserResponseDto> findAll() throws Exception;
 
-	UserResponseDto findById(Integer id) throws Exception;
+	UserResponseDto findById(Long id) throws Exception;
 
 	UserResponseDto findByEmail(String email) throws Exception;
 	

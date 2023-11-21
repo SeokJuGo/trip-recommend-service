@@ -1,8 +1,8 @@
 package com.ssafy.enjoytrip.board.model;
 
-import com.ssafy.enjoytrip.boardtype.model.BoardTypeEntity;
+import com.ssafy.enjoytrip.boardtype.model.BoardType;
 import com.ssafy.enjoytrip.boardtype.model.BoardTypeResponseDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.User;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 import io.swagger.annotations.ApiModel;
@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 public class BoardResponseDto {
 	@ApiModelProperty(value = "Index")
 	private Long id;
+	@ApiModelProperty(value = "조회수")
+	private Long hit;
 	@ApiModelProperty(value = "글제목")
 	private String title;
 	@ApiModelProperty(value = "글내용")
@@ -31,8 +33,9 @@ public class BoardResponseDto {
 	@ApiModelProperty(value = "글수정일자")
 	private String updatedDate;
 	
-	public BoardResponseDto(BoardEntity boardEntity, UserEntity userEntity, BoardTypeEntity boardTypeEntity) {
+	public BoardResponseDto(Board boardEntity, User userEntity, BoardType boardTypeEntity) {
 		this.id = boardEntity.getId();
+		this.hit = boardEntity.getHit();
 		this.title = boardEntity.getTitle();
 		this.content = boardEntity.getContent();
 		this.author = new UserResponseDto(userEntity);

@@ -22,8 +22,8 @@ public class UserRequestDto {
 	@ApiModelProperty(value = "이메일")
 	private String email;
 	
-	public UserEntity toEntity() {
-		return UserEntity.builder()
+	public User toEntity() {
+		return User.builder()
 				.email(email)
 				.nickname(nickname)
 				.username(username)

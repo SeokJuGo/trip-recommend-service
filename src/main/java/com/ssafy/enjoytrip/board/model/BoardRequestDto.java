@@ -13,23 +13,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "BoardRequestDto(게시글 요청 정보)", description = "게시글 요청 정보를 포함하고 있는 RequestDto Class")
-public class BoardUpdateRequestDto {
-	@ApiModelProperty(value = "Index")
-	private Long id;
-	@ApiModelProperty(value = "글제목")
+public class BoardRequestDto {
+	@ApiModelProperty(value = "글 제목")
 	private String title;
-	@ApiModelProperty(value = "글내용")
+	@ApiModelProperty(value = "글 내용")
 	private String content;
-	@ApiModelProperty(value = "작성자 아이디")
-	private String username;
-	@ApiModelProperty(value = "게시판 타입")
-	private String boardType;
+	@ApiModelProperty(value = "작성자 PK")
+	private Long userId;
+	@ApiModelProperty(value = "게시판 타입 PK")
+	private Long boardTypeId;
 	
-	public BoardEntity toEntity() {
-		return BoardEntity.builder()
+	public Board toEntity() {
+		return Board.builder()
+				.title(title)
+				.content(content)
+				.boardTypeId(boardTypeId)
+				.userId(userId)
+				.build();
+	}
+
+	public Board toEntity(Long id) {
+		return Board.builder()
 				.id(id)
 				.title(title)
 				.content(content)
+				.boardTypeId(boardTypeId)
+				.userId(userId)
 				.build();
 	}
+	
 }

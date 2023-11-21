@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "BoardTypeResponseDto(게시판 타입 응답 정보)", description = "게시판 타입 응답 정보를 포함하고 있는 ResponseDto Class")
 public class BoardTypeResponseDto {
-	@ApiModelProperty(value = "Index")
+	@ApiModelProperty(value = "PK")
 	private Long id;
 	@ApiModelProperty(value = "게시판 타입명")
 	private String name;
@@ -21,7 +21,7 @@ public class BoardTypeResponseDto {
 	@ApiModelProperty(value = "글수정일자")
 	private String updatedDate;
 	
-	public BoardTypeResponseDto(BoardTypeEntity boardTypeEntity) {
+	public BoardTypeResponseDto(BoardType boardTypeEntity) {
 		this.id = boardTypeEntity.getId();
 		this.name = boardTypeEntity.getName();
 		this.desc = boardTypeEntity.getDesc();

@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserResponseDto findById(Integer id) throws Exception {
-		return new UserResponseDto(userMapper.findById(id));
+	public UserResponseDto findById(Long id) throws Exception {
+		return new UserResponseDto(userMapper.findById(id.intValue()));
 	}
 
 	@Override

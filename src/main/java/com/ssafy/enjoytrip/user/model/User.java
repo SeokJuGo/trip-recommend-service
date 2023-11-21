@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "UserEntity(회원정보)", description = "회원정보를 포함하고 있는 DomainEntity Class")
-public class UserEntity {
+public class User {
 	@ApiModelProperty(value = "Index")
 	private Long id;
 	@ApiModelProperty(value = "이메일")

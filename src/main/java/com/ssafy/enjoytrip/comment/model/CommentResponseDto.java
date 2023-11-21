@@ -1,6 +1,6 @@
 package com.ssafy.enjoytrip.comment.model;
 
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.User;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 import io.swagger.annotations.ApiModel;
@@ -25,7 +25,7 @@ public class CommentResponseDto {
 	@ApiModelProperty(value = "댓글수정일자")
 	private String updatedDate;
 	
-	public CommentResponseDto(Comment commentEntity, UserEntity userEntity) {
+	public CommentResponseDto(Comment commentEntity, User userEntity) {
 		this.id = commentEntity.getId();
 		this.content = commentEntity.getContent();
 		this.author = new UserResponseDto(userEntity);

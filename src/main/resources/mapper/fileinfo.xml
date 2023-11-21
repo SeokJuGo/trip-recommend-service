@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.fileinfo.mapper.FileInfoMapper">
+
+    <select id="count" resultType="Integer">
+    	SELECT COUNT(ID) FROM FILEINFO
+	</select>
+
+    <select id="countByBoardId" parameterType="Long" resultType="Integer">
+    	SELECT COUNT(ID) FROM FILEINFO WHERE BOARD_ID = #{boardId}
+	</select>
+
+	<select id="findAll" resultType="FileInfo">
+		SELECT
+			ID AS id,
+			FILESIZE AS filesize,
+			FILENAME AS filename,
+			FILEPATH AS filepath,
+			BOARD_ID AS boardId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM FILEINFO
+	</select>
+	
+	<select id="findAllByBoardId" parameterType="Long" resultType="FileInfo">
+		SELECT
+			ID AS id,
+			FILESIZE AS filesize,
+			FILENAME AS filename,
+			FILEPATH AS filepath,
+			BOARD_ID AS boardId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM FILEINFO WHERE BOARD_ID = #{boardId}
+	</select>
+
+	<select id="findById" parameterType="Long" resultType="FileInfo">
+		SELECT
+			ID AS id,
+			FILESIZE AS filesize,
+			FILENAME AS filename,
+			FILEPATH AS filepath,
+			BOARD_ID AS boardId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM FILEINFO WHERE ID = #{id}
+	</select>
+
+	<insert id="insert" parameterType="FileInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO FILEINFO (FILESIZE, FILENAME, FILEPATH, BOARD_ID)
+		VALUES (#{filesize}, #{filename}, #{filepath}, #{boardId})
+	</insert>
+	
+	<update id="update" parameterType="FileInfo">
+	    UPDATE FILEINFO SET
+	    	FILESIZE = #{filesize},
+	    	FILENAME = #{filename},
+	    	FILEPATH = #{filepath}
+	    WHERE ID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="Long">
+	    DELETE FROM FILEINFO WHERE ID = #{id}
+	</delete>
+
+</mapper>

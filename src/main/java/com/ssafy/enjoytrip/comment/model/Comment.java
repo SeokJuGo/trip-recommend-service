@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ApiModel(value = "Comment(댓글 정보)", description = "댓글 정보를 포함하고 있는 Domain Entity Class")
 public class Comment {
-	@ApiModelProperty(value = "Index")
+	@ApiModelProperty(value = "PK")
 	private Long id;
 	@ApiModelProperty(value = "댓글 내용")
 	private String content;
@@ -27,4 +27,5 @@ public class Comment {
 	private Long userId;
 	@ApiModelProperty(value = "BOARD PK")
 	private Long boardId;
+	
 }

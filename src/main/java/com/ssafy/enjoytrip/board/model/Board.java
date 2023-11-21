@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ApiModel(value = "BoardEntity(게시글 정보)", description = "게시글 정보를 포함하고 있는 DomainEntity Class")
-public class BoardEntity {
-	@ApiModelProperty(value = "Index")
+@ApiModel(value = "Board(게시글 정보)", description = "게시글 정보를 포함하고 있는 Domain Entity Class")
+public class Board {
+	@ApiModelProperty(value = "PK")
 	private Long id;
+	@ApiModelProperty(value = "조회수")
+	private Long hit;
 	@ApiModelProperty(value = "글제목")
 	private String title;
 	@ApiModelProperty(value = "글내용")
@@ -30,4 +32,7 @@ public class BoardEntity {
 	@ApiModelProperty(value = "게시판 타입 Index")
 	private Long boardTypeId;
 	
+	public void increateHit() {
+		this.hit++;
+	}
 }

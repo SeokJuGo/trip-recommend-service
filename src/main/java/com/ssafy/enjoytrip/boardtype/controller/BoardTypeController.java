@@ -1,6 +1,5 @@
-package com.ssafy.enjoytrip.board.controller;
+package com.ssafy.enjoytrip.boardtype.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.enjoytrip.board.service.BoardTypeService;
 import com.ssafy.enjoytrip.boardtype.model.BoardTypeRequestDto;
 import com.ssafy.enjoytrip.boardtype.model.BoardTypeResponseDto;
+import com.ssafy.enjoytrip.boardtype.service.BoardTypeService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,58 +46,59 @@ public class BoardTypeController {
 	@GetMapping("")
 	@ApiOperation(value = "게시판 타입 목록 조회", notes = "<h2><b>게시판 타입 목록을 조회한다.</b></h2>")
 	public ResponseEntity<?> findAll() {
-		log.debug("[BoardTypeController] findAll() function called");
 		try {
-			List<BoardTypeResponseDto> list = boardTypeService.findAll(new HashMap<String, Object>());
-			if (list != null && !list.isEmpty())
-				return new ResponseEntity<>(list, HttpStatus.OK);
+			log.debug("[BoardTypeController] findAll() function called");
+			List<BoardTypeResponseDto> responseDtos = boardTypeService.findAll();
+			if (responseDtos != null && !responseDtos.isEmpty())
+				return new ResponseEntity<>(responseDtos, HttpStatus.OK);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@PostMapping("")
 	@ApiOperation(value = "게시판 타입 삽입", notes = "<h2><b>게시판 타입을 삽입한다.</b></h2>")
 	public ResponseEntity<?> insert(@RequestBody BoardTypeRequestDto requestDto) {
-		log.debug("[BoardTypeController] insert() function called");
 		try {
+			log.debug("[BoardTypeController] insert() function called, requestDto = {}", requestDto);
 			boardTypeService.insert(requestDto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@PutMapping("/{id}")
 	@ApiOperation(value = "게시판 타입 수정", notes = "<h2><b>게시판 타입을 수정한다.</b></h2>")
-	public ResponseEntity<?> update(@RequestBody BoardTypeRequestDto requestDto) {
-		log.debug("[BoardTypeController] update() function called");
+	public ResponseEntity<?> update(@PathVariable Integer id,
+			@RequestBody BoardTypeRequestDto requestDto) {
 		try {
-			boardTypeService.update(requestDto);
+			log.debug("[BoardTypeController] update() function called, id = {}, requestDto = {}", id, requestDto);
+			boardTypeService.update(id, requestDto);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "게시판 타입 삭제", notes = "<h2><b>게시판 타입을 삭제한다.</b></h2>")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-		log.debug("[BoardTypeController] findAll() function called");
 		try {
+			log.debug("[BoardTypeController] delete() function called, id = {}", id);
 			boardTypeService.delete(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
