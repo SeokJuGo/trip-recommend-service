@@ -1,12 +1,12 @@
 <script setup>
 import { ref, watch, onMounted } from "vue";
-import MyPlanCard from "../user/items/MyPlanCard.vue";
 var map;
 const positions = ref([]);
 const markers = ref([]);
 const traceAttraction = ref({});
 const props = defineProps({ attractions: Array, selectAttraction: Object });
 const choiceList = ref([]);
+const endPlan = false;
 watch(
   () => traceAttraction.value,
   () => {
@@ -23,7 +23,7 @@ watch(
 // watch(
 //   () => choiceList.value,
 //   () => {
-    
+
 //   },
 //   { deep: true }
 // );
@@ -70,30 +70,42 @@ const initMap = () => {
     level: 3,
   };
   map = new kakao.maps.Map(container, options);
-
-  // loadMarkers();
 };
 
 const loadMarkers = () => {
-  // 현재 표시되어있는 marker들이 있다면 map에 등록된 marker를 제거한다.
   deleteMarkers();
 
-  // 마커 이미지를 생성합니다
-  //   const imgSrc = require("@/assets/map/markerStar.png");
-  // 마커 이미지의 이미지 크기 입니다
-  //   const imgSize = new kakao.maps.Size(24, 35);
-  //   const markerImage = new kakao.maps.MarkerImage(imgSrc, imgSize);
-
-  // 마커를 생성합니다
   markers.value = [];
   positions.value.forEach((position) => {
     const marker = new kakao.maps.Marker({
       map: map, // 마커를 표시할 지도
       position: position.latlng, // 마커를 표시할 위치
+      content: "",
       title: position.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됨.
-      clickable: true, // // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+      clickable: true,
       // image: markerImage, // 마커의 이미지
     });
+    var content = '<div class="overlay_info">'+
+            `    <a href="${position.image}" target="_blank"><strong>${position.title}</strong></a>`+
+            '    <div class="desc">'+
+              `  <img style="width: 70px;height:40px" src="${position.image}" alt="">`+
+              `  <span class="address">${position.address}</span>`+
+              '  </div>'+
+              '  </div>',
+      iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+    // 인포윈도우를 생성합니다
+    var infowindow = new kakao.maps.InfoWindow({
+      content: content,
+      removable: iwRemoveable,
+    });
+
+    // 마커에 클릭이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, "click", function () {
+      // 마커 위에 인포윈도우를 표시합니다
+      infowindow.open(map, marker);
+    });
+
     markers.value.push(marker);
   });
 
@@ -113,20 +125,30 @@ const deleteMarkers = () => {
   }
 };
 
+// Attraction List 아이템 중 하나를 선택했을 때 뜨는 창들
 const trace = (attraction) => {
   traceAttraction.value = attraction;
   choiceList.value.push(attraction);
-  console.log(choiceList.value);
+  open.value = false;
 };
 
-function remove(target) {
-  choiceList.value = choiceList.value.filter((t) => t !== target)
+function removeChoice(target) {
+  choiceList.value = choiceList.value.filter((t) => t !== target);
 }
+
+// 모달 창 로직
+const open = ref(false);
+const attractionSample = ref();
+const showModal = (attraction) => {
+  open.value = true;
+  attractionSample.value = attraction;
+};
+const handleCancel = () => {
+  open.value = false;
+};
 </script>
 
 <template>
-  
-  
   <div class="map_wrap">
     <div
       id="map"
@@ -134,16 +156,15 @@ function remove(target) {
 
     <div id="menu_wrap" class="bg_white">
       <div class="option">
-        <div></div>
       </div>
       <hr />
       <ul
         id="placesList"
         v-for="attraction in positions"
         :key="attraction.contentId">
-        <a-card hoverable style="width: 300px" @click="trace(attraction)" >
+        <a-card hoverable style="width: 200px" @click="showModal(attraction)">
           <template #cover>
-            <img alt="example" :src="attraction.image" />
+            <img alt="" :src="attraction.image" />
           </template>
           <template #actions>
             <setting-outlined key="setting" />
@@ -152,16 +173,41 @@ function remove(target) {
           </template>
           <a-card-meta
             :title="attraction.title"
-            description="This is the description">
+            :description="attraction.address">
           </a-card-meta>
         </a-card>
       </ul>
+  <div>
+
+      <a-modal
+        style="top: 100px"
+        width="50%"
+        v-model:open="open">
+        <template #footer>
+        <a-button key="back" @click="handleCancel">취소</a-button>
+        <a-button key="submit" type="primary" :loading="loading" @click="trace(attractionSample)">내 계획 추가</a-button>
+      </template>
+        <div class="row">
+          <div class="col-md-6">
+            <h4>{{ attractionSample.title }}</h4>
+            <img :src="attractionSample.image" style="width:90%" />
+            <p>{{ attractionSample.address }}</p>
+          </div>
+          <div class="col-md-6 mt-5">
+            <p>{{ attractionSample.overview }}</p>
+          </div>
+        </div>
+      </a-modal>
     </div>
-    <div id="menu_detail"  class="bg_white" v-if="choiceList[0]">
-      <div  id="placeDetail" v-for="choice in choiceList" :key="choice.contentId">
-        <a-card hoverable style="width: 300px" @click="remove(choice)">
+    </div>
+    <div id="menu_detail" class="bg_white" v-if="choiceList[0]">
+      <div
+        id="placeDetail"
+        v-for="choice in choiceList"
+        :key="choice.contentId">
+        <a-card hoverable style="width: 200px" @click="removeChoice(choice)">
           <template #cover>
-            <img alt="example" :src="choice.image" />
+            <img alt="" :src="choice.image" />
           </template>
           <template #actions>
             <setting-outlined key="setting" />
@@ -170,9 +216,10 @@ function remove(target) {
           </template>
           <a-card-meta
             :title="choice.title"
-            description="This is the description">
+            :description="choice.address">
           </a-card-meta>
-        </a-card></div>
+        </a-card>
+      </div>
     </div>
   </div>
 </template>
@@ -182,12 +229,12 @@ function remove(target) {
 #menu_wrap,
 #menu_detail {
   width: 100%;
-  height: 1500px;
+  height: 100%;
 }
 .placesList {
   margin: 0 auto;
 }
-
+.wrap,
 .map_wrap,
 .map_wrap * {
   margin: 0;
@@ -204,7 +251,7 @@ function remove(target) {
 .map_wrap {
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 100%;
 }
 
 #menu_wrap {
@@ -212,7 +259,7 @@ function remove(target) {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 400px;
+  width: 210px;
   margin: 10px 0 30px 10px;
   padding: 5px;
   overflow-y: auto;
@@ -225,13 +272,12 @@ function remove(target) {
   background: #fff;
 }
 
-
 #menu_detail {
   position: absolute;
   top: 0;
   right: 0; /* 변경된 부분: left에서 right로 */
   bottom: 0;
-  width: 400px;
+  width: 210px;
   margin: 10px 10px 30px 0; /* 변경된 부분: 오른쪽 여백을 0으로 설정 */
   padding: 5px;
   overflow-y: auto;
@@ -243,7 +289,9 @@ function remove(target) {
 
 .map_detail {
   position: relative;
-  width: calc(100% - 400px); /* 변경된 부분: 메뉴 너비를 고려한 지도의 너비 조정 */
+  width: calc(
+    100% - 400px
+  ); /* 변경된 부분: 메뉴 너비를 고려한 지도의 너비 조정 */
   height: 500px;
 }
 
@@ -351,17 +399,21 @@ function remove(target) {
 #placesList .item .marker_15 {
   background-position: 0 -654px;
 }
-#pagination {
-  margin: 10px auto;
-  text-align: center;
-}
-#pagination a {
-  display: inline-block;
-  margin-right: 10px;
-}
-#pagination .on {
-  font-weight: bold;
-  cursor: default;
-  color: #777;
-}
+.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
+.dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff;}
+.dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}    
+.number {font-weight:bold;color:#ee6152;}
+.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
+.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
+.distanceInfo .label {display:inline-block;width:50px;}
+.distanceInfo:after {content:none;}
+    .overlay_info {border-radius: 6px; margin-bottom: 12px; float:left;position: relative; border: 1px solid #ccc; border-bottom: 2px solid #ddd;background-color:#fff;}
+    .overlay_info:nth-of-type(n) {border:0; box-shadow: 0px 1px 2px #888;}
+    .overlay_info a {display: block; background: #d95050; background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center; text-decoration: none; color: #fff; padding:12px 36px 12px 14px; font-size: 14px; border-radius: 6px 6px 0 0}
+    .overlay_info a strong {background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_icon.png) no-repeat; padding-left: 27px;}
+    .overlay_info .desc {padding:14px;position: relative; min-width: 190px; height: 56px}
+    .overlay_info img {vertical-align: top;}
+    .overlay_info .address {font-size: 12px; color: #333; position: absolute; left: 80px; right: 14px; top: 24px; white-space: normal}
+    .overlay_info:after {content:'';position: absolute; margin-left: -11px; left: 50%; bottom: -12px; width: 22px; height: 12px; background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png) no-repeat 0 bottom;}
+    
 </style>
