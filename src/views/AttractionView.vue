@@ -20,24 +20,6 @@
         <div class="col-md-4 mb-2 mb-md-0">
           <VSelect :selectOption="gugunList" @onKeySelect="onChangeGugun" />
         </div>
-        <div class="col-md-4 mb-0 mb-md-0">
-          <select
-            @click="getAttractions"
-            v-model="searchAtt.contentTypeId"
-            id="contentType"
-            class="form-select"
-            aria-label="Default select example">
-            <option selected>관광정보선택</option>
-            <option value="12">관광지</option>
-            <option value="14">문화시설</option>
-            <option value="15">축제공연행사</option>
-            <option value="25">여행코스</option>
-            <option value="28">레포츠</option>
-            <option value="32">숙박</option>
-            <option value="38">쇼핑</option>
-            <option value="39">음식점</option>
-          </select>
-        </div>
       </div>
       <div class="row justify-content-center mb-3">
         <div class="col-md-12 mb-0 mb-md-0">
@@ -64,7 +46,7 @@
       <div class="row h-100">
         <VKakaoMap
           :attractions="attractionList"
-          :selectAttraction="selectAttraction" />
+          :selectAttraction="selectAttraction" @response="categoryChange"/>
       </div>
     </div>
   </div>
@@ -138,6 +120,11 @@ const onChangeGugun = (val) => {
   getAttractions();
 };
 
+const categoryChange = (category)=>{
+  console.log(category);
+  searchAtt.value.contentTypeId=category;
+  getAttractions();
+}
 const getAttractions = () => {
   attractionList.value = [];
   listAttraction(
