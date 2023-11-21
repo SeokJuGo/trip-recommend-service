@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="row justify-content-center mb-3">
-        <div class="col-md-12 mb-0 mb-md-0">
+        <div class="col-md-11 mb-0 mb-md-0">
           <input
             type="text"
             class="form-control"
@@ -31,17 +31,16 @@
             v-model="searchAtt.title"/>
             <p>{{ searchAtt.title }}</p>
         </div>
-      </div>
-      <div class="row justify-content-center mb-3">
-        <div class="col-md-12 mb-0 mb-md-0">
+        <div class="col-md-1 mb-0 mb-md-0">
           <button
             class="w-100 btn btn-light border form-control"
             id="btn-search-attraction"
             @click="getAttractions">
             검색
           </button>
-        </div>
       </div>
+      </div>
+        
 
       <div class="row h-100">
         <VKakaoMap
