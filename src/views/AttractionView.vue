@@ -51,28 +51,8 @@
     </div>
     
     <div class="row">
-<div class="col-md-3">
-  <a-card hoverable class="w-75 acard">
-    <template #cover>
-      <img
-        alt="example"
-        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-      />
-    </template>
-    <template #actions>
-      <setting-outlined key="setting" />
-      <edit-outlined key="edit" />
-      <ellipsis-outlined key="ellipsis" />
-    </template>
-    <a-card-meta title="Card title" description="This is the description">
-    </a-card-meta>
-  </a-card>
-</div>
-      <div class="col-md-6">
     <VKakaoMap :attractions="attractionList" :selectAttraction="selectAttraction" />
-  </div>
-  <div class="col-md-3"></div>
-  </div>
+</div>
 </div>
 </div>
 
