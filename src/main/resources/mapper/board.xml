@@ -42,13 +42,30 @@
         <if test="boardTypeId != null and boardTypeId != ''">
             AND BOARD_TYPE_ID = #{boardTypeId}
         </if>
-	    ORDER BY ID DESC
+	    ORDER BY 
+	    <choose>
+			<when test="sortBy == 'id'"> ID</when>
+  			<when test="sortBy == 'hit'"> HIT</when>
+  			<when test="sortBy == 'title'"> TITLE</when>
+  			<when test="sortBy == 'content'"> CONTENT</when>
+  			<when test="sortBy == 'createdDate'"> CREATED_DATE</when>
+  			<when test="sortBy == 'updatedDate'"> UPDATED_DATE</when>
+  			<when test="sortBy == 'userId'"> USER_ID</when>
+  			<when test="sortBy == 'boardTypeId'"> BOARD_TYPE_ID</when>
+  			<otherwise> ID</otherwise>
+		</choose>
+		<choose>
+			<when test="orderBy == 'asc'"> ASC</when>
+  			<when test="orderBy == 'desc'"> DESC</when>
+  			<otherwise> DESC</otherwise>
+		</choose>
 	    LIMIT #{offset}, #{pageSize}
 	</select>
     
 	<select id="findById" parameterType="Integer" resultType="Board">
 		SELECT
 			ID AS id,
+			HIT as hit,
 			TITLE AS title,
 			CONTENT AS content,
 			USER_ID AS userId,
@@ -66,6 +83,7 @@
 	
 	<update id="update" parameterType="Board">
 	    UPDATE BOARD SET
+	    	HIT = #{hit},
 	    	TITLE = #{title},
 	    	CONTENT = #{content},
 	    	BOARD_TYPE_ID = #{boardTypeId}

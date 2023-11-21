@@ -25,20 +25,20 @@ public class BoardRequestDto {
 	
 	public Board toEntity() {
 		return Board.builder()
+				.title(title)
+				.content(content)
 				.boardTypeId(boardTypeId)
 				.userId(userId)
-				.content(content)
-				.title(title)
 				.build();
 	}
 
-	public Board toEntity(Integer id) {
+	public Board toEntity(Long id) {
 		return Board.builder()
-				.id(Long.valueOf(id))
+				.id(id)
+				.title(title)
+				.content(content)
 				.boardTypeId(boardTypeId)
 				.userId(userId)
-				.content(content)
-				.title(title)
 				.build();
 	}
 	

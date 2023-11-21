@@ -32,4 +32,7 @@ public class Board {
 	@ApiModelProperty(value = "게시판 타입 Index")
 	private Long boardTypeId;
 	
+	public void increateHit() {
+		this.hit++;
+	}
 }

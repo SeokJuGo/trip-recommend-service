@@ -2,7 +2,7 @@ package com.ssafy.enjoytrip.board.model;
 
 import com.ssafy.enjoytrip.boardtype.model.BoardType;
 import com.ssafy.enjoytrip.boardtype.model.BoardTypeResponseDto;
-import com.ssafy.enjoytrip.user.model.UserEntity;
+import com.ssafy.enjoytrip.user.model.User;
 import com.ssafy.enjoytrip.user.model.UserResponseDto;
 
 import io.swagger.annotations.ApiModel;
@@ -33,7 +33,7 @@ public class BoardResponseDto {
 	@ApiModelProperty(value = "글수정일자")
 	private String updatedDate;
 	
-	public BoardResponseDto(Board boardEntity, UserEntity userEntity, BoardType boardTypeEntity) {
+	public BoardResponseDto(Board boardEntity, User userEntity, BoardType boardTypeEntity) {
 		this.id = boardEntity.getId();
 		this.hit = boardEntity.getHit();
 		this.title = boardEntity.getTitle();

@@ -21,22 +21,19 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BoardServiceImpl implements BoardService {
+public class ShareServiceImpl implements ShareService {
 	private final UserMapper userMapper;
 	private final BoardMapper boardMapper;
 	private final BoardTypeMapper boardTypeMapper;
-
+	
 	@Override
 	public BoardsResponseDto findAll(Map<String, Object> requestParams) throws Exception {
 		Map<String, Object> params = new HashMap<>();
-		
-		/* 게시판 타입 파라미터 설정 */
-		Integer boardTypeId = (Integer) requestParams.get("boardTypeId");
-		if (boardTypeId != null) params.put("boardTypeId", boardTypeId);
+		params.put("boardTypeId", 4);
 		
 		/* 검색 쿼리 설정 */
 		String searchType = (String) requestParams.get("searchType");
-		String searchQuery = (String) requestParams.get("searchQuery");	
+		String searchQuery = (String) requestParams.get("searchQuery");
 		if (searchType != null && searchQuery != null) {
 			switch (searchType) {
 		        case "title":
@@ -54,8 +51,8 @@ public class BoardServiceImpl implements BoardService {
 		/* 정렬 쿼리 설정 */
 		String sortBy = (String) requestParams.get("sortBy");
 		String orderBy = (String) requestParams.get("orderBy");
-		params.put("sortBy", sortBy != null ? sortBy : "ID");
-		params.put("orderBy", orderBy != null ? orderBy : "DESC");
+		params.put("sortBy", sortBy != null && !sortBy.equals("") ? sortBy : "ID");
+		params.put("orderBy", orderBy != null && !orderBy.equals("") ? orderBy : "DESC");
 		
 		/* 페이징 쿼리 설정 */
 		Integer pageNum = (Integer) requestParams.get("pageNum");
@@ -69,8 +66,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		int totalElements = boardMapper.count(params);
 		int totalPages = (totalElements - 1) / pageSize + 1;
-
-		/* 리턴 객체 생성 */
+		
 		List<BoardResponseDto> responseDtos = new ArrayList<>();
 		List<Board> boards = boardMapper.findAll(params);
 		for (Board board : boards) {
@@ -78,7 +74,7 @@ public class BoardServiceImpl implements BoardService {
 			BoardType boardType = boardTypeMapper.findById(board.getBoardTypeId().intValue());
 			responseDtos.add(new BoardResponseDto(board, user, boardType));
 		}
-				
+		
 		return BoardsResponseDto.builder()
 				.offset(offset)
 				.pageNum(pageNum)
@@ -96,6 +92,8 @@ public class BoardServiceImpl implements BoardService {
 		Board board = boardMapper.findById(id.intValue());
 		User user = userMapper.findById(board.getUserId().intValue());
 		BoardType boardType = boardTypeMapper.findById(board.getBoardTypeId().intValue());
+		board.increateHit();
+		boardMapper.update(board);
 		return new BoardResponseDto(board, user, boardType);
 	}
 

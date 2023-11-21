@@ -25,7 +25,7 @@ public class UserResponseDto {
 	@ApiModelProperty(value = "권한 이름")
 	private String rolename;
 	
-	public UserResponseDto(UserEntity entity) {
+	public UserResponseDto(User entity) {
 		this.id = entity.getId();
 		this.email = entity.getEmail();
 		this.username = entity.getUsername();

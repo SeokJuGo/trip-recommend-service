@@ -21,6 +21,6 @@ public interface BoardMapper {
 	
 	void update(Board entity) throws SQLException;
 	
-	void delete(Integer id) throws SQLException;
+	Integer delete(Integer id) throws SQLException;
 	
 }
