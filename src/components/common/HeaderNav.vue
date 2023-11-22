@@ -2,17 +2,21 @@
 import { onMounted } from "vue";
 import logo from "@/assets/img/logo.png"
 import { userStore} from "@/stores/userPiniaStore"
-
+import { useRouter, useRoute } from "vue-router";
+import { toast } from "vue3-toastify";
+const router = useRouter();
 const store = userStore();
 
 async function logout() {
-  console.log("로그아웃 -> " + store.userInfo.id);
-  await store.userLogout(store.userInfo.id);
+  console.log("로그아웃 -> " + store.userInfo.username);
+  await store.userLogout(store.userInfo.username);
   toast.success("로그아웃 완료", {
+    
     autoClose: 2000,
   });
-  router.push({ name: "main" });
+  router.push({ name: "main" }); // 메인 페이지로 이동
 }
+
 
 </script>
 
@@ -73,11 +77,11 @@ async function logout() {
 
                 <ul class="navbar-nav ms-auto" id="logout">
                     <li class="nav-item">
-                        <a class="nav-link"  v-show="store.isLogin" @click="logout()">로그아웃</a>
+                        <a class="nav-link" @click="logout()" v-show="store.isLogin">로그아웃</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-show="store.isLogin">
                         <router-link class="nav-link" :to="{ name: 'mypage' }"
-                        v-show="store.isLogin">마이페이지</router-link
+                            >마이페이지</router-link
                         >
                     </li>
                 </ul>

@@ -8,14 +8,9 @@ const api = axios.create({
 });
 
 // 게시판 목록 조회
-export const fetchBoards = async ({
-    pageNum,
-    pageSize,
-    keyword,
-    searchType,
-    boardType,
-}) => {
-    const params = { pageNum, pageSize, keyword, searchType, boardType };
+export const fetchBoards = async (data) => {
+    const { sortBy, orderBy, pageNum, pageSize, searchType, searchQuery, boardTypeId } = data;
+    const params = { sortBy, orderBy, pageNum, pageSize, searchType, searchQuery, boardTypeId };
     const response = await api.get(`/board`, { params });
     return response.data;
 };
