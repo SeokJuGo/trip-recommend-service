@@ -2,14 +2,12 @@ import { createRouter, createWebHistory } from "vue-router";
 import { userStore } from "@/stores/userPiniaStore";
 const onlyAuthUser = async (to, from, next) => {
     const store = userStore();
-    const checkUserInfo = store.checkUserInfo;
     const checkToken = store.checkToken;
     let token = sessionStorage.getItem("access-token");
-  
-    if (checkUserInfo != null && token) {
+    if (token) {
       await store.getUserInfo(token);
     }
-    if (!checkToken || checkUserInfo === null) {
+    if (!checkToken) {
       store.isLogin = false;
       alert("로그인이 필요한 페이지입니다.");
       router.push({ name: "login" });

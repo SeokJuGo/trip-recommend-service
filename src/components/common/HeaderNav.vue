@@ -1,11 +1,9 @@
 <script setup>
+import { onMounted } from "vue";
 import logo from "@/assets/img/logo.png"
 import { userStore} from "@/stores/userPiniaStore"
 
 const store = userStore();
-let token = sessionStorage.getItem("access-token");
-
-const username = store.userInfo;
 
 async function logout() {
   console.log("로그아웃 -> " + store.userInfo.id);
@@ -15,6 +13,11 @@ async function logout() {
   });
   router.push({ name: "main" });
 }
+onMounted(() => {
+  
+    let token = sessionStorage.getItem("access-token");
+    store.getUserInfo(token);
+});
 </script>
 
 <template>
@@ -63,24 +66,22 @@ async function logout() {
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto" id="login" v-show="!store.isLogin">
-                    <i class="mt-auto mb-auto bi bi-person-circle"></i>
+                <ul class="navbar-nav ms-auto" id="login">
                     <li class="nav-item" >
-                        <router-link class="nav-link" :to="{ name: 'user' }" >로그인</router-link>
+                        <router-link class="nav-link" :to="{ name: 'user' }" v-show="!store.isLogin">로그인</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'join' }" >회원가입</router-link>
+                        <router-link class="nav-link" :to="{ name: 'join' }" v-show="!store.isLogin">회원가입</router-link>
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto" id="logout" v-show="store.isLogin">
-                    <i  class="mt-auto mb-auto bi bi-person-circle"></i>
+                <ul class="navbar-nav ms-auto" id="logout">
                     <li class="nav-item">
-                        <a class="nav-link"   @click="logout()">로그아웃</a>
+                        <a class="nav-link"  v-show="store.isLogin" @click="logout()">로그아웃</a>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'mypage' }"
-                        >마이페이지</router-link
+                        v-show="store.isLogin">마이페이지</router-link
                         >
                     </li>
                 </ul>

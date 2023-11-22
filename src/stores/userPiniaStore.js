@@ -65,7 +65,9 @@ export const userStore = defineStore("userPiniaStore", {
         ({ data }) => {
           if (data.message === "success") {
             this.userInfo = data.userInfo;
-            this.isLogin=true;
+            this.isLogin = true;
+            this.isLoginError = false;
+            this.isValidToken = true;
             // console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
