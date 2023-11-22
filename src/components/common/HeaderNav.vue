@@ -46,7 +46,7 @@ async function logout() {
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'myplan' }"
+                        <router-link class="nav-link" :to="{ name: 'plan' }"
                             >나의여행계획
                         </router-link>
                     </li>

@@ -33,7 +33,7 @@ const router = createRouter({
             redirect: { name: "att-page" },
             children: [
                 {
-                    path: "att-page",
+                    path: "page",
                     name: "att-page",
                     component: () => import("@/components/attraction/AttractionPage.vue"),
                     beforeEnter: onlyAuthUser,
@@ -41,10 +41,30 @@ const router = createRouter({
             ]
         },
         {
-            path: "/myplan",
-            name: "myplan",
-            component: () => import("../views/MyPlanView.vue"),
-            beforeEnter: onlyAuthUser,
+            path: "/plan",
+            name: "plan",
+            component: () => import("../views/PlanView.vue"),
+            redirect: { name: "plan-list" },
+            children: [
+                {
+                    path: "list",
+                    name: "plan-list",
+                    component: () => import("@/components/plan/PlanList.vue"),
+                    beforeEnter: onlyAuthUser
+                },
+                {
+                    path: "write",
+                    name: "plan-write",
+                    component: () => import("@/components/plan/PlanWrite.vue"),
+                    beforeEnter: onlyAuthUser
+                },
+                {
+                    path: "view/:id",
+                    name: "plan-view",
+                    component: () => import("@/components/plan/PlanDetail.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+            ]
         },
         {
             path: "/user",

@@ -1,13 +1,14 @@
 <script setup>
 import { ref, watch, onMounted,inject,provide } from "vue";
 
+import { useRouter, useRoute } from "vue-router";
 var map;
 const positions = ref([]);
 const markers = ref([]);
 const traceAttraction = ref({});
 const props = defineProps({ attractions: Array, selectAttraction: Object });
 const choiceList = ref([]);
-
+const router = useRouter();
 watch(
   () => traceAttraction.value,
   () => {
@@ -214,7 +215,8 @@ const draw = () => {
         strokeOpacity: 0.5, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
         strokeStyle: 'solid' // 선의 스타일입니다    
       });
-
+      
+      choiceList.value[0].distance= 0;
       // 클릭한 지점에 대한 정보를 지도에 표시합니다
       displayCircleDot(clickPosition, 0);
 
@@ -231,6 +233,7 @@ const draw = () => {
       clickLine.setPath(path);
 
       var distance = Math.round(clickLine.getLength());
+      choiceList.value[count].distance=distance;
       displayCircleDot(clickPosition, distance);
     }
 
@@ -463,12 +466,16 @@ const planSave=()=>{
     alert("두 가지 이상 선택!")
     return;
   }
-  $router.push(`/share/write`)
-
+  console.log(choiceList.value);
+  router.push({ name: "plan-write",
+	state: { // params가 state로 바뀌었다.
+    dataObj: aa,
+		},
+	});
 }
 
 
-provide("choiceList", choiceList);
+
 </script>
 
 <template>
