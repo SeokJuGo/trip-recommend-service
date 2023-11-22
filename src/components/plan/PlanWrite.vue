@@ -5,9 +5,8 @@ import PlanAPI from "@/api/board.js";
 import FileInfoAPI from "@/api/fileinfo.js";
 import FileInputForm from "@/components/common/FileInputForm.vue";
 
-const { dataObj } = history.state; // 이렇게 받는다.
-console.log(dataObj);
-
+const choiceList = inject("choiceList")
+console.log(choiceList)
 const data = ref({
     title: "",
     content: "",
