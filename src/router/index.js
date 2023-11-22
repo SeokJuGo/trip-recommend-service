@@ -1,26 +1,44 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ShareView from "../views/ShareView.vue";
-import HotPlaceView from "../views/HotPlaceView.vue";
-import AttractionView from "../views/AttractionView.vue";
-import MyPlanView from "../views/MyPlanView.vue";
-import MainView from "../views/MainView.vue";
+import { userStore } from "@/stores/userPiniaStore";
+const onlyAuthUser = async (to, from, next) => {
+    const store = userStore();
+    const checkUserInfo = store.checkUserInfo;
+    const checkToken = store.checkToken;
+    let token = sessionStorage.getItem("access-token");
+  
+    if (checkUserInfo != null && token) {
+      await store.getUserInfo(token);
+    }
+    if (!checkToken || checkUserInfo === null) {
+      //store.commit("userStore/SET_IS_LOGIN", false);
+      store.isLogin = false;
+      alert("로그인이 필요한 페이지입니다.");
+      // next({ name: "login" });
+      router.push({ name: "login" });
+    } else {
+      next();
+    }
+  };
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: "/hotplace",
             name: "hotplace",
-            component: HotPlaceView,
+            component: () => import("../views/HotPlaceView.vue"),
+            beforeEnter: onlyAuthUser,
         },
         {
             path: "/attraction",
             name: "attraction",
-            component: AttractionView,
+            component: () => import("../views/AttractionView.vue"),
+            beforeEnter: onlyAuthUser,
         },
         {
             path: "/myplan",
             name: "myplan",
-            component: MyPlanView,
+            component: () => import("../views/MyPlanView.vue"),
+            beforeEnter: onlyAuthUser,
         },
         {
             path: "/user",
@@ -48,21 +66,25 @@ const router = createRouter({
                             path: "user-myplan",
                             name: "user-myplan",
                             component: () => import("@/components/user/components/UserMyplan.vue"),
+                            beforeEnter: onlyAuthUser,
                         },
                         {
                             path: "user-board",
                             name: "user-board",
                             component: () => import("@/components/user/components/UserBoardList.vue"),
+                            beforeEnter: onlyAuthUser,
                         },
                         {
                             path: "user-info",
                             name: "user-info",
                             component: () => import("@/components/user/components/UserInfo.vue"),
+                            beforeEnter: onlyAuthUser,
                         },
                         {
                             path: "user-update",
                             name: "user-update",
                             component: () => import("@/components/user/components/UserInfoUpdate.vue"),
+                            beforeEnter: onlyAuthUser,
                         }
                     ],
                 },
@@ -71,7 +93,7 @@ const router = createRouter({
         {
             path: "/",
             name: "main",
-            component: MainView,
+            component: () => import("../views/MainView.vue"),
             // component: SampleView,
             // route level code-splitting
             // this generates a separate chunk (About.[hash].js) for this route
@@ -87,21 +109,25 @@ const router = createRouter({
                     path: "list",
                     name: "share-list",
                     component: () => import("@/components/share/ShareList.vue"),
+                    beforeEnter: onlyAuthUser,
                 },
                 {
                     path: "view/:id",
                     name: "share-view",
                     component: () => import("@/components/share/ShareDetail.vue"),
+                    beforeEnter: onlyAuthUser,
                 },
                 {
                     path: "write",
                     name: "share-write",
                     component: () => import("@/components/share/ShareWrite.vue"),
+                    beforeEnter: onlyAuthUser,
                 },
                 {
                     path: "update/:id",
                     name: "share-update",
                     component: () => import("@/components/share/ShareUpdate.vue"),
+                    beforeEnter: onlyAuthUser,
                 },
             ],
         },
