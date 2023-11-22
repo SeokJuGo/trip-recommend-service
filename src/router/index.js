@@ -86,7 +86,7 @@ const router = createRouter({
                     path: "mypage",
                     name: "mypage",
                     component: () => import("@/components/user/MyPage.vue"),
-                    redirect:{name:"user-myplan"},
+                    redirect: { name: "user-myplan" },
                     children: [
                         {
                             path: "user-myplan",

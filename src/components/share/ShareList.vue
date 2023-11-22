@@ -9,9 +9,9 @@ import PageNavigation from "../common/PageNavigation.vue";
 const params = ref({
     pageNum: undefined,
     pageSize: undefined,
-    keyword: undefined,
     searchType: undefined,
-    boardType: "BOARD",
+    searchQuery: undefined,
+    boardTypeId: 4,
 });
 
 const boards = ref([]);
@@ -21,8 +21,6 @@ const fetchBoards = async () => {
         .then((response) => {
             boards.value = response.boards;
             pageInfo.value = response;
-            console.log("[ShareList.vue] fetchBoards() >> ", response);
-            console.log("[ShareList.vue] fetchBoards() >> pageInfo = ", pageInfo.value);
         })
         .catch((error) => {
             console.error("[ShareList.vue] fetchBoards() Error >> ", error);
@@ -52,21 +50,27 @@ onMounted(() => {
         <!-- Search -->
         <div class="d-flex justify-content-center pb-3">
             <div class="input-group mb-3 w-75">
-                <select class="form-select border border-secondary" id="inputGroupSelect01">
-                    <option disabled>선택</option>
-                    <option value="1" selected>제목</option>
-                    <option value="2">내용</option>
-                    <option value="3">작성자</option>
+                <select
+                    class="form-select border border-secondary"
+                    id="inputGroupSelect01"
+                    v-model="params.searchType"
+                >
+                    <option value="선택" disabled>선택</option>
+                    <option value="title" selected>제목</option>
+                    <option value="content">내용</option>
+                    <option value="nickname">작성자</option>
                 </select>
                 <input
                     type="text"
                     class="form-control border border-secondary"
                     placeholder="떠나고 싶은 곳을 찾아보세요!"
+                    v-model="params.searchQuery"
                 />
                 <button
                     class="btn btn-light border border-secondary"
                     type="button"
                     id="button-addon2"
+                    @click="fetchBoards"
                 >
                     검색
                 </button>

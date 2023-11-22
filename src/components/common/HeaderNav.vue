@@ -6,12 +6,12 @@ import { userStore} from "@/stores/userPiniaStore"
 const store = userStore();
 
 async function logout() {
-  console.log("로그아웃 -> " + store.userInfo.id);
-  await store.userLogout(store.userInfo.id);
-  toast.success("로그아웃 완료", {
-    autoClose: 2000,
-  });
-  router.push({ name: "main" });
+    console.log("로그아웃 -> " + store.userInfo.id);
+    await store.userLogout(store.userInfo.id);
+    toast.success("로그아웃 완료", {
+        autoClose: 2000,
+    });
+    router.push({ name: "main" });
 }
 
 </script>
@@ -67,17 +67,17 @@ async function logout() {
                         <router-link class="nav-link" :to="{ name: 'user' }" v-show="!store.isLogin">로그인</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'join' }" v-show="!store.isLogin">회원가입</router-link>
+                        <router-link class="nav-link" :to="{ name: 'join' }">회원가입</router-link>
                     </li>
                 </ul>
 
                 <ul class="navbar-nav ms-auto" id="logout">
                     <li class="nav-item">
-                        <a class="nav-link"  v-show="store.isLogin" @click="logout()">로그아웃</a>
+                        <a class="nav-link" @click="logout()">로그아웃</a>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link" :to="{ name: 'mypage' }"
-                        v-show="store.isLogin">마이페이지</router-link
+                            >마이페이지</router-link
                         >
                     </li>
                 </ul>

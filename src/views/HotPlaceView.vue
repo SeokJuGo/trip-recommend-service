@@ -1,149 +1,71 @@
 <script setup>
+import { ref, onMounted, onUnmounted, watch } from "vue";
+import Carousel from "@/components/common/Carousel.vue";
 
+const srcs = ref([
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
+]);
+
+const src = `https://source.unsplash.com/random/2160x1920/?travel,beach,sig=${Math.random()}`;
+const backgroundStyle = ref({
+    // opacity: 0.5,
+    // filter: "blur(5px)",
+    // filter: "grayscale(100%)",
+    backgroundImage: `url(${src})`,
+    // backgroundImage: `url(${srcs.value[0]})`,
+    // backgroundImage: `url('${srcs.value.join("'), url('")}')`,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundRepeat: "repeat-y",
+    backgroundAttachment: "fixed", // 이미지를 스크롤에 고정
+    transition: "background-image 0.5s ease", // 애니메이션 효과 추가
+});
+
+const backgroundFilter = ref({
+    backdropFilter: "blur(5px)",
+});
+
+let imageIndex = ref(0);
+const handleScroll = () => {
+    const scrollPosition = window.scrollY;
+    const viewportHeight = window.innerHeight;
+    const newIndex = Math.floor(scrollPosition / viewportHeight) % srcs.value.length;
+    imageIndex.value = newIndex;
+};
+
+// imageIndex가 변경될 때마다 이미지를 로드하고 배경을 업데이트
+watch(imageIndex, (newIndex) => {
+    const tempImage = new Image();
+    tempImage.onload = () => {
+        backgroundStyle.value.backgroundImage = `url(${srcs.value[newIndex]})`;
+    };
+    tempImage.src = srcs.value[newIndex];
+});
+
+onMounted(() => {
+    window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("scroll", handleScroll);
+});
 </script>
 
 <template>
-<div class="container-fluid bg-success-subtle">
-	<div class="container-md py-5 text-white-emphasis">
-		<!-- Title -->
-		<h1 class="border-bottom border-2 border-secondary mb-4">핫플레이스</h1>
-
-		<!-- Grid -->
-		<div class="d-flex justify-content-center">
-			<div class="row">
-				<!-- Column 1 -->
-				<div class="col-md-6 col-lg-4">
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/강릉.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">강릉</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/양양.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">양양</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/태안.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">태안</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-				</div>
-				<!-- Column 2 -->
-				<div class="col-md-6 col-lg-4">
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/양양.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">양양</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/태안.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">태안</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/강릉.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">강릉</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-				</div>
-				<!-- Column 2 -->
-				<div class="col-md-6 col-lg-4">
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/강릉.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">강릉</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/양양.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">양양</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-					<!-- Card -->
-					<div class="card text-bg-dark shadow mb-3">
-						<img src="../assets/img/태안.jpg" class="card-img" alt="..." />
-						<div class="card-img-overlay">
-							<h5 class="card-title">태안</h5>
-							<p class="card-text">This is a wider card with supporting
-								text below as a natural lead-in to additional content. This
-								content is a little bit longer.</p>
-							<p class="card-text">
-								<small>Last updated 3 mins ago</small>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
+    <div class="container-fluid bg-white p-0" :style="backgroundStyle">
+        <div :style="backgroundFilter">
+            <Carousel />
+            <router-view></router-view>
+        </div>
+    </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
