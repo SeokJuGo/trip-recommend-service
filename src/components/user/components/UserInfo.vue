@@ -2,14 +2,16 @@
   <div class="padding">
     <div class="col-md-8">
         <!-- Column -->
-        <div class="card"> <img class="card-img-top" src="../../../assets/img/default_background.jpg" alt="Card image cap">
+        <div class="card"> <img class="card-img-top" :src="files[files.length-1].filepath" alt="Card image cap">
             <div class="card-body little-profile text-center">
-
+                {{ files[files.length-1].filepath }}
 	            
-                <div class="pro-img"><img src="../../../assets/img/default_user.jpg" alt="user"></div>
+                <div class="pro-img" @click="profileChange"><img :src="files[1]" alt="user"></div>
                 
                 <h3 class="m-b-0">{{userDetail.username}}</h3>
-                <p>{{userDetail.nickname}}</p> <button @click="modify" class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">Edit</button>
+                <div></div>
+                <p>{{userDetail.nickname}}</p><button @click="modify" class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">Edit</button> 
+                
                 <div class="row text-center m-t-20">
                     <div class="col-lg-4 col-md-4 m-t-20">
                         <h3 class="m-b-0 font-light">10</h3><small>게시물</small>
@@ -47,6 +49,8 @@
 			  </div>
             </div>
         </div>
+        
+        
     </div>
 </div>
 
@@ -57,11 +61,13 @@ import {onMounted,ref,reactive} from 'vue';
 import {findById} from "@/api/user";
 import { userStore} from "@/stores/userPiniaStore"
 import { useRouter, useRoute } from "vue-router";
+import ProfileAPI from "@/api/profile.js";
 const store = userStore();
 const username = ref(store.userInfo.username);
 const userDetail = ref("");
-
+const isProfileOption = ref(false);
 const router = useRouter();
+
 const modify = ()=>router.push({ name: "user-update" }); 
 
   onMounted(() => {
@@ -76,7 +82,46 @@ const modify = ()=>router.push({ name: "user-update" });
 
     
   );
+  
+  fetchFiles();
 });
+
+const cancleOption = () => {
+    isProfileOption.value=false;
+}
+const profileChange = (event) =>{
+    isProfileOption.value=true;
+    this.refs.images.click
+}
+
+
+
+// Fetch Files
+
+const files = ref([]);
+const fetchFiles = async () => {
+    await ProfileAPI.fetchFiles(store.userInfo.id)
+        .then((response) => {
+            files.value = response;
+            
+        })
+        .catch((error) => {
+            console.log("fetchFiles() Error >> ", error);
+        });
+};
+const formatFileSize = (sizeInBytes) => {
+    // 변환 공식: 1MB = 1024KB, 1KB = 1024Bytes
+    let i = 0;
+    let fileSize = sizeInBytes;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    while (fileSize > 1024 && i < sizes.length - 1) {
+        fileSize /= 1024;
+        i++;
+    }
+
+    return fileSize.toFixed(2) + " " + sizes[i];
+};
+
 </script>
 <style scoped>
 
