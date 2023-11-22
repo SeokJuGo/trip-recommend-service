@@ -72,6 +72,7 @@ public class BoardController {
 			log.debug("sortBy = {}, orderBy = {}", sortBy, orderBy);
 			log.debug("pageNum = {}, pageSize = {}", pageNum, pageSize);
 			log.debug("searchType = {}, searchQuery = {}", searchType, searchQuery);
+			log.debug("boardTypeId = {}", boardTypeId);
 
 			Map<String, Object> params = new HashMap<>();
 			if (sortBy != null) params.put("sortBy", sortBy);

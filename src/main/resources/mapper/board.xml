@@ -11,10 +11,10 @@
         <if test="content != null and content != ''">
             AND CONTENT LIKE CONCAT('%', #{content}, '%')
         </if>
-        <if test="userId != null and userId != ''">
+        <if test="userId != null and userId != 0">
             AND USER_ID = #{userId}
         </if>
-        <if test="boardTypeId != null and boardTypeId != ''">
+        <if test="boardTypeId != null and boardTypeId != 0">
             AND BOARD_TYPE_ID = #{boardTypeId}
         </if>
 	</select>
