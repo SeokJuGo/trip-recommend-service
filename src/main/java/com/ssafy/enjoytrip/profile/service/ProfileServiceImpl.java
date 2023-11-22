@@ -94,7 +94,7 @@ public class ProfileServiceImpl implements ProfileService {
 	private ProfileRequestDto uploadFile(Long boardId, MultipartFile file) throws IOException {
 		// 저장경로 설정 (Windows: "/", Linux: "\\", Default: "\\")
 		Path basePath = Paths.get(System.getProperty("user.dir"));
-		Path savePath = basePath.getParent().resolve("attachments");
+		Path savePath = basePath.getParent().resolve("profile");
 		
 		File directory = new File(savePath.toString());
 		if (!directory.exists()) {
