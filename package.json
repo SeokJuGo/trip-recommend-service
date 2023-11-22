@@ -18,7 +18,7 @@
     "ant-design-vue": "^4.0.7",
     "axios": "^1.6.1",
     "bootstrap": "^5.3.2",
-    "bootstrap-icons": "^1.11.1",
+    "bootstrap-icons": "^1.11.2",
     "i": "^0.3.7",
     "jwt-decode": "^3.1.2",
     "pinia": "^2.1.7",

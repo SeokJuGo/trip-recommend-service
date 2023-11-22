@@ -1,13 +1,71 @@
 <script setup>
-import Carousel from "@/components/common/Carousel.vue";
-
+import paju from "../assets/img/파주프로방스.png";
+import song from "../assets/img/송도한옥마을.jpg";
+import eul from "../assets/img/을왕리.jpg";
 </script>
 
 <template>
     <!-- Main Content -->
-    <div class="container-fluid bg-success-subtle p-0">
-        <!-- Carousel -->
-        <Carousel />
+    <div class="container-fluid bg-success-subtle">
+        <div class="container-md">
+            <!-- Carousel -->
+            <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                <!-- Indicators/dots -->
+                <div class="carousel-indicators">
+                    <button
+                        type="button"
+                        data-bs-target="#demo"
+                        data-bs-slide-to="0"
+                        class="active"
+                    ></button>
+                    <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+                </div>
+
+                <!-- The slideshow/carousel -->
+                <div class="carousel-inner" style="height: 70vh">
+                    <div class="carousel-item h-100 active">
+                        <img class="d-block h-100 ms-auto me-auto" :src="paju" alt="" />
+                        <div class="carousel-caption">
+                            <h5>경기도 파주 프로방스</h5>
+                            <p>한국 속의 작은 유럽</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item h-100">
+                        <img class="d-block h-100 ms-auto me-auto" :src="song" alt="" />
+                        <div class="carousel-caption">
+                            <h5>인천 송도 한옥마을</h5>
+                            <p>도시 속 한옥</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item h-100">
+                        <img class="d-block h-100 ms-auto me-auto" :src="eul" alt="" />
+                        <div class="carousel-caption">
+                            <h5>인천 을왕리 해수욕장</h5>
+                            <p>서울 근교 백사장</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Left and right controls/icons -->
+                <button
+                    class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#demo"
+                    data-bs-slide="prev"
+                >
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button
+                    class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#demo"
+                    data-bs-slide="next"
+                >
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
     </div>
 
     <div class="container-fluid bg-primary-subtle">

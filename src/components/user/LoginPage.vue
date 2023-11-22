@@ -114,8 +114,8 @@ const randomImageStyle = {
                                 <div class="card-body p-md-5 mx-md-4">
                                     <div class="text-center">
                                         <img
-                                            src="@/assets/img/logo.png"
-                                            style="width: 185px"
+                                            src="@/assets/img/favicon.png"
+                                            style="width: 270px"
                                             alt="logo"
                                         />
                                         <h4 class="mt-3 mb-5 pb-1">당신 곁의 여행 가이드</h4>

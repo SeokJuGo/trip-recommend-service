@@ -18,17 +18,17 @@ async function logout() {
 
 <template>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-md navbar-light bg-light shadow fixed-top">
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow fixed-top">
         <div class="container-md">
             <a class="navbar-brand" href="/">
                 <img
                     class="d-inline-block align-text-center"
                     :src="logo"
-                    width="90"
-                    height="50"
+                    width="192"
+                    height="54"
                     alt="Logo"
                 />
-                <strong>&nbsp;EnjoyTrip.com</strong>
+                <!-- <strong>&nbsp;EpicKorea.com</strong> -->
             </a>
             <button
                 class="navbar-toggler"
