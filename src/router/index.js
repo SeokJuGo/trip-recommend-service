@@ -21,12 +21,6 @@ const router = createRouter({
     
     routes: [
         {
-            path: "/hotplace",
-            name: "hotplace",
-            component: () => import("../views/HotPlaceView.vue"),
-            beforeEnter: onlyAuthUser,
-        },
-        {
             path: "/attraction",
             name: "attraction",
             component: () => import("../views/AttractionView.vue"),
@@ -136,7 +130,7 @@ const router = createRouter({
         {
             path: "/hotplace",
             name: "hotplace",
-            component: HotPlaceView,
+            component: () => import("../views/HotPlaceView.vue"),
             redirect: { path: "/hotplace/list" },
             children: [
                 {
