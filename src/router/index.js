@@ -10,10 +10,8 @@ const onlyAuthUser = async (to, from, next) => {
       await store.getUserInfo(token);
     }
     if (!checkToken || checkUserInfo === null) {
-      //store.commit("userStore/SET_IS_LOGIN", false);
       store.isLogin = false;
       alert("로그인이 필요한 페이지입니다.");
-      // next({ name: "login" });
       router.push({ name: "login" });
     } else {
       next();
@@ -94,10 +92,6 @@ const router = createRouter({
             path: "/",
             name: "main",
             component: () => import("../views/MainView.vue"),
-            // component: SampleView,
-            // route level code-splitting
-            // this generates a separate chunk (About.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
         },
         {
             path: "/share",
@@ -131,14 +125,6 @@ const router = createRouter({
                 },
             ],
         },
-
-        // {
-        //   path: '/about',
-        //   name: 'about',
-        //   // route level code-splitting
-        //   // this generates a separate chunk (About.[hash].js) for this route
-        //   // which is lazy-loaded when the route is visited.
-        //   component: () => import('../views/AboutView.vue')
     ],
 });
 

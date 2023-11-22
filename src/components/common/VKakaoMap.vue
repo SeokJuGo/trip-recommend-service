@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted,inject } from "vue";
 
 import VSelect from "@/components/common/VSelect.vue";
 var map;
@@ -437,10 +437,18 @@ function getTimeHTML(distance) {
 
 const emit = defineEmits(['response'])
 const responseCategoryType=(event)=>{
+  console.log(title);
+  console.log(sido);
+    if(sido!=0 || title!=null) {
       console.log(event.target.value);
       emit('response',event.target.value); 
+    }else{
+      alert("먼저 검색명 입력 또는 시도를 클릭해주세요!");
+      return;
+    }
 }
-
+const sido = inject("proSido")
+const title = inject("proTitle")
 const sidoList = ref([]);
 </script>
 

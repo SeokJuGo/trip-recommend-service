@@ -29,7 +29,6 @@
             id="title"
             placeholder="관광지 검색 키워드를 입력하세요." 
             v-model="searchAtt.title"/>
-            <p>{{ searchAtt.title }}</p>
         </div>
         <div class="col-md-1 mb-0 mb-md-0">
           <button
@@ -51,7 +50,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, provide} from "vue";
 import { listAttraction } from "@/api/attraction";
 import { listSido, listGugun } from "@/api/map";
 
@@ -77,6 +76,9 @@ const param = ref({
   zscode: 0,
 });
 
+
+
+provide("proSido", searchAtt.value.sidoCode)
 onMounted(() => {
   getSidoList();
 });
@@ -99,6 +101,7 @@ const getSidoList = () => {
 
 const onChangeSido = (val) => {
   searchAtt.value.sidoCode = val;
+  propsSido = val;
   listGugun(
     { sidoCode: val },
     ({ data }) => {
@@ -126,6 +129,7 @@ const categoryChange = (category)=>{
 }
 const getAttractions = () => {
   attractionList.value = [];
+  provide("proTitle", searchAtt.value.title)
   listAttraction(
     searchAtt.value,
     ({ data }) => {
