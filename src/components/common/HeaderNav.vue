@@ -11,6 +11,7 @@ async function logout() {
   console.log("로그아웃 -> " + store.userInfo.username);
   await store.userLogout(store.userInfo.username);
   toast.success("로그아웃 완료", {
+    
     autoClose: 2000,
   });
   router.push({ name: "main" }); // 메인 페이지로 이동

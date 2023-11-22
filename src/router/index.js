@@ -7,7 +7,7 @@ import { useRouter } from "vue-router";
 const onlyAuthUser = async (to, from, next) => {
     const store = userStore();
     let token = sessionStorage.getItem("access-token");
-    store.getUserInfo(token);
+    await store.getUserInfo(token);
     const checkToken = store.checkToken;
 
     if (!checkToken) {
@@ -63,7 +63,7 @@ const router = createRouter({
                     path: "mypage",
                     name: "mypage",
                     component: () => import("@/components/user/MyPage.vue"),
-                    redirect: { name: "user-myplan" },
+                    redirect: { name: "user-info" },
                     children: [
                         {
                             path: "user-myplan",
