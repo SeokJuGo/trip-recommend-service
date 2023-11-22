@@ -9,7 +9,7 @@
                 <div class="pro-img"><img src="../../../assets/img/default_user.jpg" alt="user"></div>
                 
                 <h3 class="m-b-0">{{userDetail.username}}</h3>
-                <p>{{userDetail.email}}</p> <button @click="modify" class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">Edit</button>
+                <p>{{userDetail.nickname}}</p> <button @click="modify" class="m-t-10 waves-effect waves-dark btn btn-primary btn-md btn-rounded" data-abc="true">Edit</button>
                 <div class="row text-center m-t-20">
                     <div class="col-lg-4 col-md-4 m-t-20">
                         <h3 class="m-b-0 font-light">10</h3><small>게시물</small>
