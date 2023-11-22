@@ -64,9 +64,9 @@ const insertComment = async () => {
 };
 
 const router = useRouter();
-const moveToShareList = () => router.push(`/share/list`);
-const moveToShareWrite = () => router.push(`/share/write`);
-const moveToShareUpdate = () => router.push(`/share/update/${id}`);
+const moveToShareList = () => router.push(`/hotplace/list`);
+const moveToShareWrite = () => router.push(`/hotplace/write`);
+const moveToShareUpdate = () => router.push(`/hotplace/update/${id}`);
 
 const deleteShare = async () => {
     if (files.value.length) {
@@ -140,7 +140,7 @@ onMounted(() => {
 
 <template>
     <div class="container-md py-5">
-        <h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
+        <h1 class="border-bottom border-2 border-secondary text-shadow">최고의 여행지 공유</h1>
         <div class="row d-flex justify-content-center rounded-0 shadow bg-white pt-4 px-4 mb-3">
             <!-- Title -->
             <div class="d-flex justify-content-center border-bottom border-1 border-black-50">
@@ -213,5 +213,14 @@ onMounted(() => {
 <style scoped>
 .btn {
     min-width: 100px;
+}
+
+.text-shadow {
+    /* color: #fff; 텍스트 색상 */
+    /* font-size: 24px; 텍스트 크기 */
+    /* letter-spacing: 2px; 글자 간격 */
+
+    /* 테두리 효과 */
+    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
 }
 </style>

@@ -8,7 +8,7 @@ import FileInputForm from "@/components/common/FileInputForm.vue";
 const data = ref({
     title: "",
     content: "",
-    boardTypeId: 4, // SHARE
+    boardTypeId: 3, // HOTPLACE
     userId: 1, // admin
 });
 
