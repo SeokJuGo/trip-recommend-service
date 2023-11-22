@@ -67,15 +67,15 @@ async function logout() {
                         <router-link class="nav-link" :to="{ name: 'user' }" v-show="!store.isLogin">로그인</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'join' }">회원가입</router-link>
+                        <router-link class="nav-link" :to="{ name: 'join' }" v-show="!store.isLogin">회원가입</router-link>
                     </li>
                 </ul>
 
                 <ul class="navbar-nav ms-auto" id="logout">
                     <li class="nav-item">
-                        <a class="nav-link" @click="logout()">로그아웃</a>
+                        <a class="nav-link" @click="logout()" v-show="store.isLogin">로그아웃</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-show="store.isLogin">
                         <router-link class="nav-link" :to="{ name: 'mypage' }"
                             >마이페이지</router-link
                         >
