@@ -64,9 +64,9 @@ const insertComment = async () => {
 };
 
 const router = useRouter();
-const moveToPlanList = () => router.push(`/Plan/list`);
-const moveToPlanWrite = () => router.push(`/Plan/write`);
-const moveToPlanUpdate = () => router.push(`/Plan/update/${id}`);
+const moveToPlanList = () => router.push(`/plan/list`);
+const moveToPlanWrite = () => router.push(`/plan/write`);
+const moveToPlanUpdate = () => router.push(`/plan/update/${id}`);
 
 const deletePlan = async () => {
     if (files.value.length) {

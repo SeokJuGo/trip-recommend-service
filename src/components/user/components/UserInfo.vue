@@ -2,11 +2,11 @@
   <div class="padding">
     <div class="col-md-8">
         <!-- Column -->
-        <div class="card"> <img class="card-img-top" :src="files[files.length-1].filepath" alt="Card image cap">
+        <div class="card"> <img class="card-img-top" src="../../../assets/img/default_background.jpg" alt="Card image cap">
             <div class="card-body little-profile text-center">
-                {{ files[files.length-1].filepath }}
+                
 	            
-                <div class="pro-img" @click="profileChange"><img :src="files[1]" alt="user"></div>
+                <div class="pro-img" @click="profileChange"><img src="../../../assets/img/default_user.jpg" alt="user"></div>
                 
                 <h3 class="m-b-0">{{userDetail.username}}</h3>
                 <div></div>
@@ -103,7 +103,7 @@ const fetchFiles = async () => {
     await ProfileAPI.fetchFiles(store.userInfo.id)
         .then((response) => {
             files.value = response;
-            
+            console.log(response);
         })
         .catch((error) => {
             console.log("fetchFiles() Error >> ", error);
