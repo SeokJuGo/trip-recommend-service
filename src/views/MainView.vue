@@ -68,7 +68,7 @@ import eul from "../assets/img/을왕리.jpg";
         </div>
     </div>
 
-    <div class="container-fluid bg-light-subtle">
+    <div class="container-fluid bg-primary-subtle">
         <div class="container p-5 text-light-emphasis">
             <h1>여행가고 싶을땐?</h1>
             <h3>
