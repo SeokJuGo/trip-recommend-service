@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { userStore } from "@/stores/userPiniaStore";
 
+import { useRouter } from "vue-router";
+
 
 const onlyAuthUser = async (to, from, next) => {
     const store = userStore();
@@ -11,6 +13,7 @@ const onlyAuthUser = async (to, from, next) => {
     if (!checkToken) {
       store.isLogin = false;
       alert("로그인이 필요한 페이지입니다.");
+      
       router.push({ name: "login" });
     } else {
       next();
@@ -20,12 +23,6 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     
     routes: [
-        {
-            path: "/hotplace",
-            name: "hotplace",
-            component: () => import("../views/HotPlaceView.vue"),
-            beforeEnter: onlyAuthUser,
-        },
         {
             path: "/attraction",
             name: "attraction",
@@ -86,7 +83,7 @@ const router = createRouter({
                     path: "mypage",
                     name: "mypage",
                     component: () => import("@/components/user/MyPage.vue"),
-                    redirect: { name: "user-myplan" },
+                    redirect: { name: "user-info" },
                     children: [
                         {
                             path: "user-myplan",
@@ -153,6 +150,47 @@ const router = createRouter({
                 },
             ],
         },
+        {
+            path: "/hotplace",
+            name: "hotplace",
+            component: () => import("../views/HotPlaceView.vue"),
+            redirect: { path: "/hotplace/list" },
+            children: [
+                {
+                    path: "list",
+                    name: "hotplace-list",
+                    component: () => import("@/components/hotplace/HotplaceList.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+                {
+                    path: "view/:id",
+                    name: "hotplace-view",
+                    component: () => import("@/components/hotplace/HotplaceDetail.vue"),
+                    beforeEnter: onlyAuthUser,  
+                },
+                {
+                    path: "write",
+                    name: "hotplace-write",
+                    component: () => import("@/components/hotplace/HotplaceWrite.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+                {
+                    path: "update/:id",
+                    name: "hotplace-update",
+                    component: () => import("@/components/hotplace/HotplaceUpdate.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+            ],
+        },
+
+        // {
+        //   path: '/about',
+        //   name: 'about',
+        //   // route level code-splitting
+        //   // this generates a separate chunk (About.[hash].js) for this route
+        //   // which is lazy-loaded when the route is visited.
+        //   component: () => import('../views/AboutView.vue')
+        // }
     ],
 });
 

@@ -135,6 +135,8 @@ export const userStore = defineStore("userPiniaStore", {
             this.isLogin = false;
             this.userInfo = null;
             this.isValidToken = false;
+            sessionStorage.removeItem('access-token');
+            sessionStorage.removeItem('refresh-token');
           } else {
             console.log("유저 정보 없음!!!!");
           }
