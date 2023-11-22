@@ -437,9 +437,9 @@ function getTimeHTML(distance) {
 
 const emit = defineEmits(['response'])
 const responseCategoryType=(event)=>{
-  console.log(title);
-  console.log(sido);
-    if(sido!=0 || title!=null) {
+  console.log(searchAtt.value.title);
+  console.log(searchAtt.value.sido);
+    if(searchAtt.value.sido!=0 || searchAtt.value.title!="") {
       console.log(event.target.value);
       emit('response',event.target.value); 
     }else{
@@ -447,9 +447,8 @@ const responseCategoryType=(event)=>{
       return;
     }
 }
-const sido = inject("proSido")
-const title = inject("proTitle")
-const sidoList = ref([]);
+const searchAtt = ref(inject("searchAtt"))
+console.log(">>>>>>>>>>>>>>>"+searchAtt.value)
 </script>
 
 <template>

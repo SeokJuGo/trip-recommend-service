@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { userStore } from "@/stores/userPiniaStore";
+
+
 const onlyAuthUser = async (to, from, next) => {
     const store = userStore();
-    const checkToken = store.checkToken;
     let token = sessionStorage.getItem("access-token");
-    if (token) {
-      await store.getUserInfo(token);
-    }
+    await store.getUserInfo(token);
+    const checkToken = store.checkToken;
+
     if (!checkToken) {
       store.isLogin = false;
       alert("로그인이 필요한 페이지입니다.");
@@ -17,6 +18,7 @@ const onlyAuthUser = async (to, from, next) => {
   };
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
+    
     routes: [
         {
             path: "/hotplace",
@@ -28,7 +30,15 @@ const router = createRouter({
             path: "/attraction",
             name: "attraction",
             component: () => import("../views/AttractionView.vue"),
-            beforeEnter: onlyAuthUser,
+            redirect: { name: "att-page" },
+            children: [
+                {
+                    path: "att-page",
+                    name: "att-page",
+                    component: () => import("@/components/attraction/AttractionPage.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+            ]
         },
         {
             path: "/myplan",

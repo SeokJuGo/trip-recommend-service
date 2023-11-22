@@ -13,11 +13,7 @@ async function logout() {
   });
   router.push({ name: "main" });
 }
-onMounted(() => {
-  
-    let token = sessionStorage.getItem("access-token");
-    store.getUserInfo(token);
-});
+
 </script>
 
 <template>
