@@ -1,59 +1,59 @@
-
 <template>
-<!-- Title -->
-<div class="d-flex justify-content-center mb-3">
-        <h3 class="fw-bold text-center border-bottom border-2 border-secondary">
-          관광지 정보
-        </h3>
-      </div>
-      <!-- Grid Row -->
-      <div class="row justify-content-center mb-3">
-        <div class="col-md-4 mb-2 mb-md-0">
-          <VSelect
-            :selectOption="sidoList"
-            @onKeySelect="onChangeSido"
-            class="form-select"
-            aria-label="Default select example" />
-        </div>
-        <div class="col-md-4 mb-2 mb-md-0">
-          <VSelect :selectOption="gugunList" @onKeySelect="onChangeGugun" />
-        </div>
-      </div>
-      <div class="row justify-content-center mb-3">
-        <div class="col-md-11 mb-0 mb-md-0">
-          <input
-            type="text"
-            class="form-control"
-            id="title"
-            placeholder="관광지 검색 키워드를 입력하세요." 
-            v-model="searchAtt.title"/>
-            <p>{{ searchAtt.title }}</p>
-        </div>
-        <div class="col-md-1 mb-0 mb-md-0">
-          <button
-            class="w-100 btn btn-light border form-control"
-            id="btn-search-attraction"
-            @click="searchAttracton(searchAtt.val.title)">
-            검색
-          </button>
-      </div>
-      </div>
-        
+  <!-- Title -->
+  <div class="d-flex justify-content-center mb-3">
+    <h3 class="fw-bold text-center border-bottom border-2 border-secondary">
+      관광지 정보
+    </h3>
+  </div>
+  <!-- Grid Row -->
+  <div class="row justify-content-end mb-3">
+    
+    <div class="col-md-4 mb-0 mb-md-0 float-right">
+      <VSelect
+        id="sido"
+        :selectOption="sidoList"
+        @onKeySelect="onChangeSido"
+        class="form-select"
+        aria-label="Default select example" />
+    </div>
+    <div class="col-md-4 mb-0 mb-md-0 float-right">
+      <VSelect :selectOption="gugunList" @onKeySelect="onChangeGugun" />
+    </div>
+  </div>
+  <div class="row justify-content-center mb-3">
+    <div class="col-md-11 mb-0 mb-md-0">
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        placeholder="관광지 검색 키워드를 입력하세요."
+        v-model="searchAtt.title" />
+      <p>{{ searchAtt.title }}</p>
+    </div>
+    <div class="col-md-1 mb-0 mb-md-0">
+      <button
+        class="w-100 btn btn-light border form-control"
+        id="btn-search-attraction"
+        @click="searchAttracton(searchAtt.val.title)">
+        검색
+      </button>
+    </div>
+  </div>
 
-      <div class="row h-100">
-        <VKakaoMap
-          :attractions="attractionList"
-          :selectAttraction="selectAttraction" @response="categoryChange"/>
-      </div>
+  <div class="row h-100">
+    <VKakaoMap
+      :attractions="attractionList"
+      :selectAttraction="selectAttraction"
+      @response="categoryChange" />
+  </div>
 </template>
 <script setup>
-import { ref, onMounted, provide} from "vue";
+import { ref, onMounted, provide } from "vue";
 import { listAttraction } from "@/api/attraction";
 import { listSido, listGugun } from "@/api/map";
 
 import VKakaoMap from "./VKakaoMap.vue";
 import VSelect from "@/components/common/VSelect.vue";
-
 
 const sidoList = ref([]);
 const gugunList = ref([{ text: "구군선택", value: "" }]);
@@ -66,8 +66,7 @@ const searchAtt = ref({
   title: "",
 });
 
-
-provide("searchAtt",searchAtt);
+provide("searchAtt", searchAtt);
 onMounted(() => {
   getSidoList();
 });
@@ -90,8 +89,7 @@ const getSidoList = () => {
 
 const onChangeSido = (val) => {
   searchAtt.value.sidoCode = val;
-  
-  console.log(val);
+  console.log(searchAtt);
   listGugun(
     { sidoCode: val },
     ({ data }) => {
@@ -112,15 +110,15 @@ const onChangeGugun = (val) => {
   getAttractions();
 };
 
-const categoryChange = (category)=>{
+const categoryChange = (category) => {
   console.log(category);
-  searchAtt.value.contentTypeId=category;
+  searchAtt.value.contentTypeId = category;
   getAttractions();
-}
+};
 
-const searchAttracton = (val)=>{
+const searchAttracton = (val) => {
   getAttractions();
-}
+};
 const getAttractions = () => {
   attractionList.value = [];
   listAttraction(

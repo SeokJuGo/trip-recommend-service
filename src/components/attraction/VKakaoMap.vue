@@ -1,7 +1,6 @@
 <script setup>
-import { ref, watch, onMounted,inject } from "vue";
+import { ref, watch, onMounted,inject,provide } from "vue";
 
-import VSelect from "@/components/common/VSelect.vue";
 var map;
 const positions = ref([]);
 const markers = ref([]);
@@ -128,9 +127,14 @@ const deleteMarkers = () => {
 
 // Attraction List 아이템 중 하나를 선택했을 때 뜨는 창들
 const trace = (attraction) => {
-  traceAttraction.value = attraction;
-  choiceList.value.push(attraction);
-  open.value = false;
+  if (!choiceList.value.includes(attraction)) {
+    traceAttraction.value = attraction;
+    choiceList.value.push(attraction);
+    open.value = false;
+  } else {
+    // 이미 존재하는 경우에 대한 처리
+    alert(`같은 여행지는 넣을 수 없어요!`);
+  }
 };
 
 function removeChoice(target) {
@@ -144,10 +148,13 @@ const showModal = (attraction) => {
   open.value = true;
   attractionSample.value = attraction;
 };
-const handleCancel = () => {
-  open.value = false;
-};
 
+// Plan Modal
+
+const showModalPlan = (attraction) => {
+  open.value = true;
+  attractionSample.value = attraction;
+};
 
 
 // Draw Line
@@ -163,10 +170,11 @@ const init = () => {
   clickLine // 마우스로 클릭한 좌표로 그려질 선 객체입니다
   distanceOverlay; // 선의 거리정보를 표시할 커스텀오버레이 입니다
   dots = {}; // 선이 그려지고 있을때 클릭할 때마다 클릭 지점과 거리를 표시하는 커스텀 오버레이 배열입니다.
-  var count = 0;
+  count = 0;
 }
 const draw = () => {
   init();
+  console.log(choiceList.value.length);
   choiceList.value.forEach((position) => {
     console.log(position);
     count++;
@@ -240,8 +248,7 @@ const draw = () => {
       moveLine.setPath(movepath);
       moveLine.setMap(map);
 
-      var distance = Math.round(clickLine.getLength() + moveLine.getLength()), // 선의 총 거리를 계산합니다
-        content = '<div class="dotOverlay distanceInfo">총거리 <span class="number">' + distance + '</span>m</div>'; // 커스텀오버레이에 추가될 내용입니다
+      
 
       // 거리정보를 지도에 표시합니다
       showDistance(content, mousePosition);
@@ -437,9 +444,7 @@ function getTimeHTML(distance) {
 
 const emit = defineEmits(['response'])
 const responseCategoryType=(event)=>{
-  console.log(searchAtt.value.title);
-  console.log(searchAtt.value.sido);
-    if(searchAtt.value.sido!=0 || searchAtt.value.title!="") {
+    if(searchAtt.value.sidoCode!=0 || searchAtt.value.title!="") {
       console.log(event.target.value);
       emit('response',event.target.value); 
     }else{
@@ -447,8 +452,23 @@ const responseCategoryType=(event)=>{
       return;
     }
 }
-const searchAtt = ref(inject("searchAtt"))
-console.log(">>>>>>>>>>>>>>>"+searchAtt.value)
+const searchAtt = inject("searchAtt")
+
+
+const handleCancel = () => {
+  open.value = false;
+};
+const planSave=()=>{
+  if(choiceList.value.length<2){
+    alert("두 가지 이상 선택!")
+    return;
+  }
+  $router.push(`/share/write`)
+
+}
+
+
+provide("choiceList", choiceList);
 </script>
 
 <template>
@@ -456,11 +476,6 @@ console.log(">>>>>>>>>>>>>>>"+searchAtt.value)
   <div class="map_wrap">
     <div id="map" style="width: 100%; position: relative; overflow: hidden"></div>
     <div class="category" >
-      <VSelect
-            :selectOption="sidoList"
-            @onKeySelect="onChangeSido"
-            class="form-select"
-            aria-label="Default select example" />
       <button type="button" value="12" @click="responseCategoryType"><i class="bi bi-bus-front-fill"></i> 관광</button>
 					<button type="button" value="14" @click="responseCategoryType"><i class="bi bi-building"></i> 문화</button>
 					<button type="button" value="15" @click="responseCategoryType"><i class="bi bi-back"></i> 행사</button>
@@ -471,6 +486,8 @@ console.log(">>>>>>>>>>>>>>>"+searchAtt.value)
 					<button type="button" value="39" @click="responseCategoryType"><i class="bi bi-cup-straw"></i> 음식</button>
     </div>
 
+    <form class="distance catogory" @submit.prevent>
+  </form>
     <div id="menu_wrap" class="bg_white">
       <div class="option">
       </div>
@@ -510,7 +527,12 @@ console.log(">>>>>>>>>>>>>>>"+searchAtt.value)
       </div>
     </div>
     <div id="menu_detail" class="bg_white" v-if="choiceList[0]">
+      <div class="justify-content-center m-3">
+        <button type="button" class="btn btn-outline-danger m-3" @click="draw">거리확인</button>
+        <button type="button" class="btn btn-outline-success m-3" @click="planSave">저장하기</button>
+      </div>
       <div id="placeDetail" v-for="choice in choiceList" :key="choice.contentId">
+        
         <a-card hoverable style="width: 200px" @click="removeChoice(choice)">
           <template #cover>
             <img alt="" :src="choice.image" />
@@ -518,17 +540,22 @@ console.log(">>>>>>>>>>>>>>>"+searchAtt.value)
           <template #actions>
             <setting-outlined key="setting" />
             <edit-outlined key="edit" />
+            
             <ellipsis-outlined key="ellipsis" />
+            
           </template>
+          
           <a-card-meta :title="choice.title" :description="choice.address">
+            
           </a-card-meta>
+          
         </a-card>
       </div>
     </div>
+    <div>
   </div>
-  <form @submit.prevent>
-    <button @click="draw">거리계산 임시</button>
-  </form>
+
+  </div>
 </template>
 
 <style>
@@ -866,22 +893,32 @@ console.log(">>>>>>>>>>>>>>>"+searchAtt.value)
             left: 50%;
             transform: translate(-50%, -50%);
             width: 100%;
-            height: 60px;
+            
             z-index: 10;
             font-size: 14px;
             text-align: center;
-            border-radius: 15px;
         }
-
-
-        .category button {
+        .distance {
+            position: absolute;
+            overflow: hidden;
+            bottom:100%;
+            left: 90%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            
+            z-index: 5;
+            font-size: 14px;
+            text-align: center;
+            
+        }
+        .category button  {
           
           background-color: #fff;
             border: none;
             cursor: pointer;
             padding: 10px; /* 내부 여백 크게 조절 */
             margin: 5px;
-            border-radius: 10px; /* 버튼 모서리 둥글게 조절 */
+            border-radius: 15px; /* 버튼 모서리 둥글게 조절 */
             transition: all 0.3s ease; /* 부드러운 변화를 위한 트랜지션 */}
             .category button:hover {
             transform: scale(1.1); /* 호버 시 크기 확대 */
