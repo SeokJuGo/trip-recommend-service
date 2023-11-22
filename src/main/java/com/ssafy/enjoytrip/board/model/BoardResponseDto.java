@@ -33,6 +33,15 @@ public class BoardResponseDto {
 	@ApiModelProperty(value = "글수정일자")
 	private String updatedDate;
 	
+	public BoardResponseDto(Board entity) {
+		this.id = entity.getId();
+		this.hit = entity.getHit();
+		this.title = entity.getTitle();
+		this.content = entity.getContent();
+		this.createdDate = entity.getCreatedDate();
+		this.updatedDate = entity.getUpdatedDate();
+	}
+	
 	public BoardResponseDto(Board boardEntity, User userEntity, BoardType boardTypeEntity) {
 		this.id = boardEntity.getId();
 		this.hit = boardEntity.getHit();
@@ -42,6 +51,14 @@ public class BoardResponseDto {
 		this.boardType = new BoardTypeResponseDto(boardTypeEntity);
 		this.createdDate = boardEntity.getCreatedDate();
 		this.updatedDate = boardEntity.getUpdatedDate();
+	}
+
+	public void setAuthor(User entity) {
+		this.author = new UserResponseDto(entity);
+	}
+
+	public void setBoardType(BoardType entity) {
+		this.boardType = new BoardTypeResponseDto(entity);
 	}
 	
 }

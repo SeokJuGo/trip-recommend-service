@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.board.mapper.PlanMapper">
+
+    <select id="count" parameterType="Integer" resultType="Integer">
+    	SELECT COUNT(ID) FROM BOARD WHERE BOARD_ID = #{boardId}
+	</select>
+	
+	<select id="findAllByBoardId" parameterType="Integer" resultType="Plan">
+		SELECT
+			ID AS id,
+			DETAIL AS detail,
+			DISTANCE AS distance,
+			BOARD_ID AS boardId,
+			ATTRACTION_ID AS attractionId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM PLAN
+		WHERE BOARD_ID = #{boardId}
+	    ORDER BY CREATED_DATE DESC
+	</select>
+
+	<insert id="insert" parameterType="Plan" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO PLAN (DETAIL, DISTANCE, BOARD_ID, ATTRACTION_ID)
+		VALUES (#{detail}, #{distance}, #{boardId}, #{attractionId})
+	</insert>
+	
+	<update id="update" parameterType="Plan">
+	    UPDATE PLAN SET
+	    	DETAIL = #{detail},
+	    	DISTANCE = #{distance},
+	    	BOARD_ID = #{boardId},
+	    	ATTRACTION_ID = #{attractionId}
+	    WHERE ID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="Integer">
+	    DELETE FROM PLAN WHERE ID = #{id}
+	</delete>
+
+	<delete id="deleteAllByBoardId" parameterType="Integer">
+	    DELETE FROM PLAN WHERE BOARD_ID = #{boardId}
+	</delete>
+
+</mapper>
