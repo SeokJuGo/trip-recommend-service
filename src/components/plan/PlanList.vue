@@ -94,10 +94,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-button {
-    min-width: 100px;
-}
-
 select {
     max-width: 110px;
 }
