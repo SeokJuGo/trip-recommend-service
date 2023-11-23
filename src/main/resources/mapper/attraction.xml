@@ -119,7 +119,7 @@
 			AND A.gugun_code = #{gugunCode}		
 		</if>
 		<if test="title != null and title != ''">
-			AND A.title = #{title}		
+			AND A.title like concat('%', #{title}, '%')		
 		</if>
 		<if test="address != null and address != ''">
 			AND A.addr1 = #{address}		
