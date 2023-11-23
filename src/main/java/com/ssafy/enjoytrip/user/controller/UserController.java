@@ -136,5 +136,21 @@ public class UserController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@GetMapping("/email/{email}")
+	@ApiOperation(value = "회원정보 조회", notes = "회원정보를 조회한다.")
+	public ResponseEntity<?> findByUsername(String email) {
+		log.debug("[UserController] findByEmail() function called,email= {}", email);
+		try {
+			UserResponseDto responseDto = userService.findByEmail(email);
+			if (responseDto != null)
+				return new ResponseEntity<>(responseDto, HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 }
