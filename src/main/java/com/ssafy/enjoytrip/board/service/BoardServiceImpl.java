@@ -46,7 +46,8 @@ public class BoardServiceImpl implements BoardService {
 		            params.put("content", searchQuery);
 		            break;
 		        case "nickname":
-		            params.put("nickname", searchQuery);
+		        	User user = userMapper.findByUsername(searchQuery);
+		        	if (user != null) params.put("userId", user.getId());
 		            break;
 			}
 		}
@@ -94,6 +95,9 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardResponseDto findById(Long id) throws Exception {
 		Board board = boardMapper.findById(id.intValue());
+		board.increateHit();
+		boardMapper.update(board);
+		
 		User user = userMapper.findById(board.getUserId().intValue());
 		BoardType boardType = boardTypeMapper.findById(board.getBoardTypeId().intValue());
 		return new BoardResponseDto(board, user, boardType);

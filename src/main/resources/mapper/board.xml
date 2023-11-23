@@ -55,8 +55,8 @@
   			<otherwise> ID</otherwise>
 		</choose>
 		<choose>
-			<when test="orderBy == 'asc'"> ASC</when>
-  			<when test="orderBy == 'desc'"> DESC</when>
+			<when test="orderBy == 'asc'"> ASC, ID DESC</when>
+  			<when test="orderBy == 'desc'"> DESC, ID DESC</when>
   			<otherwise> DESC</otherwise>
 		</choose>
 	    LIMIT #{offset}, #{pageSize}

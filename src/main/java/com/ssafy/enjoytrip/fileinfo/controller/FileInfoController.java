@@ -88,7 +88,8 @@ public class FileInfoController {
 		try {
 			log.debug("[FileInfoController] downloadImage() function called, id = {}", id);
 			Resource resource = fileInfoService.downloadFile(id);
-			return new ResponseEntity<>(resource, HttpStatus.OK);
+			return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
+//			return new ResponseEntity<>(resource, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.debug(e.getMessage());

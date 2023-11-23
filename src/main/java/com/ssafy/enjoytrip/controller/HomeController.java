@@ -27,7 +27,7 @@ public class HomeController {
 	public ResponseEntity<?> home() {
 		log.debug("[HomeController] home() function called");
 		try {
-			List<AttractionDto> list = attractionService.home();
+			List<AttractionDto> list = attractionService.findAllHotAttraction();
 			return new ResponseEntity<List<AttractionDto>>(list, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
