@@ -3,6 +3,7 @@
 	<div class="container w-30 mb-5 p-5 ">
 
 		<div class="d-flex justify-content-center fs-2 p-3">내 정보 수정</div>
+		<h3>내 정보</h3>
 		<form id="form-join" method="POST" action="">
 			<input type="hidden" name="action" value="join" />
 			<div class="form-floating m-3">
@@ -33,6 +34,8 @@
 					placeholder="Enter email" name="email" v-model="user.email" @blur="vaildEmail"/> <label for="email">Email <font-awesome-icon :icon="['fas', 'check']" size="lg" style="color: #2bab3a;" v-if="success.email" /></label>
 			</div>
 			<span :class="styleType.email">{{ notice.email}}</span>
+			<h3>프로필 </h3>
+			<ProfileInputFormVue @on-change-files="onChangeFiles" />
 			<div class="form-floating m-3 d-flex justify-content-end">
 				<button type="button" class="btn btn-lg btn-outline-danger w-10 " @click="update">수정하기</button>
 			</div>
@@ -46,8 +49,12 @@ import {onMounted,ref,reactive} from 'vue';
 import {findById, modify} from "@/api/user";
 import { userStore} from "@/stores/userPiniaStore";
 import { useRouter, useRoute } from "vue-router";
+import ProfileInputFormVue from '../common/ProfileInputForm.vue';
+import ProfileAPI from "@/api/profile.js";
+
 const store = userStore();
-const username = ref(store.userInfo.username);
+const username = ref(store.userInfo.username);	
+const userid = ref(store.userInfo.id);
 
 const user = ref("");
   onMounted(() => {
@@ -143,15 +150,19 @@ const isJoinPossible = (obj) => {
   return true;
 };
 
+const files = ref([]);
+const onChangeFiles = (updatedFiles) => {
+    files.value = updatedFiles;
+    console.log("[files.vue] onChangeFiles() >> ", files);
+};
 
-
-//회원가입
-const update=() =>{
+//수정
+const update=async() =>{
 	const areAllSuccessTrue = () => isJoinPossible(success);
 	const result = areAllSuccessTrue();
 	if(!result) return;
     console.log(user.value);
-	modify(
+	await modify(
         user.value,
         ({ data }) => {
 			router.push({ name: "user-info" }); 
@@ -160,6 +171,13 @@ const update=() =>{
 		  console.log("no");
         },
       );
+	  if (files.value.length != 0) {
+        await ProfileAPI.uploadFiles(userid.value, files.value)
+            .then((response) => {})
+            .catch((error) => {
+                console.log(" uploadFiles(), Error >> ", error);
+            });
+    }
 }
 const preview=()=>{
 	router.go(-1);

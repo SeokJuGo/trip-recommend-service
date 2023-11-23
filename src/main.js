@@ -1,4 +1,5 @@
 //import './assets/main.css'
+import BootstrapVue from 'bootstrap-vue-3'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 import { createApp } from "vue";
@@ -22,7 +23,7 @@ const app = createApp(App);
 
 app.use(createPinia());
 app.use(router);
-
+app.use(BootstrapVue);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.use(Antd);
 

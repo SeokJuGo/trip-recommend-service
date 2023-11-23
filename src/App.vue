@@ -2,6 +2,11 @@
 import HeaderNav from "./components/common/HeaderNav.vue";
 import FooterNav from "./components/common/FooterNav.vue";
 import { RouterView } from "vue-router";
+import { userStore } from "@/stores/userPiniaStore";
+
+const store = userStore();
+let token = sessionStorage.getItem("access-token");
+store.getUserInfo(token);
 </script>
 
 <template>

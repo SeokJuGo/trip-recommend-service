@@ -65,8 +65,8 @@ async function signIn() {
         error.message = "아이디 또는 비밀번호가 잘못되었습니다.";
     }
 }
-function preview() {
-    router.go(-1);
+function goToJoin() {
+        router.push({ name: "join" });
 }
 
 // 명언 관련 스크립트
@@ -129,28 +129,31 @@ const randomImageStyle = {
                                                 type="email"
                                                 id="form2Example11"
                                                 class="form-control"
-                                                placeholder="Phone number or email address"
+                                                placeholder="Enter id"      
+                                                v-model="user.username"
+                                                @blur="changeNoticeId"
                                             />
-                                            <label class="form-label" for="form2Example11"
-                                                >Username</label
-                                            >
+                                            
+                                             <span :class="styleType.username">{{ notice.username }}</span>
                                         </div>
 
                                         <div class="form-outline mb-4">
                                             <input
                                                 type="password"
                                                 id="form2Example22"
-                                                class="form-control"
+                                                class="form-control"   
+                                                placeholder="Enter password"                                             
+                                                v-model="user.password"
+                                                @blur="changeNoticePassword"
                                             />
-                                            <label class="form-label" for="form2Example22"
-                                                >Password</label
-                                            >
+                                            <span :class="styleType.password">{{ notice.password }}</span>
                                         </div>
 
                                         <div class="text-center pt-1 mb-5 pb-1">
                                             <button
                                                 class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
                                                 type="button"
+                                                @click="signIn"
                                             >
                                                 Log in
                                             </button>
@@ -161,7 +164,7 @@ const randomImageStyle = {
                                             class="d-flex align-items-center justify-content-center pb-4"
                                         >
                                             <p class="mb-0 me-2">Don't have an account?</p>
-                                            <button type="button" class="btn btn-outline-danger">
+                                            <button type="button" class="btn btn-outline-danger" @click="goToJoin">
                                                 Create new
                                             </button>
                                         </div>

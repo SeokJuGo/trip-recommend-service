@@ -1,73 +1,149 @@
 <script setup>
-import { onMounted, reactive, ref } from "vue";
-import { userStore } from "@/stores/userPiniaStore";
 
-import { useRouter } from "vue-router";
+import { onMounted, reactive, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { toast } from "vue3-toastify";
-const store = userStore();
+import { idCheck, join } from "@/api/user";
+
+const router = useRouter();
+
+//사용자
 const user = reactive({
     username: "",
     password: "",
+    nickname: "",
+    email: "",
 });
-const router = useRouter();
-const notice = reactive({ username: "", password: "" });
-const styleType = reactive({ username: "error-message", password: "error-message" });
-function changeNoticeId() {
-    if (user.username.length < 4) {
-        notice.username = "아이디는 4글자보다 커야합니다.";
+//아이디 체크
+const password2 = ref("");
+const notice = reactive({ username: "", password: "", passwordCheck: "", nickname: "", email: "" });
+const styleType = reactive({
+    username: "error-message",
+    password: "error-message",
+    passwordCheck: "error-message",
+    nickname: "error-message",
+    email: "error-message",
+});
+const success = reactive({
+    username: false,
+    password: false,
+    passwordCheck: false,
+    nickname: false,
+    email: false,
+});
+var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi;
+const vaildUserName = () => {
+    if (user.username.length < 4 || user.username.length > 15) {
+        notice.username = "아이디는 4자 이상 15자 미만이어야 합니다.";
         styleType.username = "error-message";
-    } else if (user.username.length > 10) {
-        notice.username = "아이디는 10자이하여야 합니다.";
+        success.username = false;
+    } else if (regExp.test(user.username)) {
+        notice.username = "아이디는 영어 또는 숫자만 사용 가능합니다.";
         styleType.username = "error-message";
+        success.username = false;
     } else {
         notice.username = "";
+        styleType.username = "success-message";
+        success.username = false;
     }
-}
-function changeNoticePassword() {
-    if (user.password.length < 8) {
-        notice.password = "비밀번호는는 8글자보다 커야합니다.";
-    } else if (user.password.length > 200) {
-        notice.password = "비밀번호는 200자이하여야 합니다.";
+};
+const vaildPassword = () => {
+    if (user.password.length < 8 || user.password.length > 20) {
+        notice.password = "비밀번호는 8자 이상 20자 미만이어야 합니다.";
+        styleType.password = "error-message";
+        success.password = false;
     } else {
-        // 성공 시
-
         notice.password = "";
+        success.password = true;
+        styleType.password = "success-message";
     }
-}
-// 쿠키 아이디 저장
-async function storeIDByCookie(username) {
-    const cookies = document.cookie;
-    const cookieArray = cookies.split("; ");
-    document.cookie = `username=${username}`;
-}
-// 로그인 함수
-async function signIn() {
-    console.log(user);
-    await store.userConfirm(user);
-    let token = sessionStorage.getItem("access-token");
-    console.log("1. confirm() token >> " + token);
-    if (store.isLogin) {
-        await store.getUserInfo(token);
-        console.log("4. confirm() userInfo :: ", store.userInfo);
-        if (store.userInfo.rolename == "ADMIN") {
-            toast.success(store.userInfo.username + "관리자 님 환영합니다!", {
-                autoClose: 1000,
-            });
-        } else {
-            toast.success(store.userInfo.name + "님 환영합니다!", {
-                autoClose: 1000,
-            });
-        }
-        console.log();
-        await storeIDByCookie(user.username);
-        router.push({ name: "main" });
+};
+const comparePassword = () => {
+    if (user.password != password2.value) {
+        notice.passwordCheck = "비밀번호를 확인해주세요";
+        styleType.passwordCheck = "error-message";
+        success.passwordCheck = false;
     } else {
-        error.message = "아이디 또는 비밀번호가 잘못되었습니다.";
+        notice.passwordCheck = "";
+        styleType.passwordCheck = "success-message";
+        success.passwordCheck = true;
     }
-}
-function preview() {
-    router.go(-1);
-}
+};
+const vaildNickname = () => {
+    if (user.nickname.length < 2 || user.nickname.length > 10) {
+        notice.nickname = "이름은 2자 이상 10자 미만이어야 합니다.";
+        styleType.nickname = "error-message";
+        success.nickname = false;
+    } else {
+        notice.nickname = "";
+        success.nickname = true;
+        styleType.nickname = "success-message";
+    }
+};
+const emailCheck = (email_address) => {
+    var email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+    if (!email_regex.test(email_address)) {
+        return false;
+    } else {
+        return true;
+    }
+};
+const vaildEmail = () => {
+    if (!emailCheck(user.email)) {
+        notice.email = "이메일 형식을 확인 ex) user@gmail.com";
+        styleType.email = "error-message";
+        success.email = false;
+    } else {
+        notice.email = "";
+        success.email = true;
+        styleType.email = "success-message";
+    }
+};
+const isJoinPossible = (obj) => {
+    for (const key in obj) {
+        if (!obj[key]) {
+            return false;
+        }
+    }
+    return true;
+};
+
+const duplicatedCheck = () => {
+    if (notice.username != "") return;
+    idCheck(
+        user.username,
+        ({ data }) => {
+            console.log(data);
+            if (data == 0) {
+                notice.username = "사용가능한 아이디입니다.";
+                styleType.username = "success-message";
+                success.username = true;
+            } else {
+                notice.username = "중복된 아이디입니다.";
+                styleType.username = "error-meesage";
+            }
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+};
+
+//회원가입
+const signUp = () => {
+    const areAllSuccessTrue = () => isJoinPossible(success);
+    const result = areAllSuccessTrue();
+    if (!result) return;
+    join(
+        user,
+        ({ data }) => {
+            router.push({ name: "login" });
+        },
+        (error) => {
+            console.log("no");
+        }
+    );
+};
 
 // 명언 관련 스크립트
 const quotes = ref([
@@ -112,10 +188,8 @@ const randomImageStyle = {
             <div class="container py-4">
                 <div class="row g-0 align-items-center">
                     <div class="col-lg-6 mb-5 mb-lg-0">
-                        <div
-                            class="d-flex flex-column justify-content-center text-center text-shadow rounded-4 shadow-4"
-                            :style="randomImageStyle"
-                        >
+                        <div class="d-flex flex-column justify-content-center text-center text-shadow rounded-4 shadow-4"
+                            :style="randomImageStyle">
                             <!-- <img :src="randomImageSrc" class="w-100 rounded-4 shadow-4" alt="" /> -->
                             <h4 class="mb-4 fst-italic">
                                 {{ randomQuote?.text }}
@@ -125,112 +199,87 @@ const randomImageStyle = {
                     </div>
 
                     <div class="col-lg-6 mb-5 mb-lg-0">
-                        <div
-                            class="card cascading-left"
-                            style="background: hsla(0, 0%, 100%, 0.55); backdrop-filter: blur(30px)"
-                        >
+                        <div class="card cascading-left"
+                            style="background: hsla(0, 0%, 100%, 0.55); backdrop-filter: blur(30px)">
                             <div class="card-body p-5 shadow-5 text-center">
                                 <h2 class="fw-bold mb-5">Sign up now</h2>
-                                <form>
+                                <form @submit.prevent>
                                     <!-- 2 column grid layout with text inputs for the first and last names -->
                                     <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <input
-                                                    type="text"
-                                                    id="form3Example1"
-                                                    class="form-control"
-                                                />
-                                                <label class="form-label" for="form3Example1"
-                                                    >First name</label
-                                                >
+                                        <div class="col-md-10 mb-4">
+                                            <div class="form-floating">
+                                                <input type="text" id="form3Example1" class="form-control"
+                                                    placeholder="Enter Your ID" v-model="user.username"
+                                                    @blur="vaildUserName" />
+                                                <label for="id">ID
+                                                    <font-awesome-icon :icon="['fas', 'check']" size="lg"
+                                                        style="color: #2bab3a" v-if="success.username" /></label>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <input
-                                                    type="text"
-                                                    id="form3Example2"
-                                                    class="form-control"
-                                                />
-                                                <label class="form-label" for="form3Example2"
-                                                    >Last name</label
-                                                >
+                                        <div class="col-md-1 mb-4">
+                                            <div class="form-floating">
+                                                <button class="btn btn-dark btn text-white" @click="duplicatedCheck">
+                                                    Check
+                                                </button>
+
                                             </div>
                                         </div>
+
+                                        <span :class="styleType.username">{{ notice.username }}</span>
                                     </div>
 
-                                    <!-- Email input -->
-                                    <div class="form-outline mb-4">
-                                        <input
-                                            type="email"
-                                            id="form3Example3"
-                                            class="form-control"
-                                        />
-                                        <label class="form-label" for="form3Example3"
-                                            >Email address</label
-                                        >
-                                    </div>
+
 
                                     <!-- Password input -->
                                     <div class="form-outline mb-4">
-                                        <input
-                                            type="password"
-                                            id="form3Example4"
-                                            class="form-control"
-                                        />
-                                        <label class="form-label" for="form3Example4"
-                                            >Password</label
-                                        >
+                                        <input type="password" id="form3Example3" class="form-control"
+                                            placeholder="Enter password" v-model="user.password" @blur="vaildPassword" />
+
+                                    </div>
+                                    <span :class="styleType.password">{{ notice.password }}</span>
+                                    <div class="form-outline mb-4">
+                                        <input type="password" id="form4Example4" class="form-control" v-model="password2"
+                                            placeholder="Check password" @blur="comparePassword" />
                                     </div>
 
-                                    <!-- Checkbox -->
-                                    <div class="form-check d-flex justify-content-center mb-4">
-                                        <input
-                                            class="form-check-input me-2"
-                                            type="checkbox"
-                                            value=""
-                                            id="form2Example33"
-                                            checked
-                                        />
-                                        <label class="form-check-label" for="form2Example33">
-                                            Subscribe to our newsletter
-                                        </label>
+                                    <span :class="styleType.passwordCheck">{{ notice.passwordCheck }}</span>
+                                    <!-- Name input -->
+                                    <div class="form-outline mb-4">
+                                        <input type="name" id="form5Example5" class="form-control" v-model="user.nickname"
+                                            placeholder="Enter name" @blur="vaildNickname" />
                                     </div>
+
+                                    <span :class="styleType.nickname">{{ notice.nickname }}</span>
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4">
+                                        <input type="email" id="form6Example6" class="form-control" v-model="user.email"
+                                            placeholder="Enter Email" @blur="vaildEmail" />
+
+                                    </div>
+                                    <span :class="styleType.email">{{ notice.email }}</span>
+                                    <br>
 
                                     <!-- Submit button -->
-                                    <button type="submit" class="btn btn-primary btn-block mb-4">
+                                    <button type="submit" class="btn btn-primary btn-block mb-4" @click="signUp">
                                         Sign up
                                     </button>
 
                                     <!-- Register buttons -->
                                     <div class="text-center">
                                         <p>or sign up with:</p>
-                                        <button
-                                            type="button"
-                                            class="btn btn-link btn-floating mx-1"
-                                        >
+                                        <button type="button" class="btn btn-link btn-floating mx-1">
                                             <i class="fab fa-facebook-f"></i>
                                         </button>
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-link btn-floating mx-1"
-                                        >
+                                        <button type="button" class="btn btn-link btn-floating mx-1">
                                             <i class="fab fa-google"></i>
                                         </button>
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-link btn-floating mx-1"
-                                        >
+                                        <button type="button" class="btn btn-link btn-floating mx-1">
                                             <i class="fab fa-twitter"></i>
                                         </button>
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-link btn-floating mx-1"
-                                        >
+                                        <button type="button" class="btn btn-link btn-floating mx-1">
                                             <i class="fab fa-github"></i>
                                         </button>
                                     </div>
@@ -240,43 +289,43 @@ const randomImageStyle = {
                     </div>
 
                     <!-- <div class="col-lg-6 mb-5 mb-lg-0">
-                        <img
-                            src="https://mdbootstrap.com/img/new/ecommerce/vertical/004.jpg"
-                            class="w-100 rounded-4 shadow-4"
-                            alt=""
-                        />
-                    </div> -->
+                                                                                                        <img
+                                                                                                            src="https://mdbootstrap.com/img/new/ecommerce/vertical/004.jpg"
+                                                                                                            class="w-100 rounded-4 shadow-4"
+                                                                                                            alt=""
+                                                                                                        />
+                                                                                                    </div> -->
                 </div>
             </div>
             <!-- Jumbotron -->
         </section>
         <!-- Section: Design Block -->
         <!-- <section class="container" style="height: 300px">
-		<div class="container p-5"></div>
+                                                                                		<div class="container p-5"></div>
 		
-		<div
-			class="container w-25 mt-5 p-3 border border-3 border-success rounded-4">
-			<form @submit.prevent id="form-login" method="POST" action="">
-				<input type="hidden" name="action" value="login" />
-				<div class="form-floating m-3">
-					<input type="text" class="form-control" id="id"
-						placeholder="Enter id" name="id" v-model="user.username" @blur="changeNoticeId"/> <label for="id">ID</label>
-				</div>
-				<span :class="styleType.username">{{ notice.username }}</span>
-				<div class="form-floating m-3">
-					<input type="password" class="form-control" id="password"
-						placeholder="Enter password" name="password" v-model="user.password"  @blur="changeNoticePassword" /> <label for="pwd">Password</label>
-				</div>
-				<span :class="styleType.password">{{ notice.password }}</span>
-				<div class="form-floating m-3 d-flex justify-content-center">
-					<button type="button" class="btn btn-outline-success m-3"
-						id="btn-login" @click="signIn" >로그인</button>
-					<button type="button" class="btn btn-outline-success m-3"
-						id="btn-go-to-index" @click="preview">이전으로</button>
-				</div>
-			</form>
-		</div>
-	</section> -->
+                                                                                		<div
+                                                                                			class="container w-25 mt-5 p-3 border border-3 border-success rounded-4">
+                                                                                			<form @submit.prevent id="form-login" method="POST" action="">
+                                                                                				<input type="hidden" name="action" value="login" />
+                                                                                				<div class="form-floating m-3">
+                                                                                					<input type="text" class="form-control" id="id"
+                                                                                						placeholder="Enter id" name="id" v-model="user.username" @blur="changeNoticeId"/> <label for="id">ID</label>
+                                                                                				</div>
+                                                                                				<span :class="styleType.username">{{ notice.username }}</span>
+                                                                                				<div class="form-floating m-3">
+                                                                                					<input type="password" class="form-control" id="password"
+                                                                                						placeholder="Enter password" name="password" v-model="user.password"  @blur="changeNoticePassword" /> <label for="pwd">Password</label>
+                                                                                				</div>
+                                                                                				<span :class="styleType.password">{{ notice.password }}</span>
+                                                                                				<div class="form-floating m-3 d-flex justify-content-center">
+                                                                                					<button type="button" class="btn btn-outline-success m-3"
+                                                                                						id="btn-login" @click="signIn" >로그인</button>
+                                                                                					<button type="button" class="btn btn-outline-success m-3"
+                                                                                						id="btn-go-to-index" @click="preview">이전으로</button>
+                                                                                				</div>
+                                                                                			</form>
+                                                                                		</div>
+                                                                                	</section> -->
     </div>
 </template>
 
@@ -285,6 +334,7 @@ const randomImageStyle = {
     color: rgba(57, 158, 240, 0.829);
     font-size: 14px;
 }
+
 .error-message {
     color: rgba(231, 78, 78, 0.829);
     font-size: 14px;

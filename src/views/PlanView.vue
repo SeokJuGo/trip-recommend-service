@@ -33,8 +33,8 @@ watch(scrollIndex, (newVal, oldVal) => {
     const checkImage = new Image();
     checkImage.onload = async () => {
         backgroundStyle.value.backgroundImage = `url(${await getBackgroundImage()})`;
-        console.log(getBackgroundImage())
-        console.log(scrollIndex)
+        console.log(getBackgroundImage());
+        console.log(scrollIndex);
     };
     checkImage.src = getBackgroundImage();
 });
@@ -58,6 +58,4 @@ onUnmounted(() => {
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

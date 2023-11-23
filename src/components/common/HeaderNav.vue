@@ -1,19 +1,23 @@
 <script setup>
-import logo from "@/assets/img/logo.png";
-import { userStore } from "@/stores/userPiniaStore";
-
+import { onMounted } from "vue";
+import logo from "@/assets/img/logo.png"
+import { userStore} from "@/stores/userPiniaStore"
+import { useRouter, useRoute } from "vue-router";
+import { toast } from "vue3-toastify";
+const router = useRouter();
 const store = userStore();
-let token = sessionStorage.getItem("access-token");
-const username = store.userInfo;
 
 async function logout() {
-    console.log("로그아웃 -> " + store.userInfo.id);
-    await store.userLogout(store.userInfo.id);
-    toast.success("로그아웃 완료", {
-        autoClose: 2000,
-    });
-    router.push({ name: "main" });
+  console.log("로그아웃 -> " + store.userInfo.username);
+  await store.userLogout(store.userInfo.username);
+  toast.success("로그아웃 완료", {
+    
+    autoClose: 2000,
+  });
+  router.push({ name: "main" }); // 메인 페이지로 이동
 }
+
+
 </script>
 
 <template>
@@ -46,7 +50,7 @@ async function logout() {
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'myplan' }"
+                        <router-link class="nav-link" :to="{ name: 'plan' }"
                             >나의여행계획
                         </router-link>
                     </li>
@@ -62,22 +66,20 @@ async function logout() {
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto" id="login" v-show="!store.isLogin">
-                    <i class="mt-auto mb-auto bi bi-person-circle"></i>
-                    <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'user' }">로그인</router-link>
+                <ul class="navbar-nav ms-auto" id="login">
+                    <li class="nav-item" >
+                        <router-link class="nav-link" :to="{ name: 'user' }" v-show="!store.isLogin">로그인</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'join' }">회원가입</router-link>
+                        <router-link class="nav-link" :to="{ name: 'join' }" v-show="!store.isLogin">회원가입</router-link>
                     </li>
                 </ul>
 
-                <ul class="navbar-nav ms-auto" id="logout" v-show="store.isLogin">
-                    <i class="mt-auto mb-auto bi bi-person-circle"></i>
+                <ul class="navbar-nav ms-auto" id="logout">
                     <li class="nav-item">
-                        <a class="nav-link" @click="logout()">로그아웃</a>
+                        <a class="nav-link" @click="logout()" v-show="store.isLogin">로그아웃</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" v-show="store.isLogin">
                         <router-link class="nav-link" :to="{ name: 'mypage' }"
                             >마이페이지</router-link
                         >
