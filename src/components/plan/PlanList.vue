@@ -1,14 +1,12 @@
 <script setup>
-import paju from "../assets/img/파주프로방스.png"
-import song from "../assets/img/송도한옥마을.jpg"
-import eul from "../assets/img/을왕리.jpg"
+
+import paju from "@/assets/img/파주프로방스.png"
+import song from "@/assets/img/송도한옥마을.jpg"
+import eul from "@/assets/img/을왕리.jpg"
 </script>
 
 <template>
-<div class="container-fluid bg-success-subtle">
-	<div class="container-md py-5">
-		<!-- Title -->
-		<div class="d-flex justify-content-center mb-3">
+    <div class="d-flex justify-content-center mb-3">
 			<h1
 				class="display-4 fw-bold text-center border-bottom border-2 border-secondary">
 				나의 여행 계획</h1>
@@ -82,9 +80,6 @@ import eul from "../assets/img/을왕리.jpg"
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
-
 </template>
 
 <style scoped>
