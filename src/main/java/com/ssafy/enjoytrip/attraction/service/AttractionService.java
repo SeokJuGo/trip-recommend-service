@@ -26,6 +26,6 @@ public interface AttractionService {
 
 	AttractionDto findByContentId(int contentId) throws Exception;
 	
-	List<AttractionDto> home() throws Exception;
+	List<AttractionDto> findAllHotAttraction() throws Exception;
 	
 }

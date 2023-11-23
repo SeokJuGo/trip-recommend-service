@@ -68,8 +68,8 @@ public class AttractionServiceImpl implements AttractionService {
 	}
 	
 	@Override
-	public List<AttractionDto> home() throws SQLException {
-		return mapper.home();
+	public List<AttractionDto> findAllHotAttraction() throws SQLException {
+		return mapper.findAllHotAttraction();
 	}
 
 }

@@ -132,9 +132,22 @@
 		</if>
 	</select>
 
-	<!-- 추후 limit 조건 함수로 만들어 id값 변경 -->
-	<select id="home" resultType="AttractionDto">
-	select content_id,title,addr1,first_image,readcount 
-	from attraction_info order by readcount desc limit 10;
+	<select id="findAllHotAttraction" resultType="AttractionDto">
+		SELECT 
+			A.content_id contentId, content_type_id contentTypeId,
+			title title, addr1 address, zipcode zipCode, tel, readcount readCount,
+			first_image firstImage, first_image2 secondImage,
+			sido_code sidoCode, gugun_code gugunCode,
+			latitude, longitude, mlevel, overview
+		FROM attraction_info A
+		JOIN (
+		    SELECT content_id
+		    FROM attraction_info
+		    ORDER BY readcount DESC
+		    LIMIT 12
+		) AS top_attractions ON A.content_id = top_attractions.content_id
+		JOIN attraction_description B ON A.content_id = B.content_id
+		ORDER BY A.readcount DESC;
 	</select>
+	
 </mapper>

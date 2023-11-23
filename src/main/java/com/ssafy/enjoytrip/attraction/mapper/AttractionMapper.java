@@ -30,7 +30,6 @@ public interface AttractionMapper {
 
 	AttractionDto findByContentId(int contentId) throws SQLException;
 	
-	// 추후 HomeController로 이동	
-	List<AttractionDto> home() throws SQLException;
+	List<AttractionDto> findAllHotAttraction() throws SQLException;
 	
 }
