@@ -1,64 +1,58 @@
 <script setup>
-import emailjs from "emailjs-com";
-import { ref } from "vue";
+import emailjs from 'emailjs-com';
 import { modify ,findByEmail} from "@/api/user";
+import {ref} from 'vue';
 
-const form = ref(null);
-const userInfo = ref("");
-const inputFieldReset = ref({
-  name: userInfo.value.username,
-  email: "",
-  message: "",
-});
-const email = ref();
-const sendMail = () => {
-  find();
-  emailjs
+    const form = ref(null);
+    const inputFieldReset = ref(null);
+
+    const sendMail = () => {
+      find()
+      emailjs
     .sendForm(
       "service_2lurd1r",
       "template_butrqam",
       form.value,
       "d8Cm9voiRtuCxJZ8t"
     )
-    .then(
-      () => {
-        alert("임시 비밀번호가 발급되었습니다.!");
-        inputFieldReset.value = " ";
-      },
-      (error) => {
-        alert("Message not sent", error);
+        .then(() => {
+          alert("비밀번호를 보냈습니다!")
+          inputFieldReset.value = " ";
+        }, (error) => {
+          alert('Message not sent', error);
+        }); 
+        userInfo.value.password=message.value;
+        update()
       }
-    );
-    update();
-};
-
-function rand(min, max) {
+      function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-const newPassword = ref(rand(10000000, 1000000000));
-inputFieldReset.value.message = newPassword.value;
-const newUser = ref({
-  email: userInfo.value.email,
-  nickname: userInfo.value.nickname,
-  password: newPassword.value,
-  username: userInfo.value.username,
-});
+const message = ref(rand(10000000, 1000000000));
+const email = ref();
+const userInfo = ref({"email":"",
+                      "id":"",
+                      "nickanme":"",
+                    "rolename":"",
+                    "username":"",
+                    "password":""});
 const find = ()=>{
 findByEmail(
-  inputFieldReset.value.email,
+   email.value,
     ({ data }) => {
       userInfo.value = data;
+      console.log(userInfo.value)
     },
     (err) => {
       console.log(err);
     }
   );
 }
+
 const update=()=>{
+  
   modify(
-    newUser.value,
+    userInfo.value,
     ({ data }) => {
-      attractionList.value = data;
     },
     (err) => {
       console.log(err);
@@ -68,106 +62,92 @@ const update=()=>{
 
 
 </script>
-
 <template>
   <section>
-    <div class="form-container">
-      <p>유저 비밀번호 찾기</p>
-      <form class="form" ref="form" @submit.prevent="sendMail">
-        <div class="form-group">
-          <input name="from_name" placeholder="name" type="hidden" required />
-        </div>
-        <div class="form-group">
-          <input
-            name="email"
-            placeholder="email"
-            type="email"
-            :value="inputFieldReset.email"
-            required />
-        </div>
-        <div class="form-group">
-          <input
-            placeholder="subject"
-            type="hidden"
-            required />
-        </div>
-        <div class="form-group">
-          <input
-            placeholder="telephone"
-            type="text"
-            required />
-        </div>
-        <div class="form-group">
-          <textarea
-            class="text-area"
-            placeholder="message"
-            type="text"
-            style="display: none"
-            required></textarea>
-        </div>
-        <div class="form-group">
-          <input class="submit" type="submit" name="send" />
-        </div>
-      </form>
-    </div>
+  <div class="form-container">
+  <p>비밀번호 찾기</p>
+  <form class="form" ref="form" @submit.prevent="sendMail" >
+  <div class="form-group">
+  <input name="from_name" placeholder="name" type="hidden" value="석주" required>
+  </div>
+  <div class="form-group">
+  <input name="email" placeholder="email" type="email" v-model="email" required>
+  </div>
+  <div class="form-group">
+  <input name="subject" placeholder="subject" type="hidden" value="dd" required>
+  </div>
+  <div class="form-group">
+  <textarea style="display:none" name="message" placeholder="message" type="hidden" :value="message" required></textarea>
+  </div>
+  <div class="form-group">
+  <input class="submit" type="submit" name="send" />
+  </div>
+  </form>
+  </div>
   </section>
-</template>
-
+  </template> 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Comfortaa&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
 }
 
-html,
-body {
-  font-size: 12px;
-  overflow: hidden;
-  font-family: "Comfortaa", cursive;
-  color: white;
+html, body {
+ font-size: 12px;
+ overflow: hidden;
+ font-family: 'Comfortaa', cursive;
+ color: white;
 }
 
-p {
-  font-size: 30px;
-  padding: 10px;
-  font-weight: bold;
+p{
+ font-size: 30px;
+ padding: 10px;
+ font-weight: bold;
 }
 
 .form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 50px auto;
-  border-radius: 10px;
-  padding: 10px;
-  width: 500px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ margin: 50px auto;
+ border-radius: 10px;
+ padding: 10px;
+ width: 500px;
 }
 
-.form-group {
-  padding: 15px;
+.form-group{
+ padding: 15px;
 }
 
-.form-group input {
-  padding: 10px 10px 10px 10px;
-  border: none;
-  border-radius: 10px;
-  width: 400px;
-  outline: none;
-  font-weight: 500;
+.form-group input{
+ padding: 10px 10px 10px 10px;
+ border: none;
+ border-radius: 10px;
+ width: 400px;
+ outline: none;
+ font-weight: 500;
 }
 
 .text-area {
-  height: 150px;
-  width: 400px;
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
-  outline: none;
-  font-family: "Comfortaa", cursive;
-  font-weight: 500;
+ height: 150px;
+ width: 400px;
+ border: none;
+ border-radius: 10px;
+ padding: 10px;
+ outline: none;
+ font-weight: 500;
+}
+
+.form-group .submit{
+ border: none;
+ border-radius:5px;
+ height: 40px;
+ width: 70px ;
+ cursor: pointer;
+ font-weight: 500;
 }
 </style>
