@@ -34,6 +34,23 @@ const fetchFiles = async () => {
         });
 };
 
+const download = async (file) => {
+    await FileInfoAPI.downloadFile(file.id)
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `${file.filename}`);
+            // undefined.jpg => 다운 받았을 때 파일 이름 및 확장자
+            document.body.appendChild(link);
+            link.click();
+        })
+        .catch((error) => {
+            console.log("[ShareDetail.vue] download() Error >> ", error);
+        });
+    return false;
+};
+
 // Comment Data
 const data = ref({
     boardId: id,
@@ -140,7 +157,7 @@ onMounted(() => {
 
 <template>
     <div class="container-md py-5">
-        <h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
+        <h1 class="border-bottom border-2 border-white text-white text-shadow">여행지 정보공유</h1>
         <div class="row d-flex justify-content-center rounded-0 shadow bg-white pt-4 px-4 mb-3">
             <!-- Title -->
             <div class="d-flex justify-content-center border-bottom border-1 border-black-50">
@@ -167,7 +184,9 @@ onMounted(() => {
                     :key="index"
                 >
                     <div class="me-auto">
-                        {{ file.filename }}
+                        <a href="#" onclick="return false;" @click="download(file)">
+                            {{ file.filename }}
+                        </a>
                     </div>
                     <div class="ms-auto">
                         {{ formatFileSize(file.filesize) }}
@@ -211,7 +230,15 @@ onMounted(() => {
 </template>
 
 <style scoped>
+a {
+    color: black;
+    text-decoration: none;
+}
 .btn {
     min-width: 100px;
+}
+
+.text-shadow {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 </style>

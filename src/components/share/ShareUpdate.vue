@@ -10,6 +10,7 @@ const { id } = route.params;
 
 const data = ref({
     id: id,
+    hit: 0,
     title: "",
     content: "",
     boardTypeId: 4, // SHARE
@@ -23,9 +24,10 @@ const fetchBoard = async () => {
             data.value = response;
             data.value.userId = response.author.id;
             data.value.boardTypeId = response.boardType.id;
+            console.log(data.value);
         })
         .catch((error) => {
-            console.log("[ShareDetail.vue] fetchBoard() Error >> ", error);
+            console.log("[ShareUpdate.vue] fetchBoard() Error >> ", error);
         });
 };
 
@@ -37,13 +39,13 @@ const fetchFiles = async () => {
             files.value = response;
         })
         .catch((error) => {
-            console.log("[ShareDetail.vue] fetchFiles() Error >> ", error);
+            console.log("[ShareUpdate.vue] fetchFiles() Error >> ", error);
         });
 };
 
 const onChangeFiles = (updatedFiles) => {
     files.value = updatedFiles;
-    console.log("[ShareWrite.vue] onChangeFiles() >> ", files);
+    console.log("[ShareUpdate.vue] onChangeFiles() >> ", files);
 };
 
 const router = useRouter();
@@ -51,16 +53,26 @@ const updateBoard = async () => {
     await ShareAPI.updateBoard(data.value.id, data.value)
         .then((response) => {})
         .catch((error) => {
-            console.log("[ShareWrite.vue] updateBoard(), Error >> ", error);
+            console.log("[ShareUpdate.vue] updateBoard(), Error >> ", error);
         });
 
-    // if (files.value.length != 0) {
-    //     await FileInfoAPI.uploadFiles(id.value, files.value)
-    //         .then((response) => {})
-    //         .catch((error) => {
-    //             console.log("[ShareWrite.vue] uploadFiles(), Error >> ", error);
-    //         });
-    // }
+    if (files.value.length != 0) {
+        for (const file of files.value) {
+            await FileInfoAPI.deleteFile(file.id)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        await FileInfoAPI.uploadFiles(data.value.id, files.value)
+            .then((response) => {})
+            .catch((error) => {
+                console.log("[ShareUpdate.vue] uploadFiles(), Error >> ", error);
+            });
+    }
     router.push(`/share/view/${id}`);
 };
 
@@ -73,7 +85,7 @@ onMounted(() => {
 <template>
     <div class="container-md py-5">
         <!-- Title -->
-        <h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
+        <h1 class="border-bottom border-2 border-white text-white text-shadow">여행지 정보공유</h1>
 
         <div class="border border-2 border-dark-subtle rounded-0 shadow bg-white pt-4 px-4">
             <h2 class="fst-italic border-bottom border-2 border-secondary">여행지정보 공유하기</h2>
@@ -119,5 +131,9 @@ onMounted(() => {
 <style scoped>
 .btn {
     min-width: 110px;
+}
+
+.text-shadow {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 </style>

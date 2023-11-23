@@ -1,28 +1,14 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from "vue";
+import { useImageStore } from "@/stores/imageStore";
 import Carousel from "@/components/common/Carousel.vue";
 
-const srcs = ref([
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-    `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`,
-]);
+const imageStore = useImageStore();
+const srcs1920x720 = imageStore.srcs1920x720;
+const getBackgroundImage = imageStore.getBackgroundImage;
 
-const src = `https://source.unsplash.com/random/2160x1920/?travel,beach,sig=${Math.random()}`;
 const backgroundStyle = ref({
-    // opacity: 0.5,
-    // filter: "blur(5px)",
-    // filter: "grayscale(100%)",
-    backgroundImage: `url(${src})`,
-    // backgroundImage: `url(${srcs.value[0]})`,
-    // backgroundImage: `url('${srcs.value.join("'), url('")}')`,
+    backgroundImage: `url(${getBackgroundImage()})`,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     backgroundRepeat: "repeat-y",
     backgroundAttachment: "fixed", // 이미지를 스크롤에 고정
@@ -33,21 +19,20 @@ const backgroundFilter = ref({
     backdropFilter: "blur(5px)",
 });
 
-let imageIndex = ref(0);
+let newIndex = ref(0);
 const handleScroll = () => {
     const scrollPosition = window.scrollY;
     const viewportHeight = window.innerHeight;
-    const newIndex = Math.floor(scrollPosition / viewportHeight) % srcs.value.length;
-    imageIndex.value = newIndex;
+    newIndex.value = Math.floor((scrollPosition / (viewportHeight / 1)) % srcs1920x720.length);
 };
 
-// imageIndex가 변경될 때마다 이미지를 로드하고 배경을 업데이트
-watch(imageIndex, (newIndex) => {
-    const tempImage = new Image();
-    tempImage.onload = () => {
-        backgroundStyle.value.backgroundImage = `url(${srcs.value[newIndex]})`;
+// scrollIndex가 변경될 때마다 이미지를 로드하고 배경을 업데이트
+watch(newIndex, (newVal, oldVal) => {
+    const checkImage = new Image();
+    checkImage.onload = () => {
+        backgroundStyle.value.backgroundImage = `url(${srcs1920x720[newVal]})`;
     };
-    tempImage.src = srcs.value[newIndex];
+    checkImage.src = srcs1920x720[newVal];
 });
 
 onMounted(() => {

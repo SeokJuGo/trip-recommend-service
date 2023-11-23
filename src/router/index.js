@@ -91,7 +91,15 @@ const router = createRouter({
         {
             path: "/",
             name: "main",
-            component: () => import("../views/MainView.vue"),
+            component: () => import("@/views/MainView.vue"),
+            redirect: { path: "/index" },
+            children: [
+                {
+                    path: "index",
+                    name: "main-index",
+                    component: () => import("@/components/main/MainPage.vue"),
+                },
+            ],
         },
         {
             path: "/plan",

@@ -22,13 +22,19 @@ export const uploadFiles = async (boardId, files) => {
 
 // 첨부파일 다운로드
 export const downloadFile = async (id) => {
-    const response = await axios.get(`/attach/download/${id}`);
-    return response;
+    const response = await axios.get(`/attach/download/${id}`, {
+        baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
+        responseType: "blob",
+    });
+    return response.data;
 };
 
 // 이미지 다운로드
 export const downloadImage = async (id) => {
-    const response = await axios.get(`/attach/image/${id}`);
+    const response = await axios.get(`/attach/image/${id}`, {
+        baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
+        responseType: "blob",
+    });
     return response;
 };
 

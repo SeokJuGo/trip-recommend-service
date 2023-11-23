@@ -1,7 +1,36 @@
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
+import FileInfoAPI from "@/api/fileinfo.js";
 const props = defineProps({
     board: Object,
+    // thumnail: String,
+});
+
+const src = ref({});
+const fileId = ref(0);
+const fetchImage = async () => {
+    await FileInfoAPI.fetchFiles(props.board.id)
+        .then((response) => {
+            fileId.value = response[0].id;
+        })
+        .catch((error) => {
+            // console.error("[HotplaceDetail.vue] fetchFiles() Error >> ", error);
+        });
+    if (fileId.value !== 0) {
+        await FileInfoAPI.downloadImage(fileId.value)
+            .then((response) => {
+                src.value = window.URL.createObjectURL(response.data);
+            })
+            .catch((error) => {
+                console.error("[HotplaceDetail.vue] downloadImage() Error >> ", error);
+            });
+    } else {
+        src.value = undefined;
+    }
+};
+
+onMounted(async () => {
+    await fetchImage();
 });
 </script>
 
@@ -10,7 +39,14 @@ const props = defineProps({
     <div class="col-lg-6">
         <router-link :to="{ name: 'hotplace-view', params: { id: board.id } }">
             <div class="card text-bg-dark shadow rounded-0 mb-3">
-                <img src="@/assets/img/강릉.jpg" class="card-img rounded-0" alt="thumnail" />
+                <!-- style="width: 636px; height: 477px" -->
+                <img v-if="src" :src="src" class="card-img rounded-0" alt="..." />
+                <img
+                    v-else
+                    src="@/assets/img/강릉.jpg"
+                    class="card-img rounded-0"
+                    alt="thumbnail"
+                />
                 <div class="card-img-overlay d-flex flex-column">
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title text-shadow">{{ board?.title }}</h5>
@@ -22,9 +58,6 @@ const props = defineProps({
                     </div>
                     <p class="text-shadow card-text mt-auto">
                         {{ board?.content }}
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati nam magni
-                        non at vel harum. Hic, ut qui esse dolore voluptatibus odio provident labore
-                        est quis minus nostrum, fugiat dignissimos!
                     </p>
                 </div>
             </div>

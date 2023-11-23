@@ -31,7 +31,7 @@ const pages = computed(() => {
 
 <template>
     <div>
-        <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content-center m-0">
             <li class="page-item">
                 <a class="page-link" @click="$emit('onChangePageNum', 1)">최신</a>
             </li>
@@ -70,6 +70,7 @@ div > li > a,
 .pagination > li > a {
     background-color: white;
     color: #000000;
+    border: solid 1px #000000;
 }
 
 div > li > a:focus,
@@ -88,7 +89,8 @@ div > li > span:hover,
 .pagination > div > .active > a {
     color: white;
     background-color: #000000 !important;
-    border: solid 1px #ddd !important;
+    border: solid 1px #000000 !important;
+    /* border: solid 1px #ddd !important; */
 }
 
 .pagination > div > .active > a:hover {

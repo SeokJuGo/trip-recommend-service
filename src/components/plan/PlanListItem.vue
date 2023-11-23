@@ -7,9 +7,42 @@ const props = defineProps({
 
 <template>
     <!-- Card -->
-    <div class="col-lg-6">
-        <router-link :to="{ name: 'hotplace-view', params: { id: board.id } }">
-            <div class="card text-bg-dark shadow rounded-0 mb-3">
+    <div class="col-lg-12">
+        <router-link :to="{ name: 'plan-view', params: { id: board.id } }">
+            <div class="card border border-1 border-dark rounded-0 shadow mb-3">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="@/assets/img/강릉.jpg" class="img-fluid rounded-0" alt="..." />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body d-flex flex-column h-100">
+                            <!-- <h2 class="card-title">{{ board?.title }}</h2>
+                            <p class="card-text">
+                                {{ board?.content }}
+                            </p>
+                            <p class="card-text mt-auto">
+                                <small class="text-body-secondary">Last updated 3 mins ago</small>
+                            </p> -->
+                            <div class="d-flex justify-content-between">
+                                <h2 class="card-title">{{ board?.title }}</h2>
+                                <p class="card-text text-end">
+                                    <small class="d-block text-body-secondary"
+                                        >Created {{ board?.createdDate }}</small
+                                    >
+                                    <small class="d-block"
+                                        >Posted By {{ board?.author.nickname }}</small
+                                    >
+                                    <small class="d-block">View {{ board?.hit }}</small>
+                                </p>
+                            </div>
+                            <div class="card-text mt-auto shadow-3-strong p-3">
+                                {{ board?.content }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="card text-bg-dark shadow rounded-0 mb-3">
                 <img src="@/assets/img/강릉.jpg" class="card-img rounded-0" alt="thumnail" />
                 <div class="card-img-overlay d-flex flex-column">
                     <div class="d-flex justify-content-between">
@@ -27,7 +60,7 @@ const props = defineProps({
                         est quis minus nostrum, fugiat dignissimos!
                     </p>
                 </div>
-            </div>
+            </div> -->
         </router-link>
     </div>
 </template>
