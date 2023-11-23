@@ -96,6 +96,7 @@ const router = createRouter({
         {
             path: "/plan",
             name: "plan",
+            component: () => import("../views/PlanView.vue"),
             redirect: { name: "plan-list" },
             children: [
                 {
@@ -116,34 +117,6 @@ const router = createRouter({
                     component: () => import("@/components/plan/PlanDetail.vue"),
                     beforeEnter: onlyAuthUser,
                 },
-            ],
-        },
-        {
-            path: "/myplan",
-            name: "myplan",
-            component: () => import("@/views/PlanView.vue"),
-            redirect: { path: "/myplan/list" },
-            children: [
-                {
-                    path: "list",
-                    name: "plan-list",
-                    component: () => import("@/components/plan/PlanList.vue"),
-                },
-                // {
-                //     path: "view/:id",
-                //     name: "plan-view",
-                //     component: () => import("@/components/plan/PlanDetail.vue"),
-                // },
-                // {
-                //     path: "write",
-                //     name: "plan-write",
-                //     component: () => import("@/components/plan/PlanWrite.vue"),
-                // },
-                // {
-                //     path: "update/:id",
-                //     name: "plan-update",
-                //     component: () => import("@/components/plan/PlanUpdate.vue"),
-                // },
             ],
         },
         {
