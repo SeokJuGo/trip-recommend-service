@@ -166,7 +166,10 @@ const showModalPlan = (attraction) => {
   open.value = true;
   attractionSample.value = attraction;
 };
-
+const handleCancel = () => {
+  open.value = false;
+  
+};
 // Draw Line
 var drawingFlag = false; // 선이 그려지고 있는 상태를 가지고 있을 변수입니다
 var moveLine; // 선이 그려지고 있을때 마우스 움직임에 따라 그려질 선 객체 입니다
@@ -469,6 +472,8 @@ const boardData = ref({
   boardTypeId: 2, // PLAN
   userId: userinfo.value.id, // USER
 });
+
+const title = ref("");
 const planSave = async () => {
   console.log(choiceList.value);
   if (choiceList.value.length < 2) {
@@ -602,6 +607,7 @@ const planSave = async () => {
           @click="planSave">
           저장하기
         </button>
+        <h3>My Plan Title</h3><input class="memo" v-model="boardData.title">
       </div>
 
       <div

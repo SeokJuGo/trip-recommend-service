@@ -96,7 +96,6 @@ const router = createRouter({
         {
             path: "/plan",
             name: "plan",
-            component: () => import("../views/PlanView.vue"),
             redirect: { name: "plan-list" },
             children: [
                 {

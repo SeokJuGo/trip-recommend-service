@@ -22,6 +22,13 @@ export const deleteBoard = async (id) => {
     const response = await api.delete(`/plan/${id}`);
     return response.data;
 };
-export default {
-    insertBoard,updateBoard,deleteBoard
+
+
+export const fetchBoard = async (id) => {
+    const response = await api.get(`/plan/${id}`, );
+    return response.data;
 };
+export default {
+    insertBoard,updateBoard,deleteBoard,fetchBoard
+};
+
