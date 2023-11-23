@@ -1,6 +1,10 @@
 <script setup>
-import { ref, watch, onMounted,inject,provide } from "vue";
-
+import { ref, watch, onMounted, inject, provide } from "vue";
+import { userStore } from "@/stores/userPiniaStore";
+import { useRouter } from "vue-router";
+import ShareAPI from "@/api/board.js";
+import PlanAPI from "../../api/plan.js";
+const router = useRouter();
 var map;
 const positions = ref([]);
 const markers = ref([]);
@@ -33,8 +37,9 @@ onMounted(() => {
     initMap();
   } else {
     const script = document.createElement("script");
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${import.meta.env.VITE_KAKAO_MAP_SERVICE_KEY
-      }&libraries=services,clusterer`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${
+      import.meta.env.VITE_KAKAO_MAP_SERVICE_KEY
+    }&libraries=services,clusterer`;
     /* global kakao */
     script.onload = () => kakao.maps.load(() => initMap());
     document.head.appendChild(script);
@@ -55,6 +60,7 @@ watch(
       obj.address = attraction.address;
       obj.image = attraction.firstImage;
       obj.overview = attraction.overview;
+      obj.attractionId = attraction.contentId;
 
       positions.value.push(obj);
     });
@@ -85,13 +91,14 @@ const loadMarkers = () => {
       clickable: true,
       // image: markerImage, // 마커의 이미지
     });
-    var content = '<div class="overlay_info">' +
-      `    <a href="${position.image}" target="_blank"><strong>${position.title}</strong></a>` +
-      '    <div class="desc">' +
-      `  <img style="width: 70px;height:40px" src="${position.image}" alt="">` +
-      `  <span class="address">${position.address}</span>` +
-      '  </div>' +
-      '  </div>',
+    var content =
+        '<div class="overlay_info">' +
+        `    <a href="${position.image}" target="_blank"><strong>${position.title}</strong></a>` +
+        '    <div class="desc">' +
+        `  <img style="width: 70px;height:40px" src="${position.image}" alt="">` +
+        `  <span class="address">${position.address}</span>` +
+        "  </div>" +
+        "  </div>",
       iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
     // 인포윈도우를 생성합니다
@@ -125,12 +132,16 @@ const deleteMarkers = () => {
   }
 };
 
+const detail = ref("");
+let i = 0;
 // Attraction List 아이템 중 하나를 선택했을 때 뜨는 창들
 const trace = (attraction) => {
   if (!choiceList.value.includes(attraction)) {
+    attraction.detail = detail.value;
     traceAttraction.value = attraction;
     choiceList.value.push(attraction);
     open.value = false;
+    detail.value = "";
   } else {
     // 이미 존재하는 경우에 대한 처리
     alert(`같은 여행지는 넣을 수 없어요!`);
@@ -155,23 +166,25 @@ const showModalPlan = (attraction) => {
   open.value = true;
   attractionSample.value = attraction;
 };
-
-
+const handleCancel = () => {
+  open.value = false;
+  
+};
 // Draw Line
 var drawingFlag = false; // 선이 그려지고 있는 상태를 가지고 있을 변수입니다
 var moveLine; // 선이 그려지고 있을때 마우스 움직임에 따라 그려질 선 객체 입니다
-var clickLine // 마우스로 클릭한 좌표로 그려질 선 객체입니다
+var clickLine; // 마우스로 클릭한 좌표로 그려질 선 객체입니다
 var distanceOverlay; // 선의 거리정보를 표시할 커스텀오버레이 입니다
 var dots = {}; // 선이 그려지고 있을때 클릭할 때마다 클릭 지점과 거리를 표시하는 커스텀 오버레이 배열입니다.
 var count = 0;
 const init = () => {
   drawingFlag = false; // 선이 그려지고 있는 상태를 가지고 있을 변수입니다
   moveLine; // 선이 그려지고 있을때 마우스 움직임에 따라 그려질 선 객체 입니다
-  clickLine // 마우스로 클릭한 좌표로 그려질 선 객체입니다
+  clickLine; // 마우스로 클릭한 좌표로 그려질 선 객체입니다
   distanceOverlay; // 선의 거리정보를 표시할 커스텀오버레이 입니다
   dots = {}; // 선이 그려지고 있을때 클릭할 때마다 클릭 지점과 거리를 표시하는 커스텀 오버레이 배열입니다.
   count = 0;
-}
+};
 const draw = () => {
   init();
   console.log(choiceList.value.length);
@@ -179,12 +192,11 @@ const draw = () => {
     console.log(position);
     count++;
 
-    // 클릭한 위치입니다 
+    // 클릭한 위치입니다
     var clickPosition = position.latlng;
 
     // 지도 클릭이벤트가 발생했는데 선을 그리고있는 상태가 아니면
     if (!drawingFlag) {
-
       // 상태를 true로, 선이 그리고있는 상태로 변경합니다
       drawingFlag = true;
 
@@ -199,27 +211,26 @@ const draw = () => {
 
       // 클릭한 위치를 기준으로 선을 생성하고 지도위에 표시합니다
       clickLine = new kakao.maps.Polyline({
-        map: map, // 선을 표시할 지도입니다 
+        map: map, // 선을 표시할 지도입니다
         path: [clickPosition], // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
-        strokeWeight: 3, // 선의 두께입니다 
-        strokeColor: '#db4040', // 선의 색깔입니다
+        strokeWeight: 3, // 선의 두께입니다
+        strokeColor: "#db4040", // 선의 색깔입니다
         strokeOpacity: 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
-        strokeStyle: 'solid' // 선의 스타일입니다
+        strokeStyle: "solid", // 선의 스타일입니다
       });
 
       // 선이 그려지고 있을 때 마우스 움직임에 따라 선이 그려질 위치를 표시할 선을 생성합니다
       moveLine = new kakao.maps.Polyline({
-        strokeWeight: 3, // 선의 두께입니다 
-        strokeColor: '#db4040', // 선의 색깔입니다
+        strokeWeight: 3, // 선의 두께입니다
+        strokeColor: "#db4040", // 선의 색깔입니다
         strokeOpacity: 0.5, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
-        strokeStyle: 'solid' // 선의 스타일입니다    
+        strokeStyle: "solid", // 선의 스타일입니다
       });
 
       // 클릭한 지점에 대한 정보를 지도에 표시합니다
       displayCircleDot(clickPosition, 0);
-
-
-    } else { // 선이 그려지고 있는 상태이면
+    } else {
+      // 선이 그려지고 있는 상태이면
 
       // 그려지고 있는 선의 좌표 배열을 얻어옵니다
       var path = clickLine.getPath();
@@ -237,7 +248,7 @@ const draw = () => {
     if (choiceList.value.length != count) {
       // 지도 마우스무브 이벤트가 발생했는데 선을 그리고있는 상태이면
 
-      // 마우스 커서의 현재 위치를 얻어옵니다 
+      // 마우스 커서의 현재 위치를 얻어옵니다
       var mousePosition = position.latlng;
 
       // 마우스 클릭으로 그려진 선의 좌표 배열을 얻어옵니다
@@ -248,13 +259,9 @@ const draw = () => {
       moveLine.setPath(movepath);
       moveLine.setMap(map);
 
-      
-
       // 거리정보를 지도에 표시합니다
       showDistance(content, mousePosition);
-
     } else {
-
       // 마우스무브로 그려진 선은 지도에서 제거합니다
       moveLine.setMap(null);
       moveLine = null;
@@ -264,7 +271,6 @@ const draw = () => {
 
       // 선을 구성하는 좌표의 개수가 2개 이상이면
       if (path.length > 1) {
-
         // 마지막 클릭 지점에 대한 거리 정보 커스텀 오버레이를 지웁니다
         if (dots[dots.length - 1].distance) {
           dots[dots.length - 1].distance.setMap(null);
@@ -276,26 +282,19 @@ const draw = () => {
 
         // 그려진 선의 거리정보를 지도에 표시합니다
         showDistance(content, path[path.length - 1]);
-
       } else {
-
-        // 선을 구성하는 좌표의 개수가 1개 이하이면 
+        // 선을 구성하는 좌표의 개수가 1개 이하이면
         // 지도에 표시되고 있는 선과 정보들을 지도에서 제거합니다.
         deleteClickLine();
         deleteCircleDot();
         deleteDistnce();
-
       }
 
       // 상태를 false로, 그리지 않고 있는 상태로 변경합니다
       drawingFlag = false;
-
     }
-
   });
-
-
-}
+};
 
 // 클릭으로 그려진 선을 지도에서 제거하는 함수입니다
 function deleteClickLine() {
@@ -308,28 +307,28 @@ function deleteClickLine() {
 // 마우스 드래그로 그려지고 있는 선의 총거리 정보를 표시하거
 // 마우스 오른쪽 클릭으로 선 그리가 종료됐을 때 선의 정보를 표시하는 커스텀 오버레이를 생성하고 지도에 표시하는 함수입니다
 function showDistance(content, position) {
-
-  if (distanceOverlay) { // 커스텀오버레이가 생성된 상태이면
+  if (distanceOverlay) {
+    // 커스텀오버레이가 생성된 상태이면
 
     // 커스텀 오버레이의 위치와 표시할 내용을 설정합니다
     distanceOverlay.setPosition(position);
     distanceOverlay.setContent(content);
-
-  } else { // 커스텀 오버레이가 생성되지 않은 상태이면
+  } else {
+    // 커스텀 오버레이가 생성되지 않은 상태이면
 
     // 커스텀 오버레이를 생성하고 지도에 표시합니다
     distanceOverlay = new kakao.maps.CustomOverlay({
       map: map, // 커스텀오버레이를 표시할 지도입니다
-      content: content,  // 커스텀오버레이에 표시할 내용입니다
+      content: content, // 커스텀오버레이에 표시할 내용입니다
       position: position, // 커스텀오버레이를 표시할 위치입니다.
       xAnchor: 0,
       yAnchor: 0,
-      zIndex: 3
+      zIndex: 3,
     });
   }
 }
 
-// 그려지고 있는 선의 총거리 정보와 
+// 그려지고 있는 선의 총거리 정보와
 // 선 그리가 종료됐을 때 선의 정보를 표시하는 커스텀 오버레이를 삭제하는 함수입니다
 function deleteDistnce() {
   if (distanceOverlay) {
@@ -338,15 +337,14 @@ function deleteDistnce() {
   }
 }
 
-// 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여 
+// 선이 그려지고 있는 상태일 때 지도를 클릭하면 호출하여
 // 클릭 지점에 대한 정보 (동그라미와 클릭 지점까지의 총거리)를 표출하는 함수입니다
 function displayCircleDot(position, distance) {
-
   // 클릭 지점을 표시할 빨간 동그라미 커스텀오버레이를 생성합니다
   var circleOverlay = new kakao.maps.CustomOverlay({
     content: '<span class="dot"></span>',
     position: position,
-    zIndex: 1
+    zIndex: 1,
   });
 
   // 지도에 표시합니다
@@ -355,10 +353,13 @@ function displayCircleDot(position, distance) {
   if (distance > 0) {
     // 클릭한 지점까지의 그려진 선의 총 거리를 표시할 커스텀 오버레이를 생성합니다
     var distanceOverlay = new kakao.maps.CustomOverlay({
-      content: '<div class="dotOverlay">거리 <span class="number">' + distance + '</span>m</div>',
+      content:
+        '<div class="dotOverlay">거리 <span class="number">' +
+        distance +
+        "</span>m</div>",
       position: position,
       yAnchor: 1,
-      zIndex: 2
+      zIndex: 2,
     });
 
     // 지도에 표시합니다
@@ -386,113 +387,172 @@ function deleteCircleDot() {
   dots = [];
 }
 
-// 마우스 우클릭 하여 선 그리기가 종료됐을 때 호출하여 
+// 마우스 우클릭 하여 선 그리기가 종료됐을 때 호출하여
 // 그려진 선의 총거리 정보와 거리에 대한 도보, 자전거 시간을 계산하여
 // HTML Content를 만들어 리턴하는 함수입니다
 function getTimeHTML(distance) {
-
   // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
-  var walkkTime = distance / 67 | 0;
-  var walkHour = '', walkMin = '';
+  var walkkTime = (distance / 67) | 0;
+  var walkHour = "",
+    walkMin = "";
 
   // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
   if (walkkTime > 60) {
-    walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + '</span>시간 ';
+    walkHour =
+      '<span class="number">' + Math.floor(walkkTime / 60) + "</span>시간 ";
   }
-  walkMin = '<span class="number">' + walkkTime % 60 + '</span>분';
+  walkMin = '<span class="number">' + (walkkTime % 60) + "</span>분";
 
   // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
-  var bicycleTime = distance / 227 | 0;
-  var bicycleHour = '', bicycleMin = '';
+  var bicycleTime = (distance / 227) | 0;
+  var bicycleHour = "",
+    bicycleMin = "";
 
   // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
   if (bicycleTime > 60) {
-    bicycleHour = '<span class="number">' + Math.floor(bicycleTime / 60) + '</span>시간 ';
+    bicycleHour =
+      '<span class="number">' + Math.floor(bicycleTime / 60) + "</span>시간 ";
   }
-  bicycleMin = '<span class="number">' + bicycleTime % 60 + '</span>분';
+  bicycleMin = '<span class="number">' + (bicycleTime % 60) + "</span>분";
 
   // 자동차의 평균 시속을 기준으로 자동차의 분속을 계산합니다 (가정: 자동차 시속 40km/h)
   var carSpeed = 40; // 자동차의 평균 시속 (단위: km/h)
-  var carTime = distance / (carSpeed * 1000 / 60) | 0;
-  var carHour = '', carMin = '';
+  var carTime = (distance / ((carSpeed * 1000) / 60)) | 0;
+  var carHour = "",
+    carMin = "";
 
   // 계산한 자동차 시간이 60분 보다 크면 시간으로 표출합니다
   if (carTime > 60) {
-    carHour = '<span class="number">' + Math.floor(carTime / 60) + '</span>시간 ';
+    carHour =
+      '<span class="number">' + Math.floor(carTime / 60) + "</span>시간 ";
   }
-  carMin = '<span class="number">' + carTime % 60 + '</span>분';
+  carMin = '<span class="number">' + (carTime % 60) + "</span>분";
 
   // 거리와 도보 시간, 자전거 시간, 자동차 시간을 가지고 HTML Content를 만들어 리턴합니다
   var content = '<ul class="dotOverlay distanceInfo">';
-  content += '    <li>';
-  content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m';
-  content += '    </li>';
-  content += '    <li>';
+  content += "    <li>";
+  content +=
+    '        <span class="label">총거리</span><span class="number">' +
+    distance +
+    "</span>m";
+  content += "    </li>";
+  content += "    <li>";
   content += '        <span class="label">도보</span>' + walkHour + walkMin;
-  content += '    </li>';
-  content += '    <li>';
-  content += '        <span class="label">자전거</span>' + bicycleHour + bicycleMin;
-  content += '    </li>';
-  content += '    <li>';
+  content += "    </li>";
+  content += "    <li>";
+  content +=
+    '        <span class="label">자전거</span>' + bicycleHour + bicycleMin;
+  content += "    </li>";
+  content += "    <li>";
   content += '        <span class="label">자동차</span>' + carHour + carMin;
-  content += '    </li>';
-  content += '</ul>';
+  content += "    </li>";
+  content += "</ul>";
 
   return content;
 }
 
-
-const emit = defineEmits(['response'])
-const responseCategoryType=(event)=>{
-    if(searchAtt.value.sidoCode!=0 || searchAtt.value.title!="") {
-      console.log(event.target.value);
-      emit('response',event.target.value); 
-    }else{
-      alert("먼저 검색명 입력 또는 시도를 클릭해주세요!");
-      return;
-    }
-}
-const searchAtt = inject("searchAtt")
-
-
-const handleCancel = () => {
-  open.value = false;
-};
-const planSave=()=>{
-  if(choiceList.value.length<2){
-    alert("두 가지 이상 선택!")
+const emit = defineEmits(["response"]);
+const responseCategoryType = (event) => {
+  if (searchAtt.value.sidoCode != 0 || searchAtt.value.title != "") {
+    console.log(event.target.value);
+    emit("response", event.target.value);
+  } else {
+    alert("먼저 검색명 입력 또는 시도를 클릭해주세요!");
     return;
   }
-  $router.push(`/share/write`)
+};
+const searchAtt = inject("searchAtt");
 
-}
+const store = userStore();
+const userinfo = ref(store.userInfo);
 
+const boardData = ref({
+  title: "",
+  content: "",
+  boardTypeId: 2, // PLAN
+  userId: userinfo.value.id, // USER
+});
 
-provide("choiceList", choiceList);
+const title = ref("");
+const planSave = async () => {
+  console.log(choiceList.value);
+  if (choiceList.value.length < 2) {
+    alert("두 가지 이상 선택!");
+    return;
+  }
+  const boardId = ref(0);
+  await ShareAPI.insertBoard(boardData.value)
+    .then((response) => {
+      boardId.value = response;
+    })
+    .catch((error) => {
+      console.log("[ShareWrite.vue] insertBoard(), Error >> ", error);
+    });
+
+  choiceList.value.forEach(async (data) => {
+    console.log(data);
+    console.log;
+    await PlanAPI.insertBoard([
+      {
+        attractionId: data.attractionId,
+        boardId: boardId.value,
+        detail: data.detail,
+        distance: 0,
+      },
+    ])
+      .then((response) => {
+        router.push({ name: 'plan-view', params: { id: boardId.value } });
+
+      })
+      .catch((error) => {
+        console.log("[PlanWrite.vue] uploadFiles(), Error >> ", error);
+      });
+  });
+};
 </script>
 
 <template>
-  
   <div class="map_wrap">
-    <div id="map" style="width: 100%; position: relative; overflow: hidden"></div>
-    <div class="category" >
-      <button type="button" value="12" @click="responseCategoryType"><i class="bi bi-bus-front-fill"></i> 관광</button>
-					<button type="button" value="14" @click="responseCategoryType"><i class="bi bi-building"></i> 문화</button>
-					<button type="button" value="15" @click="responseCategoryType"><i class="bi bi-back"></i> 행사</button>
-					<button type="button" value="25" @click="responseCategoryType"><i class="bi bi-airplane"></i> 여행</button>
-					<button type="button" value="28" @click="responseCategoryType"><i class="bi bi-bicycle"></i> 레포츠</button>
-					<button type="button" value="32" @click="responseCategoryType"><i class="bi bi-house-door-fill"></i> 숙박</button>
-					<button type="button" value="38" @click="responseCategoryType"><i class="bi bi-cart"></i> 쇼핑</button>
-					<button type="button" value="39" @click="responseCategoryType"><i class="bi bi-cup-straw"></i> 음식</button>
+    <div
+      id="map"
+      style="width: 100%; position: relative; overflow: hidden"></div>
+    <div class="category">
+      <button type="button" value="12" @click="responseCategoryType">
+        <i class="bi bi-bus-front-fill"></i> 관광
+      </button>
+      <button type="button" value="14" @click="responseCategoryType">
+        <i class="bi bi-building"></i> 문화
+      </button>
+      <button type="button" value="15" @click="responseCategoryType">
+        <i class="bi bi-back"></i> 행사
+      </button>
+      <button type="button" value="25" @click="responseCategoryType">
+        <i class="bi bi-airplane"></i> 여행
+      </button>
+      <button type="button" value="28" @click="responseCategoryType">
+        <i class="bi bi-bicycle"></i> 레포츠
+      </button>
+      <button type="button" value="32" @click="responseCategoryType">
+        <i class="bi bi-house-door-fill"></i> 숙박
+      </button>
+      <button type="button" value="38" @click="responseCategoryType">
+        <i class="bi bi-cart"></i> 쇼핑
+      </button>
+      <button type="button" value="39" @click="responseCategoryType">
+        <i class="bi bi-cup-straw"></i> 음식
+      </button>
     </div>
 
-    <form class="distance catogory" @submit.prevent>
-  </form>
+    <form class="distance catogory" @submit.prevent></form>
+
     <div id="menu_wrap" class="bg_white">
-      <div class="option">
-      </div>
+      <div class="option"></div>
+
       <hr />
-      <ul id="placesList" v-for="attraction in positions" :key="attraction.contentId">
+      <ul
+        id="placesList"
+        v-for="attraction in positions"
+        :key="attraction.contentId">
         <a-card hoverable style="width: 200px" @click="showModal(attraction)">
           <template #cover>
             <img alt="" :src="attraction.image" />
@@ -502,22 +562,31 @@ provide("choiceList", choiceList);
             <edit-outlined key="edit" />
             <ellipsis-outlined key="ellipsis" />
           </template>
-          <a-card-meta :title="attraction.title" :description="attraction.address">
+          <a-card-meta
+            :title="attraction.title"
+            :description="attraction.address">
           </a-card-meta>
         </a-card>
       </ul>
       <div>
-
         <a-modal style="top: 100px" width="50%" v-model:open="open">
           <template #footer>
             <a-button key="back" @click="handleCancel">취소</a-button>
-            <a-button key="submit" type="primary" :loading="loading" @click="trace(attractionSample)">내 계획 추가</a-button>
+            <a-button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="trace(attractionSample)"
+              >내 계획 추가</a-button
+            >
           </template>
           <div class="row">
             <div class="col-md-6">
               <h4>{{ attractionSample.title }}</h4>
-              <img :src="attractionSample.image" style="width:90%" />
+              <img :src="attractionSample.image" style="width: 90%" />
               <p>{{ attractionSample.address }}</p>
+              <p>메모</p>
+              <input class="memo" type="text" v-model="detail" />
             </div>
             <div class="col-md-6 mt-5">
               <p>{{ attractionSample.overview }}</p>
@@ -526,13 +595,25 @@ provide("choiceList", choiceList);
         </a-modal>
       </div>
     </div>
+
     <div id="menu_detail" class="bg_white" v-if="choiceList[0]">
       <div class="justify-content-center m-3">
-        <button type="button" class="btn btn-outline-danger m-3" @click="draw">거리확인</button>
-        <button type="button" class="btn btn-outline-success m-3" @click="planSave">저장하기</button>
+        <button type="button" class="btn btn-outline-danger m-3" @click="draw">
+          거리확인
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-success m-3"
+          @click="planSave">
+          저장하기
+        </button>
+        <h3>My Plan Title</h3><input class="memo" v-model="boardData.title">
       </div>
-      <div id="placeDetail" v-for="choice in choiceList" :key="choice.contentId">
-        
+
+      <div
+        id="placeDetail"
+        v-for="choice in choiceList"
+        :key="choice.contentId">
         <a-card hoverable style="width: 200px" @click="removeChoice(choice)">
           <template #cover>
             <img alt="" :src="choice.image" />
@@ -540,21 +621,16 @@ provide("choiceList", choiceList);
           <template #actions>
             <setting-outlined key="setting" />
             <edit-outlined key="edit" />
-            
+
             <ellipsis-outlined key="ellipsis" />
-            
           </template>
-          
+
           <a-card-meta :title="choice.title" :description="choice.address">
-            
           </a-card-meta>
-          
         </a-card>
       </div>
     </div>
-    <div>
-  </div>
-
+    <div></div>
   </div>
 </template>
 
@@ -688,7 +764,8 @@ provide("choiceList", choiceList);
 
 #placesList .info .jibun {
   padding-left: 26px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
+  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png)
+    no-repeat;
 }
 
 #placesList .info .tel {
@@ -701,7 +778,8 @@ provide("choiceList", choiceList);
   width: 36px;
   height: 37px;
   margin: 10px 0 0 10px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
+  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png)
+    no-repeat;
 }
 
 #placesList .item .marker_1 {
@@ -769,7 +847,7 @@ provide("choiceList", choiceList);
   float: left;
   width: 12px;
   height: 12px;
-  background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png");
 }
 
 .dotOverlay {
@@ -795,14 +873,14 @@ provide("choiceList", choiceList);
 }
 
 .dotOverlay:after {
-  content: '';
+  content: "";
   position: absolute;
   margin-left: -6px;
   left: 50%;
   bottom: -8px;
   width: 11px;
   height: 8px;
-  background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png");
 }
 
 .distanceInfo {
@@ -840,16 +918,19 @@ provide("choiceList", choiceList);
 .overlay_info a {
   display: block;
   background: #d95050;
-  background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;
+  background: #d95050
+    url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png)
+    no-repeat right 14px center;
   text-decoration: none;
   color: #fff;
   padding: 12px 36px 12px 14px;
   font-size: 14px;
-  border-radius: 6px 6px 0 0
+  border-radius: 6px 6px 0 0;
 }
 
 .overlay_info a strong {
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_icon.png) no-repeat;
+  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_icon.png)
+    no-repeat;
   padding-left: 27px;
 }
 
@@ -857,7 +938,7 @@ provide("choiceList", choiceList);
   padding: 14px;
   position: relative;
   min-width: 190px;
-  height: 56px
+  height: 56px;
 }
 
 .overlay_info img {
@@ -871,58 +952,59 @@ provide("choiceList", choiceList);
   left: 80px;
   right: 14px;
   top: 24px;
-  white-space: normal
+  white-space: normal;
 }
 
 .overlay_info:after {
-  content: '';
+  content: "";
   position: absolute;
   margin-left: -11px;
   left: 50%;
   bottom: -12px;
   width: 22px;
   height: 12px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png) no-repeat 0 bottom;
+  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png)
+    no-repeat 0 bottom;
 }
 
+.category {
+  position: absolute;
+  overflow: hidden;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
 
-        .category {
-            position: absolute;
-            overflow: hidden;
-            top: 0%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            
-            z-index: 10;
-            font-size: 14px;
-            text-align: center;
-        }
-        .distance {
-            position: absolute;
-            overflow: hidden;
-            bottom:100%;
-            left: 90%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            
-            z-index: 5;
-            font-size: 14px;
-            text-align: center;
-            
-        }
-        .category button  {
-          
-          background-color: #fff;
-            border: none;
-            cursor: pointer;
-            padding: 10px; /* 내부 여백 크게 조절 */
-            margin: 5px;
-            border-radius: 15px; /* 버튼 모서리 둥글게 조절 */
-            transition: all 0.3s ease; /* 부드러운 변화를 위한 트랜지션 */}
-            .category button:hover {
-            transform: scale(1.1); /* 호버 시 크기 확대 */
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); /* 호버 시 그림자 증가 */
-        }
-        
+  z-index: 10;
+  font-size: 14px;
+  text-align: center;
+}
+.distance {
+  position: absolute;
+  overflow: hidden;
+  bottom: 100%;
+  left: 90%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+
+  z-index: 5;
+  font-size: 14px;
+  text-align: center;
+}
+.category button {
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 10px; /* 내부 여백 크게 조절 */
+  margin: 5px;
+  border-radius: 15px; /* 버튼 모서리 둥글게 조절 */
+  transition: all 0.3s ease; /* 부드러운 변화를 위한 트랜지션 */
+}
+.category button:hover {
+  transform: scale(1.1); /* 호버 시 크기 확대 */
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); /* 호버 시 그림자 증가 */
+}
+.memo {
+  border-radius: 15px; /* 버튼 모서리 둥글게 조절 */
+}
 </style>
