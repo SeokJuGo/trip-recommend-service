@@ -74,7 +74,7 @@ public class UserController {
 	@ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 204, message = "No Content"),
 			@ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 404, message = "404 Not Found"),
 			@ApiResponse(code = 500, message = "Internal Server Error") })
-	public ResponseEntity<?> idCheck(@PathVariable("email") String username) {
+	public ResponseEntity<?> idCheck(@PathVariable("username") String username) {
 		log.debug("[UserController] idCheck() function called, username = {}", username);
 		try {
 			int result = userService.idCheck(username);
