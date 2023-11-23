@@ -65,11 +65,10 @@ const router = createRouter({
                             beforeEnter: onlyAuthUser,
                         },
                         {
-                            path: "user-board",
-                            name: "user-board",
+                            path: "find",
+                            name: "user-find",
                             component: () =>
-                                import("@/components/user/components/UserBoardList.vue"),
-                            beforeEnter: onlyAuthUser,
+                                import("@/components/user/components/FindPassword.vue"),
                         },
                         {
                             path: "user-info",

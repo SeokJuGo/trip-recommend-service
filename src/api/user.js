@@ -36,4 +36,7 @@ async function deleteUser(username, success, fail) {
   await axios.delete(`/user/${username}`).then(success).catch(fail);
 }
 
-export { login, findById, tokenRegeneration, logout, modify, deleteUser ,idCheck,join};
+async function findByEmail(email, success, fail) {
+  await axios.get(`/user/${email}`).then(success).catch(fail);
+}
+export { login, findById, tokenRegeneration, logout, modify, deleteUser ,idCheck,join,findByEmail};
