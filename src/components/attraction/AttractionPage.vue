@@ -28,13 +28,12 @@
         id="title"
         placeholder="관광지 검색 키워드를 입력하세요."
         v-model="searchAtt.title" />
-      <p>{{ searchAtt.title }}</p>
     </div>
     <div class="col-md-1 mb-0 mb-md-0">
       <button
         class="w-100 btn btn-light border form-control"
         id="btn-search-attraction"
-        @click="searchAttracton(searchAtt.val.title)">
+        @click="searchAttracton(searchAtt.title)">
         검색
       </button>
     </div>
@@ -121,6 +120,7 @@ const searchAttracton = (val) => {
 };
 const getAttractions = () => {
   attractionList.value = [];
+  console.log(searchAtt.value)
   listAttraction(
     searchAtt.value,
     ({ data }) => {
