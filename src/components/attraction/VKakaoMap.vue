@@ -518,28 +518,28 @@ const planSave = async () => {
       style="width: 100%; position: relative; overflow: hidden"></div>
     <div class="category">
       <button type="button" value="12" @click="responseCategoryType">
-        <i class="bi bi-bus-front-fill"></i> 관광
+        <div style="color:black"><i class="bi bi-bus-front-fill"></i></div> 관광
       </button>
       <button type="button" value="14" @click="responseCategoryType">
-        <i class="bi bi-building"></i> 문화
+        <div style="color:blue" class="icon"><i class="bi bi-building"></i></div> 문화
       </button>
       <button type="button" value="15" @click="responseCategoryType">
-        <i class="bi bi-back"></i> 행사
+        <div style="color:blanchedalmond" class="icon"> <i class="bi bi-back"></i></div> 행사
       </button>
       <button type="button" value="25" @click="responseCategoryType">
-        <i class="bi bi-airplane"></i> 여행
+        <div style="color:black"><i class="bi bi-airplane"></i></div> 여행
       </button>
       <button type="button" value="28" @click="responseCategoryType">
-        <i class="bi bi-bicycle"></i> 레포츠
+        <div style="color:red"><i class="bi bi-bicycle"></i></div> 레포츠
       </button>
       <button type="button" value="32" @click="responseCategoryType">
-        <i class="bi bi-house-door-fill"></i> 숙박
+        <div style="color:purple" class="icon"><i class="bi bi-house-door-fill"></i></div> 숙박
       </button>
       <button type="button" value="38" @click="responseCategoryType">
-        <i class="bi bi-cart"></i> 쇼핑
+        <div style="color:red" class="icon"><i class="bi bi-cart"></i></div> 쇼핑
       </button>
       <button type="button" value="39" @click="responseCategoryType">
-        <i class="bi bi-cup-straw"></i> 음식
+        <div style="color:orange" class="icon"> <i class="bi bi-cup-straw"></i></div> 음식
       </button>
     </div>
 
