@@ -23,16 +23,15 @@ const router = createRouter({
 
     routes: [
         {
-            path: "/attraction",
-            name: "attraction",
-            component: () => import("../views/AttractionView.vue"),
-            redirect: { name: "att-page" },
+            path: "/",
+            name: "main",
+            component: () => import("@/views/MainView.vue"),
+            redirect: { path: "/index" },
             children: [
                 {
-                    path: "page",
-                    name: "att-page",
-                    component: () => import("@/components/attraction/AttractionPage.vue"),
-                    beforeEnter: onlyAuthUser,
+                    path: "index",
+                    name: "main-index",
+                    component: () => import("@/components/main/MainPage.vue"),
                 },
             ],
         },
@@ -88,15 +87,24 @@ const router = createRouter({
             ],
         },
         {
-            path: "/",
-            name: "main",
-            component: () => import("../views/MainView.vue"),
+            path: "/attraction",
+            name: "attraction",
+            component: () => import("../views/AttractionView.vue"),
+            redirect: { name: "att-page" },
+            children: [
+                {
+                    path: "page",
+                    name: "att-page",
+                    component: () => import("@/components/attraction/AttractionPage.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+            ],
         },
         {
             path: "/plan",
             name: "plan",
-            component: () => import("../views/PlanView.vue"),
-            redirect: { name: "plan-list" },
+            component: () => import("@/views/PlanView.vue"),
+            redirect: { path: "/plan/list" },
             children: [
                 {
                     path: "list",
@@ -114,6 +122,66 @@ const router = createRouter({
                     path: "view/:id",
                     name: "plan-view",
                     component: () => import("@/components/plan/PlanDetail.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+                // {
+                //     path: "update/:id",
+                //     name: "plan-update",
+                //     component: () => import("@/components/plan/PlanUpdate.vue"),
+                // },
+            ],
+        },
+        // {
+        //     path: "/myplan",
+        //     name: "myplan",
+        //     component: () => import("@/views/PlanView.vue"),
+        //     redirect: { path: "/myplan/list" },
+        //     children: [
+        //         {
+        //             path: "list",
+        //             name: "plan-list",
+        //             component: () => import("@/components/plan/PlanList.vue"),
+        //         },
+        //         // {
+        //         //     path: "view/:id",
+        //         //     name: "plan-view",
+        //         //     component: () => import("@/components/plan/PlanDetail.vue"),
+        //         // },
+        //         // {
+        //         //     path: "write",
+        //         //     name: "plan-write",
+        //         //     component: () => import("@/components/plan/PlanWrite.vue"),
+        //         // },
+        //     ],
+        // },
+        {
+            path: "/hotplace",
+            name: "hotplace",
+            component: () => import("../views/HotPlaceView.vue"),
+            redirect: { path: "/hotplace/list" },
+            children: [
+                {
+                    path: "list",
+                    name: "hotplace-list",
+                    component: () => import("@/components/hotplace/HotplaceList.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+                {
+                    path: "view/:id",
+                    name: "hotplace-view",
+                    component: () => import("@/components/hotplace/HotplaceDetail.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+                {
+                    path: "write",
+                    name: "hotplace-write",
+                    component: () => import("@/components/hotplace/HotplaceWrite.vue"),
+                    beforeEnter: onlyAuthUser,
+                },
+                {
+                    path: "update/:id",
+                    name: "hotplace-update",
+                    component: () => import("@/components/hotplace/HotplaceUpdate.vue"),
                     beforeEnter: onlyAuthUser,
                 },
             ],
@@ -146,38 +214,6 @@ const router = createRouter({
                     path: "update/:id",
                     name: "share-update",
                     component: () => import("@/components/share/ShareUpdate.vue"),
-                    beforeEnter: onlyAuthUser,
-                },
-            ],
-        },
-        {
-            path: "/hotplace",
-            name: "hotplace",
-            component: () => import("../views/HotPlaceView.vue"),
-            redirect: { path: "/hotplace/list" },
-            children: [
-                {
-                    path: "list",
-                    name: "hotplace-list",
-                    component: () => import("@/components/hotplace/HotplaceList.vue"),
-                    beforeEnter: onlyAuthUser,
-                },
-                {
-                    path: "view/:id",
-                    name: "hotplace-view",
-                    component: () => import("@/components/hotplace/HotplaceDetail.vue"),
-                    beforeEnter: onlyAuthUser,
-                },
-                {
-                    path: "write",
-                    name: "hotplace-write",
-                    component: () => import("@/components/hotplace/HotplaceWrite.vue"),
-                    beforeEnter: onlyAuthUser,
-                },
-                {
-                    path: "update/:id",
-                    name: "hotplace-update",
-                    component: () => import("@/components/hotplace/HotplaceUpdate.vue"),
                     beforeEnter: onlyAuthUser,
                 },
             ],

@@ -9,7 +9,7 @@ import PageNavigation from "../common/PageNavigation.vue";
 const params = ref({
     pageNum: undefined,
     pageSize: undefined,
-    searchType: undefined,
+    searchType: "title",
     searchQuery: undefined,
     boardTypeId: 4,
 });
@@ -23,7 +23,7 @@ const fetchBoards = async () => {
             pageInfo.value = response;
         })
         .catch((error) => {
-            console.error("[ShareList.vue] fetchBoards() Error >> ", error);
+            console.log("[ShareList.vue] fetchBoards() Error >> ", error);
         });
 };
 
@@ -44,7 +44,9 @@ onMounted(() => {
     <div class="container-md py-4">
         <!-- Title -->
         <div class="d-flex justify-content-center pb-3">
-            <h1 class="border-bottom border-2 border-secondary">여행지 정보공유</h1>
+            <h1 class="border-bottom border-2 border-white text-white text-shadow">
+                여행지 정보공유
+            </h1>
         </div>
 
         <!-- Search -->
@@ -55,7 +57,7 @@ onMounted(() => {
                     id="inputGroupSelect01"
                     v-model="params.searchType"
                 >
-                    <option value="선택" disabled>선택</option>
+                    <option disabled>선택</option>
                     <option value="title" selected>제목</option>
                     <option value="content">내용</option>
                     <option value="nickname">작성자</option>
@@ -122,5 +124,9 @@ button {
 
 select {
     max-width: 110px;
+}
+
+.text-shadow {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 </style>

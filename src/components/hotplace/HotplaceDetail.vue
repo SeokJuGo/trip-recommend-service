@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import ShareAPI from "@/api/board.js";
+import BoardAPI from "@/api/board.js";
 import CommentAPI from "@/api/comment.js";
 import FileInfoAPI from "@/api/fileinfo.js";
 
@@ -13,12 +13,12 @@ const { id } = route.params;
 // Fetch Board
 const board = ref({});
 const fetchBoard = async () => {
-    await ShareAPI.fetchBoard(id)
+    await BoardAPI.fetchBoard(id)
         .then((response) => {
             board.value = response;
         })
         .catch((error) => {
-            console.log("[ShareDetail.vue] fetchBoard() Error >> ", error);
+            console.log("[HotplaceDetail.vue] fetchBoard() Error >> ", error);
         });
 };
 
@@ -30,8 +30,25 @@ const fetchFiles = async () => {
             files.value = response;
         })
         .catch((error) => {
-            console.log("[ShareDetail.vue] fetchFiles() Error >> ", error);
+            console.log("[HotplaceDetail.vue] fetchFiles() Error >> ", error);
         });
+};
+
+const download = async (file) => {
+    await FileInfoAPI.downloadFile(file.id)
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `${file.filename}`);
+            // undefined.jpg => 다운 받았을 때 파일 이름 및 확장자
+            document.body.appendChild(link);
+            link.click();
+        })
+        .catch((error) => {
+            console.log("[HotplaceDetail.vue] download() Error >> ", error);
+        });
+    return false;
 };
 
 // Comment Data
@@ -46,11 +63,11 @@ const comments = ref([]);
 const fetchComments = async () => {
     await CommentAPI.fetchComments(id)
         .then((response) => {
-            console.log("[ShareDetail.vue] fetchComments() >> ", response);
+            console.log("[HotplaceDetail.vue] fetchComments() >> ", response);
             comments.value = response;
         })
         .catch((error) => {
-            console.log("[ShareDetail.vue] fetchComments() Error >> ", error);
+            console.log("[HotplaceDetail.vue] fetchComments() Error >> ", error);
         });
 };
 
@@ -64,11 +81,11 @@ const insertComment = async () => {
 };
 
 const router = useRouter();
-const moveToShareList = () => router.push(`/hotplace/list`);
-const moveToShareWrite = () => router.push(`/hotplace/write`);
-const moveToShareUpdate = () => router.push(`/hotplace/update/${id}`);
+const moveToHotplaceList = () => router.push(`/hotplace/list`);
+const moveToHotplaceWrite = () => router.push(`/hotplace/write`);
+const moveToHotplaceUpdate = () => router.push(`/hotplace/update/${id}`);
 
-const deleteShare = async () => {
+const deleteHotplace = async () => {
     if (files.value.length) {
         for (const file of files.value) {
             await FileInfoAPI.deleteFile(file.id)
@@ -81,12 +98,12 @@ const deleteShare = async () => {
         }
     }
 
-    await ShareAPI.deleteBoard(id)
+    await BoardAPI.deleteBoard(id)
         .then((response) => {
-            moveToShareList();
+            moveToHotplaceList();
         })
         .catch((error) => {
-            console.log("[ShareDetail.vue] deleteBoard() Error >> ", error);
+            console.log("[HotplaceDetail.vue] deleteBoard() Error >> ", error);
         });
 };
 
@@ -115,7 +132,7 @@ onMounted(() => {
 // const { id } = route.params;
 
 // //글 delete function
-// const deleleShare = () => {
+// const deleleHotplace = () => {
 
 //   axios.delete(`http://localhost:8080/enjoytrip/board/delete`, {
 //     data: {
@@ -129,18 +146,18 @@ onMounted(() => {
 // //update 라우터
 // const router = useRouter()
 // const goUpdate = function() {
-// 	router.push({name:'share-update'})
+// 	router.push({name:'Hotplace-update'})
 // }
 
 // //list 라우터
 // const goList = function() {
-// 	router.push({name:'share-list'})
+// 	router.push({name:'Hotplace-list'})
 // }
 </script>
 
 <template>
     <div class="container-md py-5">
-        <h1 class="border-bottom border-2 border-secondary text-shadow">최고의 여행지 공유</h1>
+        <h1 class="border-bottom border-2 border-white text-white text-shadow">최고의 여행지</h1>
         <div class="row d-flex justify-content-center rounded-0 shadow bg-white pt-4 px-4 mb-3">
             <!-- Title -->
             <div class="d-flex justify-content-center border-bottom border-1 border-black-50">
@@ -167,7 +184,9 @@ onMounted(() => {
                     :key="index"
                 >
                     <div class="me-auto">
-                        {{ file.filename }}
+                        <a href="#" onclick="return false;" @click="download(file)">
+                            {{ file.filename }}
+                        </a>
                     </div>
                     <div class="ms-auto">
                         {{ formatFileSize(file.filesize) }}
@@ -179,12 +198,16 @@ onMounted(() => {
                 :class="{ 'mt-3': !files || files.length === 0 }"
                 class="d-flex justify-content-center pb-3"
             >
-                <button @click="moveToShareList" class="me-1 btn btn-outline-dark">목록으로</button>
-                <button @click="moveToShareWrite" class="ms-1 me-auto btn btn-dark">
+                <button @click="moveToHotplaceList" class="me-1 btn btn-outline-dark">
+                    목록으로
+                </button>
+                <button @click="moveToHotplaceWrite" class="ms-1 me-auto btn btn-dark">
                     새글작성
                 </button>
-                <button @click="deleteShare" class="me-1 ms-auto btn btn-danger">삭제하기</button>
-                <button @click="moveToShareUpdate" class="ms-1 btn btn-primary">수정하기</button>
+                <button @click="deleteHotplace" class="me-1 ms-auto btn btn-danger">
+                    삭제하기
+                </button>
+                <button @click="moveToHotplaceUpdate" class="ms-1 btn btn-primary">수정하기</button>
             </div>
         </div>
 
@@ -211,16 +234,15 @@ onMounted(() => {
 </template>
 
 <style scoped>
+a {
+    color: black;
+    text-decoration: none;
+}
 .btn {
     min-width: 100px;
 }
 
 .text-shadow {
-    /* color: #fff; 텍스트 색상 */
-    /* font-size: 24px; 텍스트 크기 */
-    /* letter-spacing: 2px; 글자 간격 */
-
-    /* 테두리 효과 */
-    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 </style>
