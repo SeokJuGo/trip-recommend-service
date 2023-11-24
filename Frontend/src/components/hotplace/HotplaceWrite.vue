@@ -1,0 +1,105 @@
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import BoardAPI from "@/api/board.js";
+import FileInfoAPI from "@/api/fileinfo.js";
+import ImageInputForm from "@/components/common/ImageInputForm.vue";
+
+const data = ref({
+    title: "",
+    content: "",
+    boardTypeId: 3, // HOTPLACE
+    userId: 1, // admin
+});
+
+const files = ref([]);
+const onChangeFiles = (updatedFiles) => {
+    files.value = updatedFiles;
+    console.log("[HotplaceWrite.vue] onChangeFiles() >> ", files);
+};
+
+const router = useRouter();
+const insertBoard = async () => {
+    if (!files.value.length) {
+        alert("이미지를 등록해야 합니다!!!");
+        return false;
+    }
+
+    const id = ref(0);
+    await BoardAPI.insertBoard(data.value)
+        .then((response) => {
+            id.value = response;
+        })
+        .catch((error) => {
+            console.log("[HotplaceWrite.vue] insertBoard(), Error >> ", error);
+        });
+
+    if (files.value.length != 0) {
+        await FileInfoAPI.uploadFiles(id.value, files.value)
+            .then((response) => {})
+            .catch((error) => {
+                console.log("[HotplaceWrite.vue] uploadFiles(), Error >> ", error);
+            });
+    }
+    router.push(`/hotplace/view/${id.value}`);
+};
+</script>
+
+<template>
+    <div class="container-md py-5">
+        <!-- Title -->
+        <h1 class="border-bottom border-2 border-white text-white text-shadow">핫플레이스</h1>
+
+        <div class="border border-2 border-dark-subtle rounded-0 shadow bg-white pt-4 px-4">
+            <h2 class="fst-italic border-bottom border-2 border-secondary">핫플레이스 자랑하기</h2>
+            <form @submit.prevent="onSubmit" action="">
+                <div class="mb-3">
+                    <label for="title" class="form-label">제목</label>
+                    <input
+                        type="text"
+                        class="form-control rounded-0"
+                        id="title"
+                        placeholder="제목"
+                        v-model="data.title"
+                    />
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">내용</label>
+                    <textarea
+                        class="form-control rounded-0"
+                        id="content"
+                        placeholder="내용"
+                        v-model="data.content"
+                        rows="20"
+                    ></textarea>
+                </div>
+                <div class="mb-3">
+                    <ImageInputForm @on-change-files="onChangeFiles" />
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-6 mb-3 text-center text-md-end">
+                        <button
+                            class="btn btn-outline-dark"
+                            @click="$router.push('/hotplace/list')"
+                        >
+                            목록으로
+                        </button>
+                    </div>
+                    <div class="col-md-6 mb-3 text-center text-md-start">
+                        <button class="btn btn-dark" @click="insertBoard">등록하기</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.btn {
+    min-width: 110px;
+}
+
+.text-shadow {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+</style>
