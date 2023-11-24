@@ -25,7 +25,7 @@ const fetchImage = async () => {
                 console.error("[HotplaceDetail.vue] downloadImage() Error >> ", error);
             });
     } else {
-        src.value = undefined;
+        src.value = `https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`;
     }
 };
 

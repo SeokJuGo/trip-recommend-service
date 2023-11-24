@@ -1,8 +1,10 @@
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 const props = defineProps({
     board: Object,
 });
+
+const src = ref(`https://source.unsplash.com/random/1920x1080/?travel,beach,sig=${Math.random()}`);
 </script>
 
 <template>
@@ -12,7 +14,8 @@ const props = defineProps({
             <div class="card border border-1 border-dark rounded-0 shadow mb-3">
                 <div class="row">
                     <div class="col-md-4">
-                        <img src="@/assets/img/강릉.jpg" class="img-fluid rounded-0" alt="..." />
+                        <!-- <img src="@/assets/img/강릉.jpg" class="img-fluid rounded-0" alt="..." /> -->
+                        <img :src="src" class="img-fluid rounded-0" alt="..." />
                     </div>
                     <div class="col-md-8">
                         <div class="card-body d-flex flex-column h-100">
