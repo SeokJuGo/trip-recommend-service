@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS FILEINFO;
 DROP TABLE IF EXISTS COMMENT;
 DROP TABLE IF EXISTS BOARD;
 DROP TABLE IF EXISTS BOARD_TYPE;
+DROP TABLE IF EXISTS PROFILE_IMAGE;
 DROP TABLE IF EXISTS AUTH;
 DROP TABLE IF EXISTS USER;
 DROP TABLE IF EXISTS ROLE;
@@ -98,19 +99,6 @@ CREATE TABLE IF NOT EXISTS BOARD (
         REFERENCES BOARD_TYPE (id)
         ON DELETE CASCADE
 );
-INSERT INTO BOARD (title, content, user_id, board_type_id) VALUES
-("Board Title Sample Data 001", "Board Content Sample Data 001", 1, 1),
-("Board Title Sample Data 002", "Board Content Sample Data 002", 2, 2),
-("Board Title Sample Data 003", "Board Content Sample Data 003", 3, 3),
-("Board Title Sample Data 004", "Board Content Sample Data 004", 4, 1),
-("Board Title Sample Data 005", "Board Content Sample Data 005", 6, 2),
-("Board Title Sample Data 006", "Board Content Sample Data 006", 7, 3),
-("Board Title Sample Data 007", "Board Content Sample Data 007", 1, 1),
-("Board Title Sample Data 008", "Board Content Sample Data 008", 2, 2),
-("Board Title Sample Data 009", "Board Content Sample Data 009", 3, 3),
-("Board Title Sample Data 010", "Board Content Sample Data 010", 4, 1),
-("Board Title Sample Data 011", "Board Content Sample Data 011", 6, 2),
-("Board Title Sample Data 012", "Board Content Sample Data 012", 7, 3);
 
 -- CREATE TABLE COMMENT
 CREATE TABLE IF NOT EXISTS COMMENT (
@@ -182,37 +170,3 @@ CREATE TABLE IF NOT EXISTS PLAN (
         REFERENCES ATTRACTION_INFO (content_id)
         ON DELETE CASCADE
 );
-
--- CREATE TABLE PLAN
--- CREATE TABLE IF NOT EXISTS PLAN (
---     id 				INT AUTO_INCREMENT PRIMARY KEY,
---     user_id			INT NOT NULL,
--- 	board_id		INT NOT NULL,
---     created_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     updated_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
--- 	CONSTRAINT FK_PLAN_USER
--- 		FOREIGN KEY (user_id)
---         REFERENCES USER (id)
---         ON DELETE CASCADE,
---     CONSTRAINT FK_PALN_BOARD
--- 		FOREIGN KEY (board_id)
---         REFERENCES BOARD (id)
---         ON DELETE CASCADE
--- );
-
---  CREATE TABLE PLAN_ATTR
--- CREATE TABLE IF NOT EXISTS PLAN_ATTRACTION (
---     id 				INT AUTO_INCREMENT PRIMARY KEY,
--- 	plan_id			INT NOT NULL,
---     attr_id			INT NOT NULL,
---     created_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     updated_date 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
---     CONSTRAINT FK_PLAN_ATTR_PLAN
--- 		FOREIGN KEY (plan_id)
---         REFERENCES PLAN (id)
---         ON DELETE CASCADE,
--- 	CONSTRAINT FK_PLAN_ATTR_ATTRACTION_INFO
--- 		FOREIGN KEY (attr_id)
---         REFERENCES ATTRACTION_INFO (content_id)
---         ON DELETE CASCADE
--- );
