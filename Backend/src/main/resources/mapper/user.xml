@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.user.mapper.UserMapper">
+		
+	<select id="findAll" resultType="User">
+		SELECT A.id, A.email, A.username, A.nickname,
+		B.name rolename
+		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
+	</select>
+	
+	<select id="findById" parameterType="Integer" resultType="User">
+		SELECT A.id, A.email, A.username, A.nickname,
+		B.name rolename
+		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
+		WHERE A.id = #{id}
+	</select>
+	
+	<select id="findByEmail" parameterType="String" resultType="User">
+		SELECT A.id, A.email, A.username, A.nickname,
+			B.name rolename
+		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
+		WHERE A.email = #{email}
+	</select>
+	
+	<select id="findByUsername" parameterType="String" resultType="User">
+SELECT A.id, A.email, A.username, A.nickname,
+			B.name rolename
+		FROM USER A JOIN ROLE B ON A.ROLE_ID = B.ID
+		WHERE A.username = #{username}
+	</select>
+	
+	<insert id="regist" parameterType="UserRequestDto">
+		INSERT INTO USER (username, password, nickname, email)
+		VALUES (#{username}, #{password}, #{nickname}, #{email})
+	</insert>
+	
+	<update id="update" parameterType="UserRequestDto">
+		UPDATE USER SET
+			username = #{username}, password = #{password},
+			nickname = #{nickname}, email = #{email}
+		WHERE username = #{username}
+	</update>
+	
+	<delete id="delete" parameterType="UserRequestDto">
+		DELETE FROM USER WHERE username = #{username}
+	</delete>
+	
+	<select id="idCheck" parameterType="String" resultType="Integer">
+		select count(username) from user
+		where username=#{username};
+	</select>
+</mapper>

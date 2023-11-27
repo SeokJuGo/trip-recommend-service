@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.board.mapper.BoardMapper">
+
+    <select id="count" parameterType="Map" resultType="Integer">
+    	SELECT COUNT(ID) FROM BOARD WHERE 1 = 1
+    	<if test="title != null and title != ''">
+            AND TITLE LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="content != null and content != ''">
+            AND CONTENT LIKE CONCAT('%', #{content}, '%')
+        </if>
+        <if test="userId != null and userId != 0">
+            AND USER_ID = #{userId}
+        </if>
+        <if test="boardTypeId != null and boardTypeId != 0">
+            AND BOARD_TYPE_ID = #{boardTypeId}
+        </if>
+	</select>
+	
+	<select id="findAll" parameterType="Map" resultType="Board">
+		SELECT
+			ID AS id,
+			HIT AS hit,
+			TITLE AS title,
+			CONTENT AS content,
+			USER_ID AS userId,
+			BOARD_TYPE_ID AS boardTypeId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM BOARD WHERE 1 = 1
+		<if test="title != null and title != ''">
+            AND TITLE LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="content != null and content != ''">
+            AND CONTENT LIKE CONCAT('%', #{content}, '%')
+        </if>
+        <if test="userId != null and userId != ''">
+            AND USER_ID = #{userId}
+        </if>
+        <if test="boardTypeId != null and boardTypeId != ''">
+            AND BOARD_TYPE_ID = #{boardTypeId}
+        </if>
+	    ORDER BY 
+	    <choose>
+			<when test="sortBy == 'id'"> ID</when>
+  			<when test="sortBy == 'hit'"> HIT</when>
+  			<when test="sortBy == 'title'"> TITLE</when>
+  			<when test="sortBy == 'content'"> CONTENT</when>
+  			<when test="sortBy == 'createdDate'"> CREATED_DATE</when>
+  			<when test="sortBy == 'updatedDate'"> UPDATED_DATE</when>
+  			<when test="sortBy == 'userId'"> USER_ID</when>
+  			<when test="sortBy == 'boardTypeId'"> BOARD_TYPE_ID</when>
+  			<otherwise> ID</otherwise>
+		</choose>
+		<choose>
+			<when test="orderBy == 'asc'"> ASC, ID DESC</when>
+  			<when test="orderBy == 'desc'"> DESC, ID DESC</when>
+  			<otherwise> DESC</otherwise>
+		</choose>
+	    LIMIT #{offset}, #{pageSize}
+	</select>
+    
+	<select id="findById" parameterType="Integer" resultType="Board">
+		SELECT
+			ID AS id,
+			HIT as hit,
+			TITLE AS title,
+			CONTENT AS content,
+			USER_ID AS userId,
+			BOARD_TYPE_ID AS boardTypeId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM BOARD
+		WHERE ID = #{id}
+	</select>	
+
+	<insert id="insert" parameterType="Board" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO BOARD (TITLE, CONTENT, USER_ID, BOARD_TYPE_ID)
+		VALUES (#{title}, #{content}, #{userId}, #{boardTypeId})
+	</insert>
+	
+	<update id="update" parameterType="Board">
+	    UPDATE BOARD SET
+	    	HIT = #{hit},
+	    	TITLE = #{title},
+	    	CONTENT = #{content},
+	    	BOARD_TYPE_ID = #{boardTypeId}
+	    WHERE ID = #{id}
+	</update>
+	
+	<update id="delete" parameterType="Integer">
+	    DELETE FROM BOARD WHERE ID = #{id}
+	</update>
+
+</mapper>

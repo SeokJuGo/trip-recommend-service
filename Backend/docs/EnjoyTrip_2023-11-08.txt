@@ -1,0 +1,12 @@
+$ cd C:\Program Files\MySQL\MySQL Server 8.0\bin
+$ mysql -u ssafy -p
+$ ssafy 
+$ mysqldump -ussafy -pssafy enjoytrips > d:\ssafy\enjoytrips_%date%.sql
+
+
+$ mysql -u ssafy -p
+$ ssafy 
+$ CREATE SCHEMA IF NOT EXISTS `enjoytrips2` DEFAULT 
+CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+$ USE `enjoytrips2` ;
+$ source D:\ssafy\enjoytrips_2023-11-08.sql

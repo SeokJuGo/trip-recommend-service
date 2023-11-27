@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.comment.mapper.CommentMapper">
+
+    <select id="countByBoardId" parameterType="Integer" resultType="Integer">
+    	SELECT COUNT(ID) FROM COMMENT WHERE BOARD_ID = #{boardId}
+	</select>
+	
+	<select id="findAllByBoardId" parameterType="Integer" resultType="Comment">
+		SELECT
+			ID AS id,
+			CONTENT AS content,
+			USER_ID AS userId,
+			BOARD_ID AS boardId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM COMMENT WHERE BOARD_ID = #{boardId}
+	</select>
+
+	<select id="findAll" resultType="Comment">
+		SELECT
+			ID AS id,
+			CONTENT AS content,
+			USER_ID AS userId,
+			BOARD_ID AS boardId,
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM COMMENT
+	</select>
+
+	<insert id="insert" parameterType="Comment" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO COMMENT (CONTENT, USER_ID, BOARD_ID)
+		VALUES (#{content}, #{userId}, #{boardId})
+	</insert>
+	
+	<update id="update" parameterType="Comment">
+	    UPDATE COMMENT SET
+	    	CONTENT = #{content}
+	    WHERE ID = #{id}
+	</update>
+	
+	<update id="delete" parameterType="Integer">
+	    DELETE FROM COMMENT WHERE ID = #{id}
+	</update>
+
+</mapper>

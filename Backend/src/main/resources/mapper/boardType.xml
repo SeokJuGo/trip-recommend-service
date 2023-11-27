@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.enjoytrip.boardtype.mapper.BoardTypeMapper"> 
+     
+    <select id="count" parameterType="Map" resultType="Integer">
+    	SELECT COUNT(ID) FROM BOARD_TYPE WHERE 1 = 1
+    	<if test="name != null and name != ''">
+    		AND NAME LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="description != null and description != ''">
+    		AND DESCRIPTION LIKE CONCAT('%', #{description}, '%')
+        </if>
+	</select>
+	
+	<select id="findAll" parameterType="Map" resultType="BoardType">
+		SELECT
+			ID AS id,
+			NAME AS name,
+			DESCRIPTION AS 'desc',
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM BOARD_TYPE WHERE 1 = 1
+    	<if test="name != null and name != ''">
+    		AND NAME LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="desc != null and desc != ''">
+    		AND DESCRIPTION LIKE CONCAT('%', #{desc}, '%')
+        </if>
+	</select>
+	
+	<select id="findById" parameterType="Integer" resultType="BoardType">
+		SELECT
+			ID AS id,
+			NAME AS name,
+			DESCRIPTION AS 'desc',
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM BOARD_TYPE
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findByName" parameterType="String" resultType="BoardType">
+		SELECT
+			ID AS id,
+			NAME AS name,
+			DESCRIPTION AS 'desc',
+			CREATED_DATE AS createdDate,
+			UPDATED_DATE AS updatedDate
+		FROM BOARD_TYPE
+		WHERE NAME = #{name}
+	</select>
+
+	<insert id="insert" parameterType="BoardType" useGeneratedKeys="true" keyProperty="id">
+	    INSERT INTO BOARD_TYPE (NAME, DESCRIPTION) VALUES (#{name}, #{desc})
+	</insert>
+	
+	<update id="update" parameterType="BoardType">
+	    UPDATE BOARD_TYPE SET
+	    	NAME = #{name},
+	    	DESCRIPTION = #{desc}
+	    WHERE ID = #{id}
+	</update>
+	
+	<update id="delete" parameterType="Integer">
+	    DELETE FROM BOARD_TYPE WHERE id = #{id}
+	</update>
+
+</mapper>
