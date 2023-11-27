@@ -1,4 +1,4 @@
-# EpikTrip
+# EpicTrip
 
 -   [1. Vue(Frontend)](#vuefrontend)
     -   [1. 게시글 목록](#11-게시글-목록)

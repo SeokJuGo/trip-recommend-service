@@ -1,4 +1,4 @@
-# EpikTrip
+# EpicTrip
 
 ## 목차
 
