@@ -1,4 +1,4 @@
-# EnjoyTrip*Final*서울*15반*조시훈\_고석주
+# EpikTrip
 
 ## 목차
 
@@ -21,7 +21,7 @@
     -   [카카오 지도 API](#카카오-지도-api외부api)
     -   [랜덤이미지 API](#랜덤이미지-api외부api)
 
-# EnjoyTrip - `EpicKorea`
+# `EpicTrip`
 
 > 공공데이터 포탈 및 카카오 API 등 외부 API를 활용한 여행정보제공 웹서비스
 

@@ -1,4 +1,4 @@
-# EnjoyTrip_Framework_서울_15반 조시훈   고석주
+# EpikTrip
 
 ---
 

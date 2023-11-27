@@ -1,4 +1,4 @@
-# EnjoyTrip*Vue*서울\_15반 조시훈 고석주
+# EpikTrip
 
 -   [1. Vue(Frontend)](#vuefrontend)
     -   [1. 게시글 목록](#11-게시글-목록)
