@@ -1,0 +1,2 @@
+https://lab.ssafy.com/kepler452k/enjoytrip-final-seoul15-team08
+dump 및 기타 필요파일은 resources 폴더에 있습니다.
