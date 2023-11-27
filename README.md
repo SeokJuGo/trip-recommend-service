@@ -21,6 +21,11 @@
     -   [카카오 지도 API](#카카오-지도-api외부api)
     -   [랜덤이미지 API](#랜덤이미지-api외부api)
 
+
+
+https://github.com/SeokJuGo/trip-recommend-service/assets/116260619/9fcb6a06-20eb-4911-89c0-f65a7bd73a11
+
+
 # `EpicTrip`
 
 > 공공데이터 포탈 및 카카오 API 등 외부 API를 활용한 여행정보제공 웹서비스
